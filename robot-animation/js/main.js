@@ -237,7 +237,7 @@ define(function( require ) {
     var rx =   ( 0.5 - ( event.clientY / window.innerHeight ) ) * 180,
         ry =  -( 0.5 - ( event.clientX / window.innerWidth  ) ) * 180;
 
-    var transform = 'rotateX( ' + rx + 'deg) rotateY( ' + ry + 'deg)';
+    var transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
     $robot.css({
       '-webkit-transform': transform,
       transform: transform
