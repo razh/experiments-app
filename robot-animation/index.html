@@ -55,15 +55,21 @@
 
     .checkbox,
     .checkbox:not(:checked) ~ .dimension,
-    .checkbox:not(:checked) ~ .translate {
+    .checkbox:not(:checked) ~ .translate,
+    .checkbox:not(:checked) ~ .rotations {
       display: none;
     }
 
     .name,
     .dimension,
-    .translate {
+    .translate,
+    .rotations {
       float: right;
       clear: both;
+    }
+
+    .rotate {
+      float: left;
     }
 
     .name {

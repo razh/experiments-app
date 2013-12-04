@@ -151,7 +151,10 @@ define(function( require ) {
         el: element,
         model: new Box( config[ name ].dimensions ),
         transforms: new Transforms([
-          new Transform.Translate3D( config[ name ].translate3d )
+          new Transform.Translate3D( config[ name ].translate3d ),
+          new Transform.RotateX(),
+          new Transform.RotateY(),
+          new Transform.RotateZ()
         ]),
         transformOrigin: new Transform.Origin( config[ name ].transformOrigin || {} )
       });
@@ -175,6 +178,18 @@ define(function( require ) {
       var $dimensionEl = $( '<div>', { class: 'dimension' } ),
           $translateEl = $( '<div>', { class: 'translate' } );
 
+      var $rotationsEl = $( '<div>', { class: 'rotations' } );
+
+      var $rotateXEl = $( '<div>', { class: 'rotate rotateX' } ),
+          $rotateYEl = $( '<div>', { class: 'rotate rotateY' } ),
+          $rotateZEl = $( '<div>', { class: 'rotate rotateZ' } );
+
+      $rotationsEl.append([
+        $rotateXEl,
+        $rotateYEl,
+        $rotateZEl
+      ]);
+
       // Unique ids if more than one of the same class.
       var id = className;
       if ( array.length > 1 ) {
@@ -193,7 +208,8 @@ define(function( require ) {
           for: id
         }),
         $dimensionEl,
-        $translateEl
+        $translateEl,
+        $rotationsEl
       ]);
 
       $transformViews.append( $transformEl );
@@ -211,6 +227,27 @@ define(function( require ) {
       });
 
       translateView.render();
+
+      var rotateXView = new TransformView({
+        el: $rotateXEl,
+        model: view.transforms.at(1)
+      })
+
+      rotateXView.render();
+
+      var rotateYView = new TransformView({
+        el: $rotateYEl,
+        model: view.transforms.at(2)
+      });
+
+      rotateYView.render();
+
+      var rotateZView = new TransformView({
+        el: $rotateZEl,
+        model: view.transforms.at(3)
+      });
+
+      rotateZView.render();
     });
   });
 
