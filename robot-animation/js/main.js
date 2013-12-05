@@ -51,41 +51,51 @@ define(function( require ) {
     };
 
     var hips = {
-      width: 60,
-      height: 40,
+      width: 50,
+      height: 30,
       depth: 35
     };
 
-    var upperArm = {
+    var arm = {
       width: 20,
-      height: 60,
       depth: 20
+    };
+
+    var upperArm = {
+      width: arm.width,
+      height: 60,
+      depth: arm.depth
     };
 
     var lowerArm = {
-      width: 20,
+      width: arm.width,
       height: 40,
-      depth: 20
+      depth: arm.depth
     };
 
     var hand = {
-      width: 20,
+      width: arm.width,
       height: 20,
-      depth: 20
+      depth: arm.depth
+    };
+
+    var leg = {
+      width: 25,
+      depth: 25
     };
 
     // Note: the femur should be ~26% of body height.
     var upperLeg = {
-      width: 25,
+      width: leg.width,
       height: 50,
-      depth: 25
+      depth: leg.depth
     };
 
     // Femur:tibia ratio should be 56:44. This guy's proportions are out of wack.
     var lowerLeg = {
-      width: 25,
+      width: leg.width,
       height: 70,
-      depth: 25
+      depth: leg.depth
     };
 
     var foot = {
@@ -94,17 +104,33 @@ define(function( require ) {
       depth: 50
     };
 
+    var spacing = 10;
+
+    var headOffsetY = 0.5 * ( head.height + chest.height ) + spacing;
+    var hipsOffsetY = 0.5 * ( hips.height + chest.height ) + spacing;
+
+    var armOffsetX = 0.5 * ( arm.width + chest.width ) + spacing;
+    var lowerArmOffsetY = 0.5 * ( lowerArm.height + upperArm.height ) + spacing;
+    var handOffsetY = 0.5 * ( hand.height + lowerArm.height ) + spacing;
+
+    // Position legs such that they line up with the hips.
+    var legOffsetX = 0.5 * hips.width;
+
+    var upperLegOffsetY = 0.5 * ( upperLeg.height + hips.height ) + spacing;
+    var lowerLegOffsetY = 0.5 * ( lowerLeg.height + upperLeg.height ) + spacing;
+    var footOffsetY = 0.5 * ( foot.height + lowerLeg.height ) + spacing;
+
     return {
       head: {
         dimensions: [ head.width, head.height, head.depth ],
-        translate3d: [ 0, -80, 0 ],
+        translate3d: [ 0, -headOffsetY, 0 ],
       },
       chest: {
         dimensions: [ chest.width, chest.height, chest.depth ]
       },
       hips: {
         dimensions: [ hips.width, hips.height, hips.depth ],
-        translate3d: [ 0, 80, 0 ],
+        translate3d: [ 0, hipsOffsetY, 0 ],
         transformOrigin: [ 0, -0.5 * hips.height ]
       },
 
@@ -114,34 +140,34 @@ define(function( require ) {
       },
       'lower-arm': {
         dimensions: [ lowerArm.width, lowerArm.height, lowerArm.depth ],
-        translate3d: [ 0, 60, 0 ],
+        translate3d: [ 0, lowerArmOffsetY, 0 ],
         transformOrigin: [ 0, -0.5 * lowerArm.height ]
       },
       hand: {
         dimensions: [ hand.width, hand.height, hand.depth ],
-        translate3d: [ 0, 40, 0 ],
+        translate3d: [ 0, handOffsetY, 0 ],
         transformOrigin: [ 0, -0.5 * hand.height ]
       },
-      'arm-left': [ 60 ],
-      'arm-right': [ -60 ],
+      'arm-left': [ armOffsetX ],
+      'arm-right': [ -armOffsetX ],
 
       'upper-leg': {
         dimensions: [ upperLeg.width, upperLeg.height, upperLeg.depth ],
-        translate3d: [ 0, 55, 0 ],
+        translate3d: [ 0, upperLegOffsetY, 0 ],
         transformOrigin: [ 0, -0.5 * upperLeg.height ]
       },
       'lower-leg': {
         dimensions: [ lowerLeg.width, lowerLeg.height, lowerLeg.depth ],
-        translate3d: [ 0, 70, 0 ],
+        translate3d: [ 0, lowerLegOffsetY, 0 ],
         transformOrigin: [ 0, -0.5 * lowerLeg.height ]
       },
       foot: {
         dimensions: [ foot.width, foot.height, foot.depth ],
-        translate3d: [ 0, 50, 10 ],
+        translate3d: [ 0, footOffsetY, 10 ],
         transformOrigin: [ 0, -0.5 * foot.height ]
       },
-      'leg-left': [ 25 ],
-      'leg-right': [ -25 ]
+      'leg-left': [ legOffsetX ],
+      'leg-right': [ -legOffsetX ]
     };
   }) ();
 
