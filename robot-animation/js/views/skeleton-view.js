@@ -23,6 +23,14 @@ define([
         this[ key ] = view.model;
       }.bind( this ));
 
+      // Attach left-right limb transforms.
+      [
+        'armLeft', 'armRight',
+        'legLeft', 'legRight'
+      ].forEach(function( key ) {
+        this[ key ] = options[ key ];
+      }.bind( this ));
+
       this.spacing = options.spacing;
 
       this.listenTo( this.head, 'change:height', function() {
@@ -36,11 +44,11 @@ define([
 
       this.listenTo( this.hips, 'change:width', function() {
         // Legs line up with hips.
-        var offset = 0.5 * this.hips.width;
+        var offset = 0.5 * this.hips.get( 'width' );
 
         // Legs offset.
-        this.legLeftView.transforms.at(0).set(  'x',  offset );
-        this.legRightView.transforms.at(0).set( 'x', -offset );
+        this.legLeft.set(  'tx',  offset );
+        this.legRight.set( 'tx', -offset );
       });
 
       this.listenTo( this.chest, 'change:height', function() {
@@ -50,10 +58,13 @@ define([
       });
 
       this.listenTo( this.chest, 'change:width', function() {
-        var offset = 0.5 * ( this.arm.width + this.chest.width ) + this.spacing;
+        var upperArmWidth = this.upperArmLeft.get( 'width' ),
+            chestWidth = this.chest.get( 'width' );
 
-        this.armLeftView.transforms.at(0).set(  'x',  offset );
-        this.armRightView.transforms.at(0).set( 'x', -offset );
+        var offset = 0.5 * ( upperArmWidth + chestWidth ) + this.spacing;
+
+        this.armLeft.set(  'tx',  offset );
+        this.armRight.set( 'tx', -offset );
       });
 
       // Attach bones.

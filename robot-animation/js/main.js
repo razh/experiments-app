@@ -285,22 +285,31 @@ define(function( require ) {
 
   boxViews = _.flatten( boxViews );
 
-  [ 'arm-left', 'arm-right', 'leg-left', 'leg-right' ].map(function( className ) {
-    var transforms = new Transforms([
-      new Transform.Translate3D( config[ className ] )
-    ]);
+  var directionTransforms = [
+    'arm-left', 'arm-right',
+    'leg-left', 'leg-right'
+  ].map(function( className ) {
+    var $element = $robot.find( '.' + className );
+    var transform = new Transform.Translate3D( config[ className ] );
 
-    var transformsString = transforms.toString();
-
-    $robot.find( '.' + className ).css({
-      '-webkit-transform': transformsString,
-      transform: transformsString,
-
+    $element.css({
       '-webkit-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d'
     });
 
-    return transforms;
+    function onChange() {
+      var transformString = transform.toString();
+
+      $element.css({
+        '-webkit-transform': transformString,
+        transform: transformString,
+      });
+    }
+
+    onChange();
+    transform.on( 'change', onChange );
+
+    return transform;
   });
 
 
@@ -326,6 +335,11 @@ define(function( require ) {
       lowerLegRightView: boxViews[12],
       footLeftView: boxViews[13],
       footRightView: boxViews[14],
+
+      armLeft: directionTransforms[0],
+      armRight: directionTransforms[1],
+      legLeft: directionTransforms[2],
+      legRight: directionTransforms[3],
 
       spacing: 10
     });
