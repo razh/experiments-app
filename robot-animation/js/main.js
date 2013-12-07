@@ -41,69 +41,59 @@ define(function( require ) {
   // Haphazard configuration object.
   var config = (function() {
     var head = {
-      width: 40,
-      height: 40,
-      depth: 40
-    };
-
-    var chest = {
-      width: 80,
-      height: 100,
-      depth: 35
-    };
-
-    var hips = {
-      width: 50,
-      height: 30,
-      depth: 35
-    };
-
-    var arm = {
       width: 20,
+      height: 30,
       depth: 20
     };
 
+    var chest = {
+      width: 55,
+      height: 80,
+      depth: 20
+    };
+
+    var hips = {
+      width: 40,
+      height: 24,
+      depth: 16
+    };
+
     var upperArm = {
-      width: arm.width,
+      width: 10,
       height: 60,
-      depth: arm.depth
+      depth: 10
     };
 
     var lowerArm = {
-      width: arm.width,
+      width: 8,
       height: 40,
-      depth: arm.depth
+      depth: 8
     };
 
     var hand = {
-      width: arm.width,
+      width: 8,
       height: 20,
-      depth: arm.depth
-    };
-
-    var leg = {
-      width: 25,
-      depth: 25
+      depth: 10
     };
 
     // Note: the femur should be ~26% of body height.
     var upperLeg = {
-      width: leg.width,
-      height: 50,
-      depth: leg.depth
+      width: 10,
+      height: 70,
+      depth: 10
     };
 
     // Femur:tibia ratio should be 56:44. This guy's proportions are out of wack.
     var lowerLeg = {
-      width: leg.width,
+      width: 9,
       height: 70,
-      depth: leg.depth
+      depth: 9
     };
 
     var foot = {
-      width: 30,
-      height: 15,
-      depth: 50
+      width: 16,
+      height: 6,
+      depth: 30
     };
 
     var spacing = 10;
@@ -111,7 +101,7 @@ define(function( require ) {
     var headOffsetY = 0.5 * ( head.height + chest.height ) + spacing;
     var hipsOffsetY = 0.5 * ( hips.height + chest.height ) + spacing;
 
-    var armOffsetX = 0.5 * ( arm.width + chest.width ) + spacing;
+    var armOffsetX = 0.5 * ( upperArm.width + chest.width ) + spacing;
     var lowerArmOffsetY = 0.5 * ( lowerArm.height + upperArm.height ) + spacing;
     var handOffsetY = 0.5 * ( hand.height + lowerArm.height ) + spacing;
 
