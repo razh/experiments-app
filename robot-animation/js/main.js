@@ -31,6 +31,8 @@ define(function( require ) {
   var Box     = require( 'models/box' ),
       BoxView = require( 'views/box-view' );
 
+  var SkeletonView = require( 'views/skeleton-view' );
+
   var robotTemplate = require( 'text!templates/robot.html' );
 
   var $robot = $( '.robot' );
@@ -191,12 +193,14 @@ define(function( require ) {
 
   var $transformViews = $( '.transform-views' );
 
-  [
+  var boxViews = [
     'head', 'chest', 'hips',
     'upper-arm', 'lower-arm', 'hand',
     'upper-leg', 'lower-leg', 'foot'
-  ].forEach(function( className ) {
-    createBoxViews( className ).forEach(function( view, index, array ) {
+  ].map(function( className ) {
+    var boxViews = createBoxViews( className );
+
+    boxViews.forEach(function( view, index, array ) {
       view.render();
 
       var $transformEl = $( '<div>', { class: 'edit' } );
@@ -275,7 +279,11 @@ define(function( require ) {
 
       rotateZView.render();
     });
+
+    return boxViews;
   });
+
+  boxViews = _.flatten( boxViews );
 
   [ 'arm-left', 'arm-right', 'leg-left', 'leg-right' ].map(function( className ) {
     var transforms = new Transforms([
@@ -295,6 +303,35 @@ define(function( require ) {
     return transforms;
   });
 
+
+  /**
+   * Hack which assumes that there's a given order to the various boxViews.
+   */
+  function createSkeletonView( boxViews ) {
+    return new SkeletonView({
+      headView: boxViews[0],
+      chestView: boxViews[1],
+      hipsView: boxViews[2],
+
+      upperArmLeftView: boxViews[3],
+      upperArmRightView: boxViews[4],
+      lowerArmLeftView: boxViews[5],
+      lowerArmRightView: boxViews[6],
+      handLeftView: boxViews[7],
+      handRightView: boxViews[8],
+
+      upperLegLeftView: boxViews[9],
+      upperLegRightView: boxViews[10],
+      lowerLegLeftView: boxViews[11],
+      lowerLegRightView: boxViews[12],
+      footLeftView: boxViews[13],
+      footRightView: boxViews[14],
+
+      spacing: 10
+    });
+  }
+
+  createSkeletonView( boxViews );
 
   function onMouseMove( event ) {
     var rx = -( event.clientY / window.innerHeight - 0.5 ) * 180,

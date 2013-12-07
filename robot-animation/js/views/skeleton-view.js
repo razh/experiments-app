@@ -4,22 +4,16 @@ define([
 ], function( Backbone ) {
   'use strict';
 
-  var silent = {
-    silent: true
-  };
-
   var SkeletonView = Backbone.View.extend({
     initialize: function( options ) {
       // Atach subviews and models.
       [
         'head', 'chest', 'hips',
         // Arms.
-        'armLeft', 'armRight',
         'upperArmLeft', 'upperArmRight',
         'lowerArmLeft', 'lowerArmRight',
         'handLeft', 'handRight',
         // Legs.
-        'legLeft', 'legRight',
         'upperLegLeft', 'upperLegRight',
         'lowerLegLeft', 'lowerLegRight',
         'footLeft', 'footRight'
@@ -27,7 +21,7 @@ define([
         var view = options[ key + 'View' ];
         this[ key + 'View' ] = view;
         this[ key ] = view.model;
-      });
+      }.bind( this ));
 
       this.spacing = options.spacing;
 
@@ -36,7 +30,7 @@ define([
             chestHeight = this.chest.get( 'height' );
 
         this.headView.transforms.at(0).set({
-          y: -0.5 * ( headHeight + chestHeight ) - this.spacing
+          ty: -0.5 * ( headHeight + chestHeight ) - this.spacing
         });
       });
 
@@ -68,13 +62,15 @@ define([
           var parentHeight = this[ parentName ].get( 'height' ),
               childHeight = this[ childName ].get( 'height' );
 
+          var childView = this[ childName + 'View' ];
+
           // Set translate3d.
-          this[ childName + 'View' ].transforms.at(0).set({
-            y: 0.5 * ( childHeight + parentHeight ) + this.spacing
+          childView.transforms.at(0).set({
+            ty: 0.5 * ( childHeight + parentHeight ) + this.spacing
           });
 
           // Set transform origin.
-          this[ childName + 'View' ].transformOrigin.set({
+          childView.transformOrigin.set({
             y: -0.5 * childHeight
           });
 
@@ -128,9 +124,8 @@ define([
               otherIndex = ( index + 1 ) % pair.length,
               otherModel = this[ pair[ otherIndex ] + 'View' ].model;
 
-          // Sync the other model silently.
           this.listenTo( model, 'change', function() {
-            otherModel.set( model.attributes, silent );
+            otherModel.set( model.attributes );
           });
         }.bind( this ));
       }.bind( this ));
