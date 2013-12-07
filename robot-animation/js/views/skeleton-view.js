@@ -101,6 +101,10 @@ define([
             lowerArm = 'lowerArm' + direction,
             hand = 'hand' + direction;
 
+        this[ upperArm ].on( 'change:height', function() {
+          this[ lowerArm ].trigger( 'change:height' );
+        }, this );
+
         attachBone( upperArm, lowerArm, function() {
           this[ hand ].trigger( 'change:height' );
         });
