@@ -71,7 +71,7 @@ define([
 
           // Set transform origin.
           childView.transformOrigin.set({
-            y: -0.5 * childHeight
+            y: -0.5 * ( childHeight + this.spacing )
           });
 
           // This callback usually handles grandchildren.
@@ -83,6 +83,7 @@ define([
 
       attachBone( 'chest', 'hips' );
 
+      // Attach limb bones.
       [ 'Left', 'Right' ].forEach(function( direction ) {
         // Attach arm bones.
         var upperArm = 'upperArm' + direction,

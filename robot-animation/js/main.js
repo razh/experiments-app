@@ -133,22 +133,22 @@ define(function( require ) {
       hips: {
         dimensions: [ hips.width, hips.height, hips.depth ],
         translate3d: [ 0, hipsOffsetY, 0 ],
-        transformOrigin: [ 0, -0.5 * hips.height ]
+        transformOrigin: [ 0, -0.5 * ( hips.height + spacing ) ]
       },
 
       'upper-arm': {
         dimensions: [ upperArm.width, upperArm.height, upperArm.depth ],
-        transformOrigin: [ 0, -0.5 * upperArm.height ]
+        transformOrigin: [ 0, -0.5 * ( upperArm.height + spacing ) ]
       },
       'lower-arm': {
         dimensions: [ lowerArm.width, lowerArm.height, lowerArm.depth ],
         translate3d: [ 0, lowerArmOffsetY, 0 ],
-        transformOrigin: [ 0, -0.5 * lowerArm.height ]
+        transformOrigin: [ 0, -0.5 * ( lowerArm.height + spacing ) ]
       },
       hand: {
         dimensions: [ hand.width, hand.height, hand.depth ],
         translate3d: [ 0, handOffsetY, 0 ],
-        transformOrigin: [ 0, -0.5 * hand.height ]
+        transformOrigin: [ 0, -0.5 * ( hand.height + spacing ) ]
       },
       'arm-left': [ armOffsetX ],
       'arm-right': [ -armOffsetX ],
@@ -156,17 +156,17 @@ define(function( require ) {
       'upper-leg': {
         dimensions: [ upperLeg.width, upperLeg.height, upperLeg.depth ],
         translate3d: [ 0, upperLegOffsetY, 0 ],
-        transformOrigin: [ 0, -0.5 * upperLeg.height ]
+        transformOrigin: [ 0, -0.5 * ( upperLeg.height + spacing ) ]
       },
       'lower-leg': {
         dimensions: [ lowerLeg.width, lowerLeg.height, lowerLeg.depth ],
         translate3d: [ 0, lowerLegOffsetY, 0 ],
-        transformOrigin: [ 0, -0.5 * lowerLeg.height ]
+        transformOrigin: [ 0, -0.5 * ( lowerLeg.height + spacing ) ]
       },
       foot: {
         dimensions: [ foot.width, foot.height, foot.depth ],
         translate3d: [ 0, footOffsetY, 0.2 * foot.depth ],
-        transformOrigin: [ 0, -0.5 * foot.height ]
+        transformOrigin: [ 0, -0.5 * ( foot.height + spacing ) ]
       },
       'leg-left': [ legOffsetX ],
       'leg-right': [ -legOffsetX ]
