@@ -75,11 +75,25 @@
     .name {
       text-transform: uppercase;
     }
+
+    .help {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+    }
+
+    .help > p {
+      margin: 0;
+    }
   </style>
 </head>
 <body>
   <div class="robot"></div>
   <div class="transform-views"></div>
+  <div class="help">
+    <p>SHIFT to orbit.</p>
+    <p>R to reset rotation.</p>
+  </div>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>
 </body>

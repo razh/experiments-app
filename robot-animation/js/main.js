@@ -347,10 +347,7 @@ define(function( require ) {
 
   createSkeletonView( boxViews );
 
-  function onMouseMove( event ) {
-    var rx = -( event.clientY / window.innerHeight - 0.5 ) * 180,
-        ry =  ( event.clientX / window.innerWidth  - 0.5 ) * 180;
-
+  function rotate( rx, ry ) {
     var transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
     $robot.css({
       '-webkit-transform': transform,
@@ -358,5 +355,22 @@ define(function( require ) {
     });
   }
 
+  function onMouseMove( event ) {
+    if ( !event.shiftKey ) {
+      return;
+    }
+
+    var rx = -( event.clientY / window.innerHeight - 0.5 ) * 180,
+        ry =  ( event.clientX / window.innerWidth  - 0.5 ) * 180;
+
+    rotate( rx, ry );
+  }
+
   $( window ).on( 'mousemove', onMouseMove );
+  $( document ).on( 'keydown', function( event ) {
+    // R.
+    if ( event.which === 82 ) {
+      rotate( 0, 0 );
+    }
+  });
 });
