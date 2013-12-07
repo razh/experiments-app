@@ -10,37 +10,43 @@ define([
 
   var SkeletonView = Backbone.View.extend({
     initialize: function( options ) {
+      // Atach subviews and models.
       [
         'head', 'chest', 'hips',
-        // Limbs.
-        'arm', 'leg',
         // Arms.
+        'armLeft', 'armRight',
         'upperArmLeft', 'upperArmRight',
         'lowerArmLeft', 'lowerArmRight',
         'handLeft', 'handRight',
         // Legs.
+        'legLeft', 'legRight',
         'upperLegLeft', 'upperLegRight',
         'lowerLegLeft', 'lowerLegRight',
         'footLeft', 'footRight'
       ].forEach(function( key ) {
-        this[ key ] = options[ key ];
+        var view = options[ key + 'View' ];
+        this[ key + 'View' ] = view;
+        this[ key ] = view.model;
       });
+
+      this.spacing = options.spacing;
 
       this.listenTo( this.head, 'change:height', function() {
         var headHeight = this.head.get( 'height' ),
             chestHeight = this.chest.get( 'height' );
 
-        this.head.transformOrigin.set( 'y', -0.5 * ( headHeight + chestHeight ) - this.spacing );
-      });
-
-      this.listenTo( this.hips, 'change:height', function() {
-        var hipsHeight = this.hips.get( 'height' ),
-            chestHeight = this.chest.get( 'height' );
-
-        this.hips.transformOrigin.set( 'y', 0.5 * ( hipsHeight + chestHeight ) + this.spacing );
+        this.headView.transforms.at(0).set({
+          y: -0.5 * ( headHeight + chestHeight ) - this.spacing
+        });
       });
 
       this.listenTo( this.hips, 'change:width', function() {
+        // Legs line up with hips.
+        var offset = 0.5 * this.hips.width;
+
+        // Legs offset.
+        this.legLeftView.transforms.at(0).set(  'x',  offset );
+        this.legRightView.transforms.at(0).set( 'x', -offset );
       });
 
       this.listenTo( this.chest, 'change:height', function() {
@@ -50,25 +56,81 @@ define([
       });
 
       this.listenTo( this.chest, 'change:width', function() {
-        var offsetX = 0.5 * ( this.arm.width + this.chest.width ) + this.spacing;
-        // Set translate3ds of each limb and direction combination.
+        var offset = 0.5 * ( this.arm.width + this.chest.width ) + this.spacing;
+
+        this.armLeftView.transforms.at(0).set(  'x',  offset );
+        this.armRightView.transforms.at(0).set( 'x', -offset );
       });
 
+      // Attach bones.
+      var attachBone = function( parentName, childName, callback ) {
+        this.listenTo( this[ childName ], 'change:height', function() {
+          var parentHeight = this[ parentName ].get( 'height' ),
+              childHeight = this[ childName ].get( 'height' );
 
+          // Set translate3d.
+          this[ childName + 'View' ].transforms.at(0).set({
+            y: 0.5 * ( childHeight + parentHeight ) + this.spacing
+          });
 
-      // Entangle change events of each pair together.
+          // Set transform origin.
+          this[ childName + 'View' ].transformOrigin.set({
+            y: -0.5 * childHeight
+          });
+
+          // This callback usually handles grandchildren.
+          if ( callback && callback.call ) {
+            callback.call( this );
+          }
+        });
+      }.bind( this );
+
+      attachBone( 'chest', 'hips' );
+
+      [ 'Left', 'Right' ].forEach(function( direction ) {
+        // Attach arm bones.
+        var upperArm = 'upperArm' + direction,
+            lowerArm = 'lowerArm' + direction,
+            hand = 'hand' + direction;
+
+        attachBone( upperArm, lowerArm, function() {
+          this[ hand ].trigger( 'change:height' );
+        });
+
+        attachBone( lowerArm, hand );
+
+        // Attach leg bones.
+        var upperLeg = 'upperLeg' + direction,
+            lowerLeg = 'lowerLeg' + direction,
+            foot = 'foot' + direction;
+
+        attachBone( 'hips', upperLeg, function() {
+          this[ lowerLeg ].trigger( 'change:height' );
+        });
+
+        attachBone( upperLeg, lowerLeg, function() {
+          this[ foot ].trigger( 'change:height' );
+        });
+
+        attachBone( lowerLeg, foot );
+      }.bind( this ));
+
+      // Entangle change events of each pair of parts together.
       [
-        [ 'upperArmLeft', 'upperArmRight' ],
-        [ 'lowerArmLeft', 'lowerArmRight' ],
-        [ 'handLeft', 'handRight' ],
-        [ 'upperLegLeft', 'lowerLegRight' ],
-        [ 'lowerLegLeft', 'lowerLegRight' ],
-        [ 'footLeft', 'footRight' ]
-      ].forEach(function( pair ) {
-        pair.forEach(function( key, index, array ) {
-          var otherIndex = ( index + 1 ) % array.length;
-          this.listenTo( this[ key ], 'change', function() {
-            this[ pair[ otherIndex ] ].set( this[ key ].attributes, silent );
+        'upperArm', 'lowerArm', 'hand',
+        'upperLeg', 'lowerLeg', 'foot'
+      ].forEach(function( name ) {
+        // Left and right part.
+        var pair = [ name + 'Left', name + 'Right' ];
+
+        pair.forEach(function( key, index ) {
+          var model = this[ key + 'View' ].model,
+              otherIndex = ( index + 1 ) % pair.length,
+              otherModel = this[ pair[ otherIndex ] + 'View' ].model;
+
+          // Sync the other model silently.
+          this.listenTo( model, 'change', function() {
+            otherModel.set( model.attributes, silent );
           });
         }.bind( this ));
       }.bind( this ));
