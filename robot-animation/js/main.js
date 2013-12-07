@@ -163,7 +163,7 @@ define(function( require ) {
       },
       foot: {
         dimensions: [ foot.width, foot.height, foot.depth ],
-        translate3d: [ 0, footOffsetY, 10 ],
+        translate3d: [ 0, footOffsetY, 0.2 * foot.depth ],
         transformOrigin: [ 0, -0.5 * foot.height ]
       },
       'leg-left': [ legOffsetX ],
@@ -257,7 +257,7 @@ define(function( require ) {
       var rotateXView = new TransformView({
         el: $rotateXEl,
         model: view.transforms.at(1)
-      })
+      });
 
       rotateXView.render();
 
