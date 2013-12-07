@@ -51,6 +51,11 @@ define([
         this.legRight.set( 'tx', -offset );
       });
 
+      this.listenTo( this.hips, 'change:height', function() {
+        this.upperLegLeft.trigger( 'change:height' );
+        this.upperLegRight.trigger( 'change:height' );
+      });
+
       this.listenTo( this.chest, 'change:height', function() {
         // Trigger children.
         this.head.trigger( 'change:height' );
