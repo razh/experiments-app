@@ -10,6 +10,30 @@ define([
   var BoxView = Backbone.View.extend({
     template: _.template( boxTemplate ),
 
+    events: {
+      'click': 'click'
+    },
+
+    click: function( event ) {
+      event.stopPropagation();
+
+      var rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)?\)$/;
+
+      this.$el.children( '.face' ).each(function( index, face ) {
+        var $face = $( face );
+
+        var color = $face.css( 'background-color' );
+        var rgba = rgbaRegex.exec( color ).slice( 1, 5 );
+
+        // Swap red/green.
+        var temp = rgba[0];
+        rgba[0] = rgba[1];
+        rgba[1] = temp;
+
+        $face.css( 'background-color', 'rgba(' + rgba.join( ', ' ) + ')' );
+      });
+    },
+
     initialize: function( options ) {
       this.transforms      = options.transforms;
       this.transformOrigin = options.transformOrigin;
