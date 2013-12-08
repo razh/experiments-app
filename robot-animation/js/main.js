@@ -35,6 +35,35 @@ define(function( require ) {
 
   var robotTemplate = require( 'text!templates/robot.html' );
 
+  // Attach click event to BoxView.
+  (function() {
+    if ( !BoxView.prototype.events ) {
+      BoxView.prototype.events = {};
+    }
+
+    BoxView.prototype.events.click = 'click';
+
+    BoxView.prototype.click = function( event ) {
+      event.stopPropagation();
+
+      var rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)?\)$/;
+
+      this.$el.children( '.face' ).each(function( index, face ) {
+        var $face = $( face );
+
+        var color = $face.css( 'background-color' );
+        var rgba = rgbaRegex.exec( color ).slice( 1, 5 );
+
+        // Swap red/green.
+        var temp = rgba[0];
+        rgba[0] = rgba[1];
+        rgba[1] = temp;
+
+        $face.css( 'background-color', 'rgba(' + rgba.join( ', ' ) + ')' );
+      });
+    };
+  }) ();
+
   var $robot = $( '.robot' );
   $robot.html( _.template( robotTemplate ) );
 
