@@ -35,27 +35,31 @@ define(function( require ) {
 
   var robotTemplate = require( 'text!templates/robot.html' );
 
-  // Attach click event to BoxView.
+  // Attach mousedown event to BoxView.
   (function() {
     if ( !BoxView.prototype.events ) {
       BoxView.prototype.events = {};
     }
 
-    BoxView.prototype.events.click = 'click';
+    BoxView.prototype.events.mousedown = 'onMouseDown';
 
-    BoxView.prototype.click = function( event ) {
+    BoxView.prototype.onMouseDown = function( event ) {
       event.stopPropagation();
 
       if ( event.altKey ) {
         this.toggle();
-      } else if ( this.$el.attr( 'data-hidden' ) !== 'true' ) {
+      } else if ( !this.$el.attr( 'data-hidden' ) ) {
         this.highlight();
       }
     };
 
     BoxView.prototype.toggle = function() {
-      // Toggle data-hidden.
-      this.$el.attr( 'data-hidden', this.$el.attr( 'data-hidden' ) !== 'true' );
+      // Add/remove data-hidden attribute.
+      if( this.$el.attr( 'data-hidden' ) ) {
+        this.$el.removeAttr( 'data-hidden' );
+      } else {
+        this.$el.attr( 'data-hidden', true );
+      }
 
       this.$el.children( '.face' ).each(function( index, face ) {
         var $face = $( face );
