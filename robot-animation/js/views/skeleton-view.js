@@ -4,30 +4,34 @@ define([
 ], function( Backbone ) {
   'use strict';
 
+  var parts = [
+    'head', 'chest', 'hips',
+    // Arms.
+    'upperArmLeft', 'upperArmRight',
+    'lowerArmLeft', 'lowerArmRight',
+    'handLeft', 'handRight',
+    // Legs.
+    'upperLegLeft', 'upperLegRight',
+    'lowerLegLeft', 'lowerLegRight',
+    'footLeft', 'footRight'
+  ];
+
+  var leftRightOffsets = [
+    'armLeft', 'armRight',
+    'legLeft', 'legRight'
+  ];
+
   var SkeletonView = Backbone.View.extend({
     initialize: function( options ) {
       // Atach subviews and models.
-      [
-        'head', 'chest', 'hips',
-        // Arms.
-        'upperArmLeft', 'upperArmRight',
-        'lowerArmLeft', 'lowerArmRight',
-        'handLeft', 'handRight',
-        // Legs.
-        'upperLegLeft', 'upperLegRight',
-        'lowerLegLeft', 'lowerLegRight',
-        'footLeft', 'footRight'
-      ].forEach(function( key ) {
-        var view = options[ key + 'View' ];
-        this[ key + 'View' ] = view;
-        this[ key ] = view.model;
+      parts.forEach(function( part ) {
+        var view = options[ part + 'View' ];
+        this[ part + 'View' ] = view;
+        this[ part ] = view.model;
       }.bind( this ));
 
-      // Attach left-right limb transforms.
-      [
-        'armLeft', 'armRight',
-        'legLeft', 'legRight'
-      ].forEach(function( key ) {
+      // Attach left-right limb transforms/offsets.
+      leftRightOffsets.forEach(function( key ) {
         this[ key ] = options[ key ];
       }.bind( this ));
 
@@ -160,6 +164,33 @@ define([
           });
         }.bind( this ));
       }.bind( this ));
+    },
+
+    toJSON: function() {
+      var jsonObject = {};
+
+      // Attach parts.
+      var view, model;
+      parts.forEach(function( part ) {
+        view = this[ part + 'View' ];
+        model = this[ part ];
+
+        // Use .toJSON() to avoid changing the original models.
+        var partJSON = model.toJSON();
+        partJSON.transforms = view.transforms.toJSON();
+        partJSON.transformOrigin = view.transformOrigin.toJSON();
+
+        jsonObject[ part ] = partJSON;
+      }.bind( this ));
+
+      // Attach left-right limb offsets.
+      leftRightOffsets.forEach(function( key ) {
+        jsonObject[ key ] = this[ key ].toJSON();
+      }.bind( this ));
+
+      jsonObject.spacing = this.spacing;
+
+      return jsonObject;
     }
   });
 
