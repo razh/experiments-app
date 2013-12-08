@@ -31,8 +31,16 @@ define([
         this[ key ] = options[ key ];
       }.bind( this ));
 
-      this.spacing = options.spacing;
+      this.spacingView = options.spacing;
 
+      this.listenTo( this.spacingView.model, 'change', function() {
+        this.chest.trigger( 'change:width change:height' );
+        this.upperArmLeft.trigger( 'change:height' );
+        this.upperArmRight.trigger( 'change:height' );
+        this.hips.trigger( 'change:height' );
+      });
+
+      // Head height affects the head's distance from the chest.
       this.listenTo( this.head, 'change:height', function() {
         var headHeight = this.head.get( 'height' ),
             chestHeight = this.chest.get( 'height' );
@@ -42,6 +50,7 @@ define([
         });
       });
 
+      // Hips width affects the distance between left/right legs.
       this.listenTo( this.hips, 'change:width', function() {
         // Legs line up with hips.
         var offset = 0.5 * this.hips.get( 'width' );
@@ -51,13 +60,14 @@ define([
         this.legRight.set( 'tx', -offset );
       });
 
+      // Hips height affects upper leg position.
       this.listenTo( this.hips, 'change:height', function() {
         this.upperLegLeft.trigger( 'change:height' );
         this.upperLegRight.trigger( 'change:height' );
       });
 
+      // Chest height affects head and hips.
       this.listenTo( this.chest, 'change:height', function() {
-        // Trigger children.
         this.head.trigger( 'change:height' );
         this.hips.trigger( 'change:height' );
       });
@@ -153,6 +163,11 @@ define([
     }
   });
 
+  Object.defineProperty( SkeletonView.prototype, 'spacing', {
+    get: function() {
+      return this.spacingView.model.get( 't' );
+    }
+  });
 
   return SkeletonView;
 });

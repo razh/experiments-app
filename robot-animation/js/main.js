@@ -307,6 +307,32 @@ define(function( require ) {
    * Hack which assumes that there's a given order to the various boxViews.
    */
   function createSkeletonView( boxViews ) {
+    var $transformEl = $( '<div>', { class: 'edit' } ),
+        $spacingEl = $( '<div>', { class: 'translate' } );
+
+    var spacingView = new TransformView({
+      el: $spacingEl,
+      model: new Transform.Translate1D([ 10 ])
+    });
+
+    spacingView.render();
+
+    $transformEl.append([
+      $( '<input>', {
+        class: 'checkbox',
+        type: 'checkbox',
+        id: 'spacing'
+      }),
+      $( '<label>', {
+        class: 'name',
+        text: 'spacing',
+        for: 'spacing'
+      }),
+      $spacingEl
+    ]);
+
+    $transformViews.append( $transformEl );
+
     return new SkeletonView({
       headView: boxViews[0],
       chestView: boxViews[1],
@@ -331,11 +357,11 @@ define(function( require ) {
       legLeft: directionTransforms[2],
       legRight: directionTransforms[3],
 
-      spacing: 10
+      spacing: spacingView
     });
   }
 
-  createSkeletonView( boxViews );
+  var skeletonView = createSkeletonView( boxViews );
 
   function rotate( rx, ry ) {
     var transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';

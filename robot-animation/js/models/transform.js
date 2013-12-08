@@ -311,6 +311,8 @@ define([
 
   Transform.Translate   = Translate;
   Transform.Translate3D = Translate3D;
+
+  Transform.Translate1D = Translate1D;
   Transform.TranslateX  = TranslateX;
   Transform.TranslateY  = TranslateY;
   Transform.TranslateZ  = TranslateZ;
