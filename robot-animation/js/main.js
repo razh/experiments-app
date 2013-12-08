@@ -46,6 +46,26 @@ define(function( require ) {
     BoxView.prototype.click = function( event ) {
       event.stopPropagation();
 
+      if ( event.altKey ) {
+        this.toggle();
+      } else if ( this.$el.attr( 'data-hidden' ) !== 'true' ) {
+        this.highlight();
+      }
+    };
+
+    BoxView.prototype.toggle = function() {
+      // Toggle data-hidden.
+      this.$el.attr( 'data-hidden', this.$el.attr( 'data-hidden' ) !== 'true' );
+
+      this.$el.children( '.face' ).each(function( index, face ) {
+        var $face = $( face );
+
+        var opacity = $face.css( 'opacity' );
+        $face.css( 'opacity', opacity === '1' ? '0' : '1' );
+      });
+    };
+
+    BoxView.prototype.highlight = function() {
       var rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)?\)$/;
 
       this.$el.children( '.face' ).each(function( index, face ) {
