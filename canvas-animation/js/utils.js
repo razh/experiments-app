@@ -8,7 +8,7 @@ define(function() {
       RAD_TO_DEG = 180 / Math.PI;
 
   function clamp( value, min, max ) {
-    return Math.min( Math.max( value, min, max ) );
+    return Math.min( Math.max( value, min ), max );
   }
 
   return {

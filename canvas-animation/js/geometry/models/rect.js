@@ -13,13 +13,11 @@ define([
     },
 
     drawPath: function( ctx ) {
-      var x = this.get( 'x' ),
-          y = this.get( 'y' ),
-          width  = this.get( 'width' ),
+      var width  = this.get( 'width' ),
           height = this.get( 'height' );
 
       ctx.beginPath();
-      ctx.rect( x - 0.5 * width, y - 0.5 * height, width, height );
+      ctx.rect( -0.5 * width, -0.5 * height, width, height );
       ctx.closePath();
     }
   });
