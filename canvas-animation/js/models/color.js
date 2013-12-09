@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'backbone'
-], function( Backbone ) {
+  'backbone',
+  'utils'
+], function( Backbone, Utils ) {
   'use strict';
 
   var Color = Backbone.Model.extend({
@@ -16,10 +17,10 @@ define([
 
     rgba: function() {
       return 'rgba(' +
-        this.get( 'red'   ) + ', ' +
-        this.get( 'green' ) + ', ' +
-        this.get( 'blue'  ) + ', ' +
-        this.get( 'alpha' ) +
+        Utils.clamp( Math.round( this.get( 'red'   ) ), 0, 255 ) + ', ' +
+        Utils.clamp( Math.round( this.get( 'green' ) ), 0, 255 ) + ', ' +
+        Utils.clamp( Math.round( this.get( 'blue'  ) ), 0, 255 ) + ', ' +
+        Utils.clamp( this.get( 'alpha' ), 0, 1 ) +
       ')';
     }
   });

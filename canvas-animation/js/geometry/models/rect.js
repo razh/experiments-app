@@ -10,6 +10,17 @@ define([
       defaults.width  = 0;
       defaults.height = 0;
       return defaults;
+    },
+
+    drawPath: function( ctx ) {
+      var x = this.get( 'x' ),
+          y = this.get( 'y' ),
+          width  = this.get( 'width' ),
+          height = this.get( 'height' );
+
+      ctx.beginPath();
+      ctx.rect( x - 0.5 * width, y - 0.5 * height, width, height );
+      ctx.closePath();
     }
   });
 
