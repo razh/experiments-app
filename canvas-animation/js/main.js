@@ -26,6 +26,7 @@ define(function( require ) {
   var EditorView = require( 'views/editor-view' );
 
   var Color = require( 'models/color' );
+  var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
 
   var editorCanvas = document.getElementById( 'editor' );
@@ -45,12 +46,28 @@ define(function( require ) {
     y: 200,
     width: 80,
     height: 60,
+    lineWidth: 4,
+    fill: new Color({ red: 0, green: 0, blue: 128, alpha: 1 }),
+    stroke: new Color({ red: 0, green: 0, blue: 255, alpha: 1 })
   });
-  rect.get( 'fill' ).set({
-    blue: 255,
-    alpha: 1
-  });
+
   group.add( rect );
+
+  var path = new Path({
+    x: 300,
+    y: 200,
+    points: [
+      10, 10,
+      50, 20,
+      70, 30,
+      90, 0,
+      120, 90
+    ],
+    lineWidth: 2,
+    stroke: new Color({ red: 255, green: 0, blue: 0, alpha: 1 })
+  });
+
+  group.add( path );
 
   editorView.render();
 });
