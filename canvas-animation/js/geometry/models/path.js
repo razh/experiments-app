@@ -1,25 +1,52 @@
 /*globals define*/
 define([
-  'geometry/models/object2d'
-], function( Object2D ) {
+  'geometry/models/object2d',
+  'utils'
+], function( Object2D, Utils ) {
   'use strict';
 
+  var PI2 = Utils.PI2;
+
   var Interpolation = {
-    LINEAR:      0,
-    QUADRATIC:   1,
-    CATMULL_ROM: 2
+    LINEAR:    0,
+    QUADRATIC: 1
   };
 
   var Path = Object2D.extend({
     defaults: function() {
       var defaults = Object2D.prototype.defaults();
       defaults.points = [];
+      defaults.interpolation = Interpolation.LINEAR;
       return defaults;
     },
 
     drawPath: function( ctx ) {
-      this.drawLinear( ctx );
-      this.drawQuadratic( ctx );
+      this.drawPoints( ctx );
+
+      var interpolation = this.get( 'interpolation' );
+      if ( interpolation === Interpolation.LINEAR ) {
+        this.drawLinear( ctx );
+      } else if ( interpolation === Interpolation.QUADRATIC ) {
+        this.drawQuadratic( ctx );
+      }
+    },
+
+    drawPoints: function( ctx ) {
+      var pointCount = this.pointCount();
+      var points = this.get( 'points' );
+
+      ctx.beginPath();
+
+      var x, y;
+      for ( var i = 0; i < pointCount; i++ ) {
+        x = points[ 2 * i ];
+        y = points[ 2 * i + 1 ];
+        ctx.moveTo( x, y );
+        ctx.arc( x, y, 6, 0, PI2 );
+      }
+
+      ctx.fillStyle = 'red';
+      ctx.fill();
     },
 
     drawLinear: function( ctx ) {
@@ -29,11 +56,11 @@ define([
       ctx.beginPath();
       ctx.moveTo( points[0], points[1] );
 
-      var xi, yi;
+      var x, y;
       for ( var i = 1; i < pointCount; i++ ) {
-        xi = points[ 2 * i ];
-        yi = points[ 2 * i + 1 ];
-        ctx.lineTo( xi, yi );
+        x = points[ 2 * i ];
+        y = points[ 2 * i + 1 ];
+        ctx.lineTo( x, y );
       }
     },
 

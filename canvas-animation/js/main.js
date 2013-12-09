@@ -61,7 +61,8 @@ define(function( require ) {
       50, 20,
       70, 30,
       90, 0,
-      120, 90
+      120, 90,
+      90, 90
     ],
     lineWidth: 2,
     stroke: new Color({ red: 255, green: 0, blue: 0, alpha: 1 })
@@ -70,4 +71,9 @@ define(function( require ) {
   group.add( path );
 
   editorView.render();
+
+  setInterval(function() {
+    path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );
+    editorView.render();
+  }, 500 );
 });
