@@ -418,6 +418,11 @@ define(function( require ) {
   var skeletonJSONObject = skeletonView.toJSON();
   skeletonJSONObject.upperArmLeft.transforms[3].a = -5;
   skeletonView.fromJSON( JSON.stringify( skeletonJSONObject ) );
+  if ( skeletonView.upperArmLeftView.transforms.at(3).get( 'a' ) !== -5 ) {
+    console.log( 'JSON loading messed up.' );
+  }
+  skeletonJSONObject.upperArmLeft.transforms[3].a = 0;
+  skeletonView.fromJSON( JSON.stringify( skeletonJSONObject ) );
 
   function rotate( rx, ry ) {
     var transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
