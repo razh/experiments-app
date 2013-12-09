@@ -191,12 +191,47 @@ define([
       jsonObject.spacing = this.spacing;
 
       return jsonObject;
+    },
+
+    fromJSON: function( json ) {
+      var jsonObject = JSON.parse( json );
+
+      Object.keys( jsonObject ).forEach(function( key ) {
+        var value = jsonObject[ key ];
+
+        var view, model;
+        // Assume that every value is preserved in the JSON.
+        if ( parts.indexOf( key ) !== -1 ) {
+          view = this[ key + 'View' ];
+          model = this[ key ];
+
+          Object.keys( value ).forEach(function( valueKey ) {
+            if ( model.has( valueKey ) ) {
+              model.set( value[ valueKey ] );
+            }
+          });
+
+          view.transforms.forEach(function( transform, index ) {
+            transform.set( value.transforms[ index ] );
+          });
+
+          view.transformOrigin.set( value.transformOrigin );
+        } else if ( leftRightOffsets.indexOf( key ) !== -1 ) {
+          this[ key ].set( value );
+        } else if ( key === 'spacing' ) {
+          this.spacing = value;
+        }
+      }.bind( this ));
     }
   });
 
   Object.defineProperty( SkeletonView.prototype, 'spacing', {
     get: function() {
       return this.spacingView.model.get( 't' );
+    },
+
+    set: function( spacing ) {
+      this.spacingView.model.set( 't', spacing );
     }
   });
 

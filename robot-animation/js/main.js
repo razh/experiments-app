@@ -415,6 +415,9 @@ define(function( require ) {
   }
 
   var skeletonView = createSkeletonView( boxViews );
+  var skeletonJSONObject = skeletonView.toJSON();
+  skeletonJSONObject.upperArmLeft.transforms[3].a = -5;
+  skeletonView.fromJSON( JSON.stringify( skeletonJSONObject ) );
 
   function rotate( rx, ry ) {
     var transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
