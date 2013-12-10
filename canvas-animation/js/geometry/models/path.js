@@ -31,6 +31,25 @@ define([
       }
     },
 
+    getWorldPoints: function() {
+      var pointCount = this.pointCount();
+      // Shallow copy of points.
+      var points = this.get( 'points' ).slice();
+
+      var point;
+      var x, y;
+      for ( var i = 0; i < pointCount; i++ ) {
+        x = points[ 2 * i ];
+        y = points[ 2 * i + 1 ];
+
+        point = this.toWorld( x, y );
+        points[ 2 * i ] = point.x;
+        points[ 2 * i + 1 ] = point.y;
+      }
+
+      return points;
+    },
+
     drawPoints: function( ctx ) {
       var pointCount = this.pointCount();
       var points = this.get( 'points' );

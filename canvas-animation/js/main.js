@@ -64,7 +64,6 @@ define(function( require ) {
   var path = new Path({
     x: 300,
     y: 200,
-    scaleX: 2,
     points: [
       10, 10,
       50, 20,
