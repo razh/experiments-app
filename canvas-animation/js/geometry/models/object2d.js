@@ -1,8 +1,9 @@
 /*globals define*/
 define([
+  'underscore',
   'backbone',
   'models/color'
-], function( Backbone, Color ) {
+], function( _, Backbone, Color ) {
   'use strict';
 
   var Object2D = Backbone.Model.extend({
@@ -16,10 +17,22 @@ define([
         scaleX: 1,
         scaleY: 1,
 
-        fill: new Color(),
-        stroke: new Color(),
+        fill: null,
+        stroke: null,
         lineWidth: 1
       };
+    },
+
+    constructor: function() {
+      var attributes = arguments[0];
+
+      [ 'fill', 'stroke' ].forEach(function( prop ) {
+        if ( _.isArray( attributes[ prop ] ) ) {
+          attributes[ prop ] = new Color( attributes[ prop ] );
+        }
+      });
+
+      Backbone.Model.apply( this, arguments );
     },
 
     draw: function( ctx ) {
@@ -37,12 +50,12 @@ define([
           stroke = this.get( 'stroke' ),
           lineWidth = this.get( 'lineWidth' );
 
-      if ( fill.get( 'alpha' ) ) {
+      if ( fill && fill.get( 'alpha' ) ) {
         ctx.fillStyle = fill.rgba();
         ctx.fill();
       }
 
-      if ( lineWidth && stroke.get( 'alpha' ) ) {
+      if ( lineWidth && stroke && stroke.get( 'alpha' ) ) {
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = stroke.rgba();
         ctx.stroke();

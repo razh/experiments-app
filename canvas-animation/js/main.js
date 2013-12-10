@@ -33,6 +33,14 @@ define(function( require ) {
   editorCanvas.width  = 640;
   editorCanvas.height = 480;
 
+  var color = new Color([ 255, 20, 30, 1 ]);
+  if ( color.get( 'red'   ) !== 255 ||
+       color.get( 'green' ) !==  20 ||
+       color.get( 'blue'  ) !==  30 ||
+       color.get( 'alpha' ) !==   1 ) {
+    console.log( 'Incorrect initializion of Color.' );
+  }
+
   var editorView = new EditorView({
     el: editorCanvas,
     model: new Editor(),
@@ -47,8 +55,8 @@ define(function( require ) {
     width: 80,
     height: 60,
     lineWidth: 4,
-    fill: new Color({ red: 0, green: 0, blue: 128, alpha: 1 }),
-    stroke: new Color({ red: 0, green: 0, blue: 255, alpha: 1 })
+    fill: [ 0, 0, 128, 1 ],
+    stroke: [ 0, 0, 255, 1 ]
   });
 
   group.add( rect );
@@ -65,7 +73,7 @@ define(function( require ) {
       90, 90
     ],
     lineWidth: 2,
-    stroke: new Color({ red: 255, green: 0, blue: 0, alpha: 1 })
+    stroke: [ 255, 0, 0, 1 ]
   });
 
   group.add( path );

@@ -1,8 +1,9 @@
 /*globals define*/
 define([
+  'underscore',
   'backbone',
   'utils'
-], function( Backbone, Utils ) {
+], function( _, Backbone, Utils ) {
   'use strict';
 
   var Color = Backbone.Model.extend({
@@ -13,6 +14,25 @@ define([
         blue:  0,
         alpha: 0
       };
+    },
+
+    constructor: function() {
+      var args = [].slice.call( arguments ),
+          attributes = args.shift();
+
+      if ( _.isArray( attributes ) ) {
+        args.unshift({});
+        Backbone.Model.apply( this, args );
+
+        this.set( _.defaults({
+          red:   attributes[0],
+          green: attributes[1],
+          blue:  attributes[2],
+          alpha: attributes[3]
+        }, this.attributes ));
+      } else {
+        Backbone.Model.apply( this, arguments );
+      }
     },
 
     rgba: function() {
