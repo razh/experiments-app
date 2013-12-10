@@ -16,6 +16,7 @@ define([
     defaults: function() {
       var defaults = Object2D.prototype.defaults();
       defaults.points = [];
+      defaults.closed = false;
       defaults.interpolation = Interpolation.LINEAR;
       return defaults;
     },
@@ -23,11 +24,17 @@ define([
     drawPath: function( ctx ) {
       this.drawPoints( ctx );
 
-      var interpolation = this.get( 'interpolation' );
+      var interpolation = this.get( 'interpolation' ),
+          closed = this.get( 'closed' );
+
       if ( interpolation === Interpolation.LINEAR ) {
         this.drawLinear( ctx );
       } else if ( interpolation === Interpolation.QUADRATIC ) {
-        this.drawQuadratic( ctx );
+        if ( closed ) {
+          this.drawQuadraticClosed( ctx );
+        } else {
+          this.drawQuadratic( ctx );
+        }
       }
     },
 
@@ -81,6 +88,10 @@ define([
         y = points[ 2 * i + 1 ];
         ctx.lineTo( x, y );
       }
+
+      if ( this.get( 'closed' ) ) {
+        ctx.lineTo( points[0], points[1] );
+      }
     },
 
     drawQuadratic: function( ctx ) {
@@ -105,6 +116,50 @@ define([
         ctx.quadraticCurveTo( xi, yi, mx, my );
       }
 
+      xi = points[ 2 * i ];
+      yi = points[ 2 * i + 1 ];
+      xj = points[ 2 * ( i + 1 ) ];
+      yj = points[ 2 * ( i + 1 ) + 1 ];
+
+      ctx.quadraticCurveTo( xi, yi, xj, yj );
+    },
+
+    drawQuadraticClosed: function( ctx ) {
+      var pointCount = this.pointCount();
+      var points = this.get( 'points' );
+
+      ctx.beginPath();
+
+      var xi, yi, xj, yj;
+      var mx, my;
+      var i, il;
+
+      // Draw initial midpoint.
+      xi = points[ 2 * i ];
+      yi = points[ 2 * i + 1 ];
+      xj = points[ 2 * ( i + 1 ) ];
+      yj = points[ 2 * ( i + 1 ) + 1 ];
+
+      mx = 0.5 * ( xi + xj );
+      my = 0.5 * ( yi + yj );
+
+      ctx.moveTo( mx, my );
+
+      // Draw path.
+      for ( i = 1, il = pointCount; i < il; i++ ) {
+        xi = points[ 2 * i ];
+        yi = points[ 2 * i + 1 ];
+        xj = points[ 2 * ( ( i + 1 ) % pointCount ) ];
+        yj = points[ 2 * ( ( i + 1 ) % pointCount ) + 1 ];
+
+        mx = 0.5 * ( xi + xj );
+        my = 0.5 * ( yi + yj );
+
+        ctx.quadraticCurveTo( xi, yi, mx, my );
+      }
+
+      // Connect final point.
+      i %= pointCount;
       xi = points[ 2 * i ];
       yi = points[ 2 * i + 1 ];
       xj = points[ 2 * ( i + 1 ) ];

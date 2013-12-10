@@ -86,11 +86,19 @@ define(function( require ) {
     var x = event.pageX - editorCanvas.offsetLeft,
         y = event.pageY - editorCanvas.offsetTop;
 
-    console.log( rect.contains( editorCanvas.getContext( '2d' ), x, y ) );
+    var rectContains = rect.contains( editorCanvas.getContext( '2d' ), x, y );
+    var pathContains = path.contains( editorCanvas.getContext( '2d' ), x, y );
+
+    console.log( 'rect: ' + rectContains + ', path: ' + pathContains );
   });
 
   setInterval(function() {
     path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );
     editorView.render();
   }, 500 );
+
+  setInterval(function() {
+    path.set( 'closed', !path.get( 'closed' ) );
+    editorView.render();
+  }, 1000 );
 });
