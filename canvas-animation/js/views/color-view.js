@@ -1,12 +1,12 @@
 /*globals define*/
 define([
   'underscore',
-  'backbone',
+  'views/form-view',
   'text!templates/color-view.html'
-], function( _, Backbone, colorTemplate ) {
+], function( _, FormView, colorTemplate ) {
   'use strict';
 
-  var ColorView = Backbone.View.extend({
+  var ColorView = FormView.extend({
     template: _.template( colorTemplate ),
 
     render: function() {

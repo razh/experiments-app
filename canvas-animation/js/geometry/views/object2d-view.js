@@ -1,13 +1,19 @@
 /*globals define*/
 define([
   'underscore',
-  'backbone',
+  'views/form-view',
+  'views/color-view',
   'text!geometry/templates/object2d-view.html'
-], function( _, Backbone, object2dTemplate ) {
+], function( _, FormView, ColorView, object2dTemplate ) {
   'use strict';
 
-  var Object2DView = Backbone.View.extend({
+  var Object2DView = FormView.extend({
     template: _.template( object2dTemplate ),
+
+    initialize: function() {
+      _.bindAll( this, 'render' );
+      this.listenTo( this.model, 'change', this.update );
+    },
 
     render: function() {
       this.$el.html( this.template() );
