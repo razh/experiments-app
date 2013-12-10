@@ -54,6 +54,8 @@ define(function( require ) {
     y: 200,
     width: 80,
     height: 60,
+    angle: 20,
+    scaleX: 3,
     lineWidth: 4,
     fill: [ 0, 0, 128, 1 ],
     stroke: [ 0, 0, 255, 1 ]
@@ -79,6 +81,13 @@ define(function( require ) {
   group.add( path );
 
   editorView.render();
+
+  editorCanvas.addEventListener( 'mousedown', function( event ) {
+    var x = event.pageX - editorCanvas.offsetLeft,
+        y = event.pageY - editorCanvas.offsetTop;
+
+    console.log( rect.contains( editorCanvas.getContext( '2d' ), x, y ) );
+  });
 
   setInterval(function() {
     path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );

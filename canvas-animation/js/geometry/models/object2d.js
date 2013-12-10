@@ -59,12 +59,25 @@ define([
       }
     },
 
-    drawPath: function() {},
+    drawPath: function( ctx ) {
+      // Draw an empty path so .contains() doesn't use the last drawn path.
+      ctx.beginPath();
+      ctx.closePath();
+    },
 
     applyTransform: function( ctx ) {
       ctx.translate( this.get( 'x' ), this.get( 'y' ) );
       ctx.rotate( -this.get( 'angle' ) );
       ctx.scale( this.get( 'scaleX' ), this.get( 'scaleY' ) );
+    },
+
+    contains: function( ctx, x, y ) {
+      ctx.save();
+      this.applyTransform( ctx );
+      this.drawPath( ctx );
+      ctx.restore();
+
+      return ctx.isPointInPath( x, y );
     },
 
     toLocal: function( x, y ) {
