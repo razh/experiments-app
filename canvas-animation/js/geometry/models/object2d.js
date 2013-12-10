@@ -38,10 +38,7 @@ define([
     draw: function( ctx ) {
       ctx.save();
 
-      ctx.translate( this.get( 'x' ), this.get( 'y' ) );
-      ctx.rotate( -this.get( 'angle' ) );
-      ctx.scale( this.get( 'scaleX' ), this.get( 'scaleY' ) );
-
+      this.applyTransform( ctx );
       this.drawPath( ctx );
 
       ctx.restore();
@@ -62,7 +59,63 @@ define([
       }
     },
 
-    drawPath: function() {}
+    drawPath: function() {},
+
+    applyTransform: function( ctx ) {
+      ctx.translate( this.get( 'x' ), this.get( 'y' ) );
+      ctx.rotate( -this.get( 'angle' ) );
+      ctx.scale( this.get( 'scaleX' ), this.get( 'scaleY' ) );
+    },
+
+    toLocal: function( x, y ) {
+      x -= this.get( 'x' );
+      y -= this.get( 'y' );
+
+      var angle = this.get( 'angle' );
+      var cos, sin;
+      var rx, ry;
+
+      if ( angle ) {
+        cos = Math.cos( angle );
+        sin = Math.sin( angle );
+
+        rx = cos * x - sin * y;
+        ry = sin * x + cos * y;
+
+        x = rx;
+        y = ry;
+      }
+
+      return {
+        x: x / this.get( 'scaleX' ),
+        y: y / this.get( 'scaleY' )
+      };
+    },
+
+    toWorld: function( x, y ) {
+      x *= this.get( 'scaleX' );
+      y *= this.get( 'scaleY' );
+
+      var angle = this.get( 'angle' );
+      var cos, sin;
+      var rx, ry;
+
+      if ( angle ) {
+        cos = Math.cos( -angle );
+        sin = Math.sin( -angle );
+
+        rx = cos * x - sin * y;
+        ry = sin * x + cos * y;
+
+        x = rx;
+        y = ry;
+      }
+
+      return {
+        x: x + this.get( 'x' ),
+        y: y + this.get( 'y' )
+      };
+    }
   });
 
   return Object2D;
