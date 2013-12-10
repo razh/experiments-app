@@ -1,0 +1,12 @@
+<form>
+  <% [ 'x', 'y' ].forEach(function( key ) { %>
+    <fieldset>
+      <label for="<%= key %>"><%= key %></label>
+      <input type="number" id="<%= key %>">
+    </fieldset>
+  <% }); %>
+  <fieldset>
+    <label for="angle">angle</label>
+    <input type="number" id="angle">
+  </fieldset>
+</form>
