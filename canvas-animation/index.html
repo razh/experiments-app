@@ -8,9 +8,27 @@
     body {
       margin: 0;
     }
+
+    #path-edit-view {
+      position: absolute;
+    }
+
+    .handler {
+      position: absolute;
+
+      width: 10px;
+      height: 10px;
+
+      margin-left: -5px;
+      margin-top: -5px;
+
+      border-radius: 50%;
+      background-color: #000;
+    }
   </style>
 </head>
 <body>
+  <div id="path-edit-view"></div>
   <canvas id="editor"></canvas>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>

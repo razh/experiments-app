@@ -82,6 +82,15 @@ define(function( require ) {
 
   editorView.render();
 
+  var PathEditView = require( 'geometry/views/path-edit-view' );
+  var pathEditView = new PathEditView({
+    el: '#path-edit-view',
+    canvas: editorCanvas,
+    model: path
+  });
+
+  pathEditView.render();
+
   editorCanvas.addEventListener( 'mousedown', function( event ) {
     var x = event.pageX - editorCanvas.offsetLeft,
         y = event.pageY - editorCanvas.offsetTop;
