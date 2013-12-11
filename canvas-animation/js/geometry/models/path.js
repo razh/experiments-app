@@ -23,6 +23,7 @@ define([
 
     drawPath: function( ctx ) {
       this.drawPoints( ctx );
+      this.drawCentroid( ctx );
 
       var interpolation = this.get( 'interpolation' ),
           closed = this.get( 'closed' );
@@ -71,6 +72,15 @@ define([
         ctx.arc( x, y, 6, 0, PI2 );
       }
 
+      ctx.fillStyle = 'red';
+      ctx.fill();
+    },
+
+    drawCentroid: function( ctx ) {
+      var centroid = this.computeCentroid();
+
+      ctx.beginPath();
+      ctx.arc( centroid.x, centroid.y, 10, 0, PI2 );
       ctx.fillStyle = 'red';
       ctx.fill();
     },
@@ -169,6 +179,48 @@ define([
 
         ctx.quadraticCurveTo( xi, yi, mx, my );
       }
+    },
+
+    computeCentroid: function() {
+      var pointCount = this.pointCount();
+      var points = this.get( 'points' );
+
+      // Centroid.
+      var x = 0,
+          y = 0;
+
+      var area = 0;
+      var x0 = 0,
+          y0 = 0;
+
+      var third = 1 / 3;
+
+      var triangleArea;
+      var x1, y1, x2, y2;
+      var dx0, dy0, dx1, dy1;
+      for ( var i = 0; i < pointCount; i++ ) {
+        x1 = points[ 2 * i ];
+        y1 = points[ 2 * i + 1 ];
+        x2 = points[ 2 * ( ( i + 1 ) % pointCount ) ];
+        y2 = points[ 2 * ( ( i + 1 ) % pointCount ) + 1 ];
+
+        dx0 = x1 - x0;
+        dy0 = y1 - x0;
+        dx1 = x2 - x1;
+        dy1 = y2 - y1;
+
+        // Half the 2D 'cross product'.
+        triangleArea = 0.5 * ( dx0 * dy1 - dx1 * dy0 );
+
+        area += triangleArea;
+        x += triangleArea * third * ( x0 + x1 + x2 );
+        y += triangleArea * third * ( y0 + y1 + y2 );
+      }
+
+      return {
+        x: x / area,
+        y: y / area
+      };
     },
 
     pointCount: function() {
