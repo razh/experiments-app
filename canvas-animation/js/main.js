@@ -141,4 +141,13 @@ define(function( require ) {
   });
 
   console.log( JSON.stringify( editorView.renderIntercept() ) );
+
+  var GroupView = require( 'geometry/views/group-view' );
+
+  var groupView = new GroupView({
+    el: '#group-view',
+    collection: group
+  });
+
+  groupView.render();
 });
