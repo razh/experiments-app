@@ -6,8 +6,30 @@ define([
   'use strict';
 
   var EditorView = Backbone.View.extend({
+    events: {
+      mousedown: 'onMouseDown',
+      mousemove: 'onMouseMove',
+      mouseup: 'onMouseUp'
+    },
+
     initialize: function() {
-      _.bindAll( this, 'render' );
+      _.bindAll( this,
+        'render',
+        'onMouseDown',
+        'onMouseMove',
+        'onMouseUp'
+      );
+
+      this.mouse = {
+        x: 0,
+        y: 0
+      };
+
+      this.selected = null;
+      this.offset = {
+        x: 0,
+        y: 0
+      };
 
       this.el.width = this.model.get( 'width' );
       this.el.height = this.model.get( 'height' );
@@ -97,6 +119,49 @@ define([
       this.drawObjects( ctx );
 
       return calls;
+    },
+
+    mousePosition: function( event ) {
+      this.mouse.x = event.pageX - this.el.offsetLeft;
+      this.mouse.y = event.pageY - this.el.offsetTop;
+    },
+
+    onMouseDown: function( event ) {
+      this.mousePosition( event );
+      this.mouse.down = true;
+
+      var ctx = this.ctx;
+      var x = this.mouse.x,
+          y = this.mouse.y;
+
+      var selected = this.collection.find(function( model ) {
+        return model.contains( ctx, x, y );
+      });
+
+      if ( selected ) {
+        this.selected = selected;
+        this.offset.x = selected.get( 'x' ) - x;
+        this.offset.y = selected.get( 'y' ) - y;
+      }
+    },
+
+    onMouseMove: function( event ) {
+      this.mousePosition( event );
+
+      if ( this.mouse.down && this.selected ) {
+        this.selected.set({
+          x: this.mouse.x + this.offset.x,
+          y: this.mouse.y + this.offset.y
+        });
+      }
+    },
+
+    onMouseUp: function() {
+      this.mouse.down = false;
+
+      this.selected = null;
+      this.offset.x = 0;
+      this.offset.y = 0;
     }
   });
 
