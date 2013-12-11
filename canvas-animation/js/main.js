@@ -26,6 +26,7 @@ define(function( require ) {
   var EditorView = require( 'views/editor-view' );
 
   var Color = require( 'models/color' );
+  var Circle = require( 'geometry/models/circle' );
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
 
@@ -79,6 +80,18 @@ define(function( require ) {
   });
 
   group.add( path );
+
+  var circle = new Circle({
+    x: 170,
+    y: 100,
+    radius: 30,
+    lineWidth: 2,
+    fill: [ 192, 192, 255, 0.8 ],
+    stroke: [ 0, 0, 0, 0.8 ],
+    zIndex: -1
+  });
+
+  group.add( circle );
 
   editorView.render();
 
