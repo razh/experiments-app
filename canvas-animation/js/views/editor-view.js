@@ -12,18 +12,21 @@ define([
       this.ctx = this.el.getContext( '2d' );
     },
 
-    renderObjects: function( ctx ) {
-      this.collection.each(function( object ) {
+    drawObjects: function( ctx ) {
+      this.collection.sortBy( 'zIndex' ).forEach(function( object ) {
         object.draw( ctx );
       });
     },
+
+    drawGrid: function() {},
 
     render: function() {
       var ctx = this.ctx;
 
       ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
 
-      this.renderObjects( ctx );
+      this.drawGrid( ctx );
+      this.drawObjects( ctx );
     }
   });
 

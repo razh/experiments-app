@@ -19,7 +19,9 @@ define([
 
         fill: null,
         stroke: null,
-        lineWidth: 1
+        lineWidth: 1,
+
+        zIndex: 0
       };
     },
 
