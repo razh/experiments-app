@@ -130,15 +130,20 @@ define([
 
       ctx.beginPath();
 
+      // Draw nothing if degenerate.
+      if ( pointCount < 2 ) {
+        ctx.closePath();
+        return;
+      }
+
       var xi, yi, xj, yj;
       var mx, my;
-      var i, il;
 
       // Draw initial midpoint.
-      xi = points[ 2 * i ];
-      yi = points[ 2 * i + 1 ];
-      xj = points[ 2 * ( i + 1 ) ];
-      yj = points[ 2 * ( i + 1 ) + 1 ];
+      xi = points[0];
+      yi = points[1];
+      xj = points[2];
+      yj = points[3];
 
       mx = 0.5 * ( xi + xj );
       my = 0.5 * ( yi + yj );
@@ -146,26 +151,21 @@ define([
       ctx.moveTo( mx, my );
 
       // Draw path.
-      for ( i = 1, il = pointCount; i < il; i++ ) {
-        xi = points[ 2 * i ];
-        yi = points[ 2 * i + 1 ];
-        xj = points[ 2 * ( ( i + 1 ) % pointCount ) ];
-        yj = points[ 2 * ( ( i + 1 ) % pointCount ) + 1 ];
+      var index;
+      var i, il;
+      for ( i = 1, il = pointCount + 1; i < il; i++ ) {
+        index = i % pointCount;
+
+        xi = points[ 2 * index ];
+        yi = points[ 2 * index + 1 ];
+        xj = points[ 2 * ( ( index + 1 ) % pointCount ) ];
+        yj = points[ 2 * ( ( index + 1 ) % pointCount ) + 1 ];
 
         mx = 0.5 * ( xi + xj );
         my = 0.5 * ( yi + yj );
 
         ctx.quadraticCurveTo( xi, yi, mx, my );
       }
-
-      // Connect final point.
-      i %= pointCount;
-      xi = points[ 2 * i ];
-      yi = points[ 2 * i + 1 ];
-      xj = points[ 2 * ( i + 1 ) ];
-      yj = points[ 2 * ( i + 1 ) + 1 ];
-
-      ctx.quadraticCurveTo( xi, yi, xj, yj );
     },
 
     pointCount: function() {

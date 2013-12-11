@@ -68,7 +68,7 @@ define(function( require ) {
     y: 200,
     points: [
       10, 10,
-      50, 20,
+      50, -50,
       70, 30,
       90, 0,
       120, 90,
@@ -101,13 +101,31 @@ define(function( require ) {
     console.log( 'rect: ' + rectContains + ', path: ' + pathContains );
   });
 
-  setInterval(function() {
+  var interpInterval = setInterval(function() {
     path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );
     editorView.render();
   }, 500 );
 
-  setInterval(function() {
+  // There's a math joke here.
+  var closedInterval = setInterval(function() {
     path.set( 'closed', !path.get( 'closed' ) );
     editorView.render();
   }, 1000 );
+
+  // Continuously draw closed quadratic Path.
+  document.addEventListener( 'keydown', function( event ) {
+    if ( event.which === 32 ) {
+      clearInterval( interpInterval );
+      clearInterval( closedInterval );
+
+      path.set({
+        interpolation: Path.Interpolation.QUADRATIC,
+        closed: true
+      });
+
+      setInterval(function() {
+        editorView.render();
+      }, 16 );
+    }
+  })
 });

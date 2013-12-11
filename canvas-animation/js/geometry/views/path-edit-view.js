@@ -1,8 +1,9 @@
 /* globals define*/
 define([
   'jquery',
+  'underscore',
   'backbone'
-], function( $, Backbone ) {
+], function( $, _, Backbone ) {
   'use strict';
 
   /**
@@ -56,6 +57,10 @@ define([
         }).css({
           '-webkit-transform': transform,
           transform: transform
+        }).attr({
+          'data-x': x,
+          'data-y': y,
+          'data-index': i
         });
 
         fragment.appendChild( handlerEl[0] );
@@ -69,25 +74,40 @@ define([
       var target = event.currentTarget;
 
       this.selected = target;
-      var transform = this.selected.webkitTransform || this.selected.transform;
+      var $target = $( target );
+      var x = $target.attr( 'data-x' ),
+          y = $target.attr( 'data-y' );
 
-      this.offset.x = event.pageX - this.canvas.offsetLeft;
-      this.offset.y = event.pageY - this.canvas.offsetTop;
+      this.offset.x = x - ( event.pageX - this.canvas.offsetLeft );
+      this.offset.y = y - ( event.pageY - this.canvas.offsetTop );
     },
 
     onMouseMove: function( event ) {
       var transform;
+      var point;
       var x, y;
       if ( this.selected ) {
-        x = event.pageX - this.offset.x;
-        y = event.pageY - this.offset.y;
+        x = event.pageX + this.offset.x;
+        y = event.pageY + this.offset.y;
+
 
         transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        console.log(transform)
-        $( this.selected ).css({
+
+        var $selected = $( this.selected );
+        $selected.css({
           '-webkit-transform': transform,
           transform: transform
+        }).attr({
+          'data-x': x,
+          'data-y': y
         });
+
+        var index = parseInt( $selected.attr( 'data-index' ), 10 );
+
+        var points = this.model.get( 'points' );
+        point = this.model.toLocal( x, y );
+        points[ 2 * index ] = point.x;
+        points[ 2 * index + 1 ] = point.y;
       }
     },
 
