@@ -4,7 +4,14 @@ define([
 ], function( Backbone ) {
   'use strict';
 
-  var Editor = Backbone.Model.extend({});
+  var Editor = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        width: 512,
+        height: 512
+      };
+    }
+  });
 
   return Editor;
 });

@@ -31,8 +31,6 @@ define(function( require ) {
   var Rect = require( 'geometry/models/rect' );
 
   var editorCanvas = document.getElementById( 'editor' );
-  editorCanvas.width  = 640;
-  editorCanvas.height = 480;
 
   var color = new Color([ 255, 20, 30, 1 ]);
   if ( color.get( 'red'   ) !== 255 ||
@@ -140,5 +138,5 @@ define(function( require ) {
         editorView.render();
       }, 16 );
     }
-  })
+  });
 });

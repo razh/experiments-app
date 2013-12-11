@@ -9,6 +9,10 @@
       margin: 0;
     }
 
+    .editor-view {
+      border: 1px solid black;
+    }
+
     #path-edit-view {
       position: absolute;
     }
@@ -29,7 +33,7 @@
 </head>
 <body>
   <div id="path-edit-view"></div>
-  <canvas id="editor"></canvas>
+  <canvas class="editor-view" id="editor"></canvas>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>
 </body>

@@ -2,8 +2,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone'
-], function( $, _, Backbone ) {
+  'backbone',
+  'utils'
+], function( $, _, Backbone, Utils ) {
   'use strict';
 
   /**
@@ -12,19 +13,14 @@ define([
    */
   var PathEditView = Backbone.View.extend({
     events: {
-      'mousedown .handler': 'onMouseDown',
-      'mousemove': 'onMouseMove',
-      'mouseup': 'onMouseUp'
+      'mousedown .handler': 'onMouseDown'
     },
 
     initialize: function( options ) {
+      _.bindAll( this, 'onMouseDown', 'onMouseMove', 'onMouseUp' );
+
       this.canvas = options.canvas;
       this.handlers = [];
-
-      this.$el.css({
-        width: this.canvas.width,
-        height: this.canvas.height
-      });
 
       this.selected = null;
       this.offset = {
@@ -63,6 +59,9 @@ define([
       }
 
       this.$el.append( fragment );
+
+      document.body.addEventListener( 'mousemove', this.onMouseMove );
+      document.body.addEventListener( 'mouseup', this.onMouseUp );
     },
 
     onMouseDown: function( event ) {
@@ -113,6 +112,12 @@ define([
         x: 0,
         y: 0
       };
+    },
+
+    remove: function() {
+      Backbone.View.prototype.remove.call( this );
+      document.body.removeEventListener( 'mousemove', this.onMouseMove );
+      document.body.removeEventListener( 'mouseup', this.onMouseUp );
     }
   });
 

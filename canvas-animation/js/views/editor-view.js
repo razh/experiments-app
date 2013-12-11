@@ -9,6 +9,9 @@ define([
     initialize: function() {
       _.bindAll( this, 'render' );
 
+      this.el.width = this.model.get( 'width' );
+      this.el.height = this.model.get( 'height' );
+
       this.ctx = this.el.getContext( '2d' );
     },
 
