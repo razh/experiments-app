@@ -33,21 +33,16 @@ define([
       };
 
       var pointCount = this.model.pointCount();
-      var points = this.model.get( 'points' );
+      var points = this.model.getWorldPoints();
 
       var fragment = document.createDocumentFragment();
 
       var handlerEl;
       var transform;
-      var point;
       var x, y;
       for ( var i = 0; i < pointCount; i++ ) {
         x = points[ 2 * i ];
         y = points[ 2 * i + 1 ];
-
-        point = this.model.toWorld( x, y );
-        x = point.x;
-        y = point.y;
 
         transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
 
@@ -71,30 +66,31 @@ define([
     },
 
     onMouseDown: function( event ) {
-      var target = event.currentTarget;
+      var target = event.currentTarget,
+          $target = $( target );
 
-      this.selected = target;
-      var $target = $( target );
       var x = $target.attr( 'data-x' ),
           y = $target.attr( 'data-y' );
 
+      this.selected = target;
       this.offset.x = x - ( event.pageX - this.canvas.offsetLeft );
       this.offset.y = y - ( event.pageY - this.canvas.offsetTop );
     },
 
     onMouseMove: function( event ) {
+      var $selected;
       var transform;
-      var point;
+      var points, point;
+      var index;
       var x, y;
+
       if ( this.selected ) {
         x = event.pageX + this.offset.x;
         y = event.pageY + this.offset.y;
 
-
         transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
 
-        var $selected = $( this.selected );
-        $selected.css({
+        $selected = $( this.selected ).css({
           '-webkit-transform': transform,
           transform: transform
         }).attr({
@@ -102,9 +98,9 @@ define([
           'data-y': y
         });
 
-        var index = parseInt( $selected.attr( 'data-index' ), 10 );
+        index = parseInt( $selected.attr( 'data-index' ), 10 );
 
-        var points = this.model.get( 'points' );
+        points = this.model.get( 'points' );
         point = this.model.toLocal( x, y );
         points[ 2 * index ] = point.x;
         points[ 2 * index + 1 ] = point.y;

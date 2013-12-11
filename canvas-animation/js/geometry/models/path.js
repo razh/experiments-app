@@ -150,12 +150,15 @@ define([
 
       ctx.moveTo( mx, my );
 
-      // Draw path.
+      // Draw path (connects all midpoints).
       var index;
       var i, il;
       for ( i = 1, il = pointCount + 1; i < il; i++ ) {
+        // For i >= pointCount.
         index = i % pointCount;
 
+        // (xj, yj) modulo is for i + 1 >= pointCount, where (xi, yi) would be
+        // the last point.
         xi = points[ 2 * index ];
         yi = points[ 2 * index + 1 ];
         xj = points[ 2 * ( ( index + 1 ) % pointCount ) ];
