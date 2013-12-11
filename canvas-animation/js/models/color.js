@@ -17,7 +17,7 @@ define([
     },
 
     constructor: function() {
-      var args = [].slice.call( arguments ),
+      var args = _.toArray( arguments ),
           attributes = args.shift();
 
       if ( _.isArray( attributes ) ) {

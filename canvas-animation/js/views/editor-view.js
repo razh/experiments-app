@@ -30,6 +30,24 @@ define([
 
       this.drawGrid( ctx );
       this.drawObjects( ctx );
+    },
+
+    /**
+     * Intercept canvas calls.
+     */
+    renderIntercept: function() {
+      var calls = [];
+
+      var ctx = {};
+      _.functions( this.ctx ).forEach(function( functionName ) {
+        ctx[ functionName ] = function() {
+          calls.push( [ functionName ].concat( _.toArray( arguments ) ) );
+        };
+      });
+
+      this.drawObjects( ctx );
+
+      return calls;
     }
   });
 

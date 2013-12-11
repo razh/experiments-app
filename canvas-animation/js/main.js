@@ -139,4 +139,6 @@ define(function( require ) {
       }, 16 );
     }
   });
+
+  console.log( JSON.stringify( editorView.renderIntercept() ) );
 });
