@@ -1,0 +1,7 @@
+<% // Since there is only one input, we need to disable form submission. %>
+<form onsubmit="return false;">
+  <fieldset>
+    <label for="radius">radius</label>
+    <input type="number" id="radius" value="<%= model.get( 'radius' ) %>" min="0">
+  </fieldset>
+</form>

@@ -112,6 +112,31 @@ define(function( require ) {
 
   object2dView.render();
 
+  var RectView = require( 'geometry/views/rect-view' );
+  var rectView = new RectView({
+    el: '#rect-view',
+    model: rect
+  });
+
+  rectView.render();
+
+  var CircleView = require( 'geometry/views/circle-view' );
+  var circleView = new CircleView({
+    el: '#circle-view',
+    model: circle
+  });
+
+  circleView.render();
+
+  var PathView = require( 'geometry/views/path-view' );
+  var pathView = new PathView({
+    el: '#path-view',
+    model: path
+  });
+
+  pathView.render();
+
+
   editorCanvas.addEventListener( 'mousedown', function( event ) {
     var x = event.pageX - editorCanvas.offsetLeft,
         y = event.pageY - editorCanvas.offsetTop;

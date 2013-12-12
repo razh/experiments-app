@@ -1,3 +1,4 @@
+/*jshint bitwise:false*/
 /*globals define*/
 define([
   'underscore',

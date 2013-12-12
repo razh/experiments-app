@@ -1,0 +1,8 @@
+<form>
+  <% [ 'width', 'height' ].forEach(function( dimension ) { %>
+    <fieldset>
+      <label for="<%= dimension %>"><%= dimension %></label>
+      <input type="number" id="<%= dimension %>" value="<%= model.get( dimension ) %>">
+    </fieldset>
+  <% }); %>
+</form>

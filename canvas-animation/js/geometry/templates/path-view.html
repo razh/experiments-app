@@ -1,0 +1,21 @@
+<form>
+  <% for ( var index = 0; index < pointCount; index++ ) { %>
+    <fieldset>
+      <label for="x<%= index %>">x<%= index %></label>
+      <input type="number"
+        class="coordinate"
+        id="x<%= index %>"
+        value="<%= points[ 2 * index ] %>"
+        data-axis="0"
+        data-index="<%= index %>">
+
+      <label for="y<%= index %>">y<%= index %></label>
+      <input type="number"
+        class="coordinate"
+        id="y<%= index %>"
+        value="<%= points[ 2 * index + 1 ] %>"
+        data-axis="1"
+        data-index="<%= index %>">
+    </fieldset>
+  <% } %>
+</form>

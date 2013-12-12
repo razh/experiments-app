@@ -21,6 +21,7 @@ define([
       [ 'fill', 'stroke' ].forEach(function( property ) {
         if ( this.model.get( property ) ) {
           this[ property + 'View' ] = new ColorView({
+            className: property,
             model: this.model.get( property )
           });
         }
@@ -38,7 +39,7 @@ define([
         var view = this[ property + 'View' ];
         if ( view ) {
           view.render();
-          this.$( '.' + property ).append( view.el );
+          this.$el.append( view.el );
         }
       }.bind( this ));
 
