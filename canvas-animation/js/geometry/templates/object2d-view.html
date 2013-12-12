@@ -5,20 +5,24 @@
       <input type="number" id="<%= key %>" value="<%= model.get( key ) %>">
     </fieldset>
   <% }); %>
+
   <fieldset>
     <label for="angle">angle</label>
     <input type="number" id="angle" value="<%= model.get( 'angle' ) %>" step="<%= Math.PI / 180 %>">
   </fieldset>
+
   <% [ 'scaleX', 'scaleY' ].forEach(function( scale ) { %>
     <fieldset>
       <label for="<%= scale %>"><%= scale %></label>
       <input type="number" id="<%= scale %>" value="<%= model.get( scale ) %>">
     </fieldset>
   <% }); %>
+
   <fieldset>
     <label for="lineWidth">lineWidth</label>
     <input type="number" id="lineWidth" value="<%= model.get( 'lineWidth' ) %>">
   </fieldset>
+
   <fieldset>
     <label for="lineCap">lineCap</label>
     <select id="lineCap">
@@ -29,6 +33,7 @@
       <% }); %>
     </select>
   </fieldset>
+
   <fieldset>
     <label for="lineJoin">lineJoin</label>
     <select id="lineJoin">
@@ -39,10 +44,12 @@
       <% }); %>
     </select>
   </fieldset>
+
   <fieldset>
     <label for="miterLimit">miterLimit</label>
     <input type="number" id="miterLimit" value="<%= model.get( 'miterLimit' ) %>" min="0">
   </fieldset>
+
   <fieldset>
     <label for="zIndex">zIndex</label>
     <input type="number" id="zIndex" min="-8" max="8" step="1" value="<%= model.get( 'zIndex' ) %>">

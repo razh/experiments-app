@@ -15,6 +15,7 @@ define([
     template: _.template( object2dTemplate ),
 
     events: {
+      'change select': 'changeSelected',
       'change input': 'change'
     },
 
@@ -60,6 +61,13 @@ define([
       }.bind( this ));
 
       FormView.prototype.remove.call( this );
+    },
+
+    changeSelected: function( event ) {
+      event.stopImmediatePropagation();
+
+      var target = event.currentTarget;
+      this.model.set( target.id, target.value );
     }
   });
 
