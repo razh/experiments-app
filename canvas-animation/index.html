@@ -9,8 +9,9 @@
       margin: 0;
     }
 
-    .editor-view {
-      border: 1px solid black;
+    .editor-view,
+    .group-view {
+      display: inline;
     }
 
     #path-edit-view {
@@ -34,7 +35,7 @@
 <body>
   <div id="path-edit-view"></div>
   <canvas class="editor-view" id="editor"></canvas>
-  <div id="group-view"></div>
+  <div class="group-view" id="group-view"></div>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>
 </body>

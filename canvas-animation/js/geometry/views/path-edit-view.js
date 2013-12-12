@@ -33,28 +33,14 @@ define([
       };
 
       var pointCount = this.model.pointCount();
-      var points = this.model.getWorldPoints();
-
       var fragment = document.createDocumentFragment();
 
       var $handler;
-      var transform;
-      var x, y;
       for ( var i = 0; i < pointCount; i++ ) {
-        x = points[ 2 * i ];
-        y = points[ 2 * i + 1 ];
-
-        transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-
         $handler = $( '<div>', {
           'class': 'handler',
           id: 'handler-' + i
-        }).css({
-          '-webkit-transform': transform,
-          transform: transform
         }).attr({
-          'data-x': x,
-          'data-y': y,
           'data-index': i
         });
 
@@ -62,6 +48,7 @@ define([
         this.$handlers.push( $handler );
       }
 
+      this.update();
       this.$el.append( fragment );
 
       document.body.addEventListener( 'mousemove', this.onMouseMove );
