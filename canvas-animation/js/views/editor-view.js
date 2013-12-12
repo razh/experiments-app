@@ -112,6 +112,21 @@ define([
       var calls = [];
 
       var ctx = {};
+      // Intercept property setters.
+      _.keys( this.ctx ).forEach(function( property ) {
+        Object.defineProperty( ctx, property, {
+          get: function() {
+            return ctx[ '_' + property ];
+          },
+
+          set: function( value ) {
+            calls.push( [ property, value ] );
+            ctx[ '_' + property ] = value;
+          }
+        });
+      });
+
+      // Intercept functions.
       _.functions( this.ctx ).forEach(function( functionName ) {
         ctx[ functionName ] = function() {
           calls.push( [ functionName ].concat( _.toArray( arguments ) ) );
