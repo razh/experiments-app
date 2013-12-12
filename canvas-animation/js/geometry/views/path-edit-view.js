@@ -130,6 +130,8 @@ define([
         point = this.model.toLocal( x, y );
         points[ 2 * index ] = point.x;
         points[ 2 * index + 1 ] = point.y;
+
+        this.model.trigger( 'change' );
       }
     },
 

@@ -114,13 +114,11 @@ define(function( require ) {
 
   var interpInterval = setInterval(function() {
     path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );
-    editorView.render();
   }, 500 );
 
   // There's a math joke here.
   var closedInterval = setInterval(function() {
     path.set( 'closed', !path.get( 'closed' ) );
-    editorView.render();
   }, 1000 );
 
   // Continuously draw closed quadratic Path.
@@ -133,10 +131,6 @@ define(function( require ) {
         interpolation: Path.Interpolation.QUADRATIC,
         closed: true
       });
-
-      setInterval(function() {
-        editorView.render();
-      }, 16 );
     }
   });
 

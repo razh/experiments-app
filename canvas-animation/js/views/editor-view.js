@@ -35,6 +35,8 @@ define([
       this.el.height = this.model.get( 'height' );
 
       this.ctx = this.el.getContext( '2d' );
+
+      this.listenTo( this.collection, 'change add remove reset', this.render );
     },
 
     drawObjects: function( ctx ) {
