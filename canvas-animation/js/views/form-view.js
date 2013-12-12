@@ -1,6 +1,6 @@
 /*globals define*/
 define([
-  'jqeury',
+  'jquery',
   'backbone'
 ], function( $, Backbone ) {
   'use strict';
@@ -14,8 +14,11 @@ define([
     },
 
     change: function( event ) {
+      // Prevent sibling/parent change handlers from firing.
+      event.stopImmediatePropagation();
+
       var target = event.currentTarget,
-          value = parseInt( $( target ).val(), 10 );
+          value = parseFloat( this.$( target ).val() );
 
       this.model.set( target.id, value );
     }

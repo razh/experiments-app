@@ -7,6 +7,9 @@
   <style>
     body {
       margin: 0;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 0.8em;
     }
 
     .editor-view,
@@ -30,12 +33,22 @@
       border-radius: 50%;
       background-color: rgba(0, 0, 0, 0.5);
     }
+
+    .object2d-view {
+      float: right;
+    }
+
+    fieldset {
+      margin: 0 auto;
+      padding: 0.2em;
+    }
   </style>
 </head>
 <body>
   <div id="path-edit-view"></div>
   <canvas class="editor-view" id="editor"></canvas>
   <div class="group-view" id="group-view"></div>
+  <div class="object2d-view" id="object2d-view"></div>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>
 </body>

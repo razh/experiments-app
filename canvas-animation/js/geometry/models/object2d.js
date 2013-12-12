@@ -17,8 +17,8 @@ define([
         scaleX: 1,
         scaleY: 1,
 
-        fill: null,
-        stroke: null,
+        fill: new Color(),
+        stroke: new Color(),
         lineWidth: 1,
 
         zIndex: 0
@@ -28,13 +28,19 @@ define([
     constructor: function() {
       var attributes = arguments[0];
 
-      [ 'fill', 'stroke' ].forEach(function( prop ) {
-        if ( _.isArray( attributes[ prop ] ) ) {
-          attributes[ prop ] = new Color( attributes[ prop ] );
+      [ 'fill', 'stroke' ].forEach(function( property ) {
+        if ( _.isArray( attributes[ property ] ) ) {
+          attributes[ property ] = new Color( attributes[ property ] );
         }
       });
 
       Backbone.Model.apply( this, arguments );
+
+      [ 'fill', 'stroke' ].forEach(function( property ) {
+        this.listenTo( this.get( property ), 'change', function() {
+          this.trigger( 'change' );
+        }.bind( this ));
+      }.bind( this ));
     },
 
     draw: function( ctx ) {

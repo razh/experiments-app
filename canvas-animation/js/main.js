@@ -21,6 +21,8 @@ requirejs.config({
 define(function( require ) {
   'use strict';
 
+  var Utils = require( 'utils' );
+
   var Group = require( 'geometry/collections/group' );
   var Editor = require( 'models/editor' );
   var EditorView = require( 'views/editor-view' );
@@ -53,7 +55,7 @@ define(function( require ) {
     y: 200,
     width: 80,
     height: 60,
-    angle: 20,
+    angle: 20 * Utils.DEG_TO_RAD,
     scaleX: 3,
     lineWidth: 4,
     fill: [ 0, 0, 128, 1 ],
@@ -101,6 +103,14 @@ define(function( require ) {
   });
 
   pathEditView.render();
+
+  var Object2DView = require( 'geometry/views/object2d-view' );
+  var object2dView = new Object2DView({
+    el: '#object2d-view',
+    model: path
+  });
+
+  object2dView.render();
 
   editorCanvas.addEventListener( 'mousedown', function( event ) {
     var x = event.pageX - editorCanvas.offsetLeft,
