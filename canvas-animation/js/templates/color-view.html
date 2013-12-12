@@ -1,4 +1,8 @@
 <form>
+  <fieldset>
+    <input type="color" value="<%= color.hexString() %>">
+    <input type="text" value="<%= color.hexString() %>" pattern="\#[a-f\d]{6}">
+  </fieldset>
   <% [ 'red', 'green', 'blue' ].forEach(function( component ) { %>
     <fieldset>
       <label for="<%= component %>"><%= component %></label>

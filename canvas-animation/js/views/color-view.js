@@ -10,6 +10,8 @@ define([
     template: _.template( colorTemplate ),
 
     events: {
+      'change input[type=color]': 'changeHex',
+      'change input[type=text]': 'changeHex',
       'change input': 'change'
     },
 
@@ -24,6 +26,21 @@ define([
       }));
 
       return this;
+    },
+
+    update: function() {
+      FormView.prototype.update.call( this );
+
+      var hexString = this.model.hexString();
+      this.$( 'input[type=color]' ).val( hexString );
+      this.$( 'input[type=text]'  ).val( hexString );
+    },
+
+    changeHex: function( event ) {
+      event.stopImmediatePropagation();
+
+      var $target = this.$( event.currentTarget );
+      this.model.setHexString( $target.val() );
     }
   });
 

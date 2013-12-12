@@ -6,6 +6,8 @@ define([
 ], function( _, Backbone, Utils ) {
   'use strict';
 
+  var hexRegex = /([a-f\d]{2})/gi;
+
   var Color = Backbone.Model.extend({
     defaults: function() {
       return {
@@ -42,6 +44,29 @@ define([
         Utils.clamp( Math.round( this.get( 'blue'  ) ), 0, 255 ) + ', ' +
         Utils.clamp( this.get( 'alpha' ), 0, 1 ) +
       ')';
+    },
+
+    hexString: function() {
+      return '#' + ( ( 1 << 24 ) + this.hex() ).toString( 16 ).slice(1);
+    },
+
+    hex: function() {
+      return ( Math.round( this.get( 'red'   ) ) << 16 ) +
+             ( Math.round( this.get( 'green' ) ) <<  8 ) +
+               Math.round( this.get( 'blue'  ) );
+    },
+
+    setHexString: function( hexString ) {
+      var hex = hexString.match( hexRegex );
+      if ( hex.length !== 3 ) {
+        return;
+      }
+
+      this.set({
+        red:   parseInt( hex[0], 16 ),
+        green: parseInt( hex[1], 16 ),
+        blue:  parseInt( hex[2], 16 )
+      });
     }
   });
 

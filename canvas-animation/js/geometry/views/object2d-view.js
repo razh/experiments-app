@@ -38,7 +38,7 @@ define([
         var view = this[ property + 'View' ];
         if ( view ) {
           view.render();
-          this.$el.append( view.el );
+          this.$( '.' + property ).append( view.el );
         }
       }.bind( this ));
 
