@@ -10,7 +10,8 @@ define([
     pathTemplate: _.template( pathTemplate ),
 
     events: {
-      'change input.coordinate': 'changeCoordinate'
+      'change input.coordinate': 'changeCoordinate',
+      'change input': 'change'
     },
 
     render: function() {
