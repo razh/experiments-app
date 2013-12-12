@@ -20,6 +20,30 @@
     <input type="number" id="lineWidth" value="<%= model.get( 'lineWidth' ) %>">
   </fieldset>
   <fieldset>
+    <label for="lineCap">lineCap</label>
+    <select id="lineCap">
+      <% lineCaps.forEach(function( lineCap ) { %>
+        <option value="<%= lineCap %>"
+          <% if ( model.get( 'lineCap' ) === lineCap )
+            print( 'selected' ) %>><%= lineCap %></option>
+      <% }); %>
+    </select>
+  </fieldset>
+  <fieldset>
+    <label for="lineJoin">lineJoin</label>
+    <select id="lineJoin">
+      <% lineJoins.forEach(function( lineJoin ) { %>
+        <option value="<%= lineJoin %>"
+          <% if ( model.get( 'lineJoin' ) === lineJoin )
+              print( 'selected' ) %>><%= lineJoin %></option>
+      <% }); %>
+    </select>
+  </fieldset>
+  <fieldset>
+    <label for="miterLimit">miterLimit</label>
+    <input type="number" id="miterLimit" value="<%= model.get( 'miterLimit' ) %>" min="0">
+  </fieldset>
+  <fieldset>
     <label for="zIndex">zIndex</label>
     <input type="number" id="zIndex" min="-8" max="8" step="1" value="<%= model.get( 'zIndex' ) %>">
   </fieldset>

@@ -6,6 +6,12 @@ define([
 ], function( _, Backbone, Color ) {
   'use strict';
 
+  var defaultLineStyle = {
+    lineCap: 'butt',
+    lineJoin: 'miter',
+    miterLimit: 10
+  };
+
   var Object2D = Backbone.Model.extend({
     defaults: function() {
       return {
@@ -20,6 +26,10 @@ define([
         fill: new Color(),
         stroke: new Color(),
         lineWidth: 1,
+
+        lineCap: defaultLineStyle.lineCap,
+        lineJoin: defaultLineStyle.lineJoin,
+        miterLimit: defaultLineStyle.miterLimit,
 
         zIndex: 0
       };
@@ -51,6 +61,24 @@ define([
 
       ctx.restore();
 
+      // Set line style if not default.
+      var lineCap = this.get( 'lineCap' ),
+          lineJoin = this.get( 'lineJoin' ),
+          miterLimit = this.get( 'miterLimit' );
+
+      if ( lineCap !== defaultLineStyle.lineCap ) {
+        ctx.lineCap = lineCap;
+      }
+
+      if ( lineJoin !== defaultLineStyle.lineJoin ) {
+        ctx.lineJoin = lineJoin;
+      }
+
+      if ( ctx.lineJoin === 'miter' && miterLimit !== defaultLineStyle.miterLimit ) {
+        ctx.miterLimit = miterLimit;
+      }
+
+      // Fill and stroke.
       var fill = this.get( 'fill' ),
           stroke = this.get( 'stroke' ),
           lineWidth = this.get( 'lineWidth' );
@@ -64,6 +92,19 @@ define([
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = stroke.rgba();
         ctx.stroke();
+      }
+
+      // Restore default line style state.
+      if ( lineCap !== defaultLineStyle.lineCap ) {
+        ctx.lineCap = defaultLineStyle.lineCap;
+      }
+
+      if ( lineJoin !== defaultLineStyle.lineJoin ) {
+        ctx.lineJoin = defaultLineStyle.lineJoin;
+      }
+
+      if ( miterLimit !== defaultLineStyle.miterLimit ) {
+        ctx.miterLimit = defaultLineStyle.miterLimit;
       }
     },
 

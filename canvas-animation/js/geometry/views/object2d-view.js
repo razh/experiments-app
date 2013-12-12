@@ -8,6 +8,9 @@ define([
 ], function( $, _, FormView, ColorView, object2dTemplate ) {
   'use strict';
 
+  var lineCaps = [ 'butt', 'round', 'square' ];
+  var lineJoins = [ 'bevel', 'round', 'miter' ];
+
   var Object2DView = FormView.extend({
     template: _.template( object2dTemplate ),
 
@@ -32,7 +35,9 @@ define([
 
     render: function() {
       this.$el.html(this.template({
-        model: this.model
+        model: this.model,
+        lineCaps: lineCaps,
+        lineJoins: lineJoins
       }));
 
       [ 'fill', 'stroke' ].forEach(function( property ) {
