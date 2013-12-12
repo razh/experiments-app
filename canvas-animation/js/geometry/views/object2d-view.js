@@ -67,7 +67,7 @@ define([
       event.stopImmediatePropagation();
 
       var target = event.currentTarget;
-      this.model.set( target.id, target.value );
+      this.model.set( target.id, this.$( target ).val() );
     }
   });
 

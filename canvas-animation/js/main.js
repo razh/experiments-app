@@ -175,7 +175,9 @@ define(function( require ) {
 
   var groupView = new GroupView({
     el: '#group-view',
-    collection: group
+    collection: group,
+    objectEl: '#group-object2d-view',
+    selectedIndex: 0
   });
 
   groupView.render();
