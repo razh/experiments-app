@@ -17,10 +17,14 @@ define([
     },
 
     initialize: function( options ) {
-      _.bindAll( this, 'onMouseDown', 'onMouseMove', 'onMouseUp' );
+      _.bindAll( this,
+        'onMouseDown',
+        'onMouseMove',
+        'onMouseUp'
+      );
 
       this.canvas = options.canvas;
-      this.handlers = [];
+      this.$handlers = [];
 
       this.selected = null;
       this.offset = {
@@ -33,7 +37,7 @@ define([
 
       var fragment = document.createDocumentFragment();
 
-      var handlerEl;
+      var $handler;
       var transform;
       var x, y;
       for ( var i = 0; i < pointCount; i++ ) {
@@ -42,7 +46,7 @@ define([
 
         transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
 
-        handlerEl = $( '<div>', {
+        $handler = $( '<div>', {
           'class': 'handler',
           id: 'handler-' + i
         }).css({
@@ -54,14 +58,37 @@ define([
           'data-index': i
         });
 
-        fragment.appendChild( handlerEl[0] );
-        this.handlers.push( handlerEl );
+        fragment.appendChild( $handler[0] );
+        this.$handlers.push( $handler );
       }
 
       this.$el.append( fragment );
 
       document.body.addEventListener( 'mousemove', this.onMouseMove );
       document.body.addEventListener( 'mouseup', this.onMouseUp );
+
+      this.listenTo( this.model, 'change', this.update );
+    },
+
+    update: function() {
+      var points = this.model.getWorldPoints();
+
+      var transform;
+      var x, y;
+      this.$handlers.forEach(function( $handler, index ) {
+        x = points[ 2 * index ];
+        y = points[ 2 * index + 1 ];
+
+        transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+
+        $handler.css({
+          '-webkit-transform': transform,
+          transform: transform
+        }).attr({
+          'data-x': x,
+          'data-y': y
+        });
+      });
     },
 
     onMouseDown: function( event ) {

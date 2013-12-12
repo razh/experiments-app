@@ -80,8 +80,8 @@ define(function( require ) {
   group.add( path );
 
   var circle = new Circle({
-    x: 170,
-    y: 100,
+    x: 320,
+    y: 180,
     radius: 30,
     lineWidth: 2,
     fill: [ 192, 192, 255, 0.8 ],

@@ -16,7 +16,7 @@ define([
 
     drawPath: function( ctx ) {
       ctx.beginPath();
-      ctx.arc( this.get( 'x' ), this.get( 'y'), this.get( 'radius' ), 0, PI2 );
+      ctx.arc( 0, 0, this.get( 'radius' ), 0, PI2 );
       ctx.closePath();
     }
   });
