@@ -186,9 +186,8 @@ define(function( require ) {
         return;
       }
 
+      var model = this.selection.model;
       if ( this.selection instanceof ModelSelection ) {
-        var model = this.selection.model;
-
         if ( model instanceof Circle ) {
           this.drawCircleHandlers( ctx, model );
         } else if ( model instanceof Path ) {
@@ -197,7 +196,7 @@ define(function( require ) {
           this.drawRectHandlers( ctx, model );
         }
       } else if ( this.selection instanceof PointSelection ) {
-        this.drawPathHandlers( ctx, this.selection.path );
+        this.drawPathHandlers( ctx, model );
       }
     },
 
@@ -265,6 +264,26 @@ define(function( require ) {
       var x = this.mouse.x,
           y = this.mouse.y;
 
+      // Select point on path.
+      if ( this.selection instanceof ModelSelection &&
+           this.selection.model instanceof Path ||
+           this.selection instanceof PointSelection ) {
+        var model = this.selection.model;
+        var pointCount = model.pointCount;
+        var points = model.getWorldPoints();
+
+        var cx, cy;
+        for ( var i = 0; i < pointCount; i++ ) {
+          cx = points[ 2 * i ];
+          cy = points[ 2 * i + 1 ];
+
+          if ( Utils.circleContains( x, y, cx, cy, handlerRadius ) ) {
+            this.selection = new PointSelection( model, i, x, y );
+            return;
+          }
+        }
+      }
+
       // Add shape.
       var shape;
       if ( event.altKey ) {
@@ -321,8 +340,8 @@ define(function( require ) {
       this.mousePosition( event );
 
       if ( this.mouse.down && this.selection ) {
-        this.selection.x = this.mouse.x;
-        this.selection.y = this.mouse.y;
+        // The worldPosition property shallow clones the mouse position.
+        this.selection.worldPosition = this.mouse;
       }
     },
 

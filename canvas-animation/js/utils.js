@@ -23,7 +23,7 @@ define(function() {
   }
 
   function circleContains( x, y, cx, cy, radius ) {
-    return distanceSquared( x, y, cx, cy ) < radius * radius;
+    return distanceSquared( x, y, cx, cy ) <= radius * radius;
   }
 
   return {

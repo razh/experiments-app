@@ -33,5 +33,19 @@ define(function() {
     }
   });
 
+  Object.defineProperty( ModelSelection.prototype, 'worldPosition', {
+    get: function() {
+      return {
+        x: this.x,
+        y: this.y
+      };
+    },
+
+    set: function( position ) {
+      this.x = position.x;
+      this.y = position.y;
+    }
+  });
+
   return ModelSelection;
 });

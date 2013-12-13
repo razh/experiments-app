@@ -3,41 +3,59 @@ define(function() {
   'use strict';
 
   /**
-   * Selection container object for a specific point in a Path object.
+   * Selection container object for a specific point in a model object.
    */
-  function PointSelection( path, index, x, y ) {
-    this.path = path;
+  function PointSelection( model, index, x, y ) {
+    this.model = model;
     this.index = index;
 
+    var point = this.model.toWorld( this.x, this.y );
     this.offset = {
-      x: this.x - x || 0,
-      y: this.y - y || 0
+      x: point.x - x || 0,
+      y: point.y - y || 0
     };
   }
 
+  // x and y are in local coordinates.
   Object.defineProperty( PointSelection.prototype, 'x', {
     get: function() {
-      var points = this.path.get( 'points' );
+      var points = this.model.get( 'points' );
       return points[ 2 * this.index ];
     },
 
     set: function( x ) {
-      var points = this.path.get( 'points' );
+      var points = this.model.get( 'points' );
       points[ 2 * this.index ] = x + this.offset.x;
-      this.path.trigger( 'change' );
     }
   });
 
   Object.defineProperty( PointSelection.prototype, 'y', {
     get: function() {
-      var points = this.path.get( 'points' );
+      var points = this.model.get( 'points' );
       return points[ 2 * this.index + 1 ];
     },
 
     set: function( y ) {
-      var points = this.get( 'points' );
+      var points = this.model.get( 'points' );
       points[ 2 * this.index + 1 ] = y + this.offset.y;
-      this.path.trigger( 'change' );
+    }
+  });
+
+
+  Object.defineProperty( PointSelection.prototype, 'worldPosition', {
+    get: function() {
+      return this.model.toWorld( this.x, this.y );
+    },
+
+    set: function( position ) {
+      var x = position.x + this.offset.x;
+      var y = position.y + this.offset.y;
+
+      var point = this.model.toLocal( x, y );
+      this.x = point.x;
+      this.y = point.y;
+
+      this.model.trigger( 'change' );
     }
   });
 
