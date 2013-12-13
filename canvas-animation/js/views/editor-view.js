@@ -17,13 +17,19 @@ define([
         'render',
         'onMouseDown',
         'onMouseMove',
-        'onMouseUp'
+        'onMouseUp',
+        'onKeyDown',
+        'onKeyUp'
       );
 
       this.mouse = {
         x: 0,
-        y: 0
+        y: 0,
+
+        down: false
       };
+
+      this.keys = [];
 
       this.selected = null;
       this.offset = {
@@ -37,6 +43,9 @@ define([
       this.ctx = this.el.getContext( '2d' );
 
       this.listenTo( this.collection, 'change add remove reset', this.render );
+
+      document.addEventListener( 'keydown', this.onKeyDown );
+      document.addEventListener( 'keyup', this.onKeyUp );
     },
 
     drawObjects: function( ctx ) {
@@ -179,6 +188,20 @@ define([
       this.selected = null;
       this.offset.x = 0;
       this.offset.y = 0;
+    },
+
+    onKeyDown: function( event ) {
+      this.keys[ event.which ] = true;
+    },
+
+    onKeyUp: function( event ) {
+      this.keys[ event.which ] = false;
+    },
+
+    remove: function() {
+      Backbone.View.prototype.remove.call( this )
+      document.removeEventListener( 'keydown', this.onKeyDown );
+      document.removeEventListener( 'keyup', this.onKeyUp );
     }
   });
 
