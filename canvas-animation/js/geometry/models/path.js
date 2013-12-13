@@ -7,17 +7,12 @@ define([
 
   var PI2 = Utils.PI2;
 
-  var Interpolation = {
-    LINEAR:    0,
-    QUADRATIC: 1
-  };
-
   var Path = Object2D.extend({
     defaults: function() {
       var defaults = Object2D.prototype.defaults();
       defaults.points = [];
       defaults.closed = false;
-      defaults.interpolation = Interpolation.LINEAR;
+      defaults.interpolation = 'linear';
       return defaults;
     },
 
@@ -28,9 +23,9 @@ define([
       var interpolation = this.get( 'interpolation' ),
           closed = this.get( 'closed' );
 
-      if ( interpolation === Interpolation.LINEAR ) {
+      if ( interpolation === 'linear' ) {
         this.drawLinear( ctx );
-      } else if ( interpolation === Interpolation.QUADRATIC ) {
+      } else if ( interpolation === 'quadratic' ) {
         if ( closed ) {
           this.drawQuadraticClosed( ctx );
         } else {
@@ -227,8 +222,6 @@ define([
       return 0.5 * this.get( 'points' ).length;
     }
   });
-
-  Path.Interpolation = Interpolation;
 
   return Path;
 });

@@ -6,11 +6,15 @@ define([
 ], function( _, Object2DView, pathTemplate ) {
   'use strict';
 
+  var interpolations = [ 'linear', 'quadratic' ];
+
   var PathView = Object2DView.extend({
     pathTemplate: _.template( pathTemplate ),
 
     events: {
       'change input.coordinate': 'changeCoordinate',
+      'change select': 'changeString',
+      'change input[type=checkbox]': 'changeCheckbox',
       'change input': 'change'
     },
 
@@ -20,13 +24,19 @@ define([
       this.$el.prepend(this.pathTemplate({
         model: this.model,
         pointCount: this.model.pointCount(),
-        points: this.model.get( 'points' )
+        points: this.model.get( 'points' ),
+        interpolations: interpolations
       }));
 
       return this;
     },
 
     update: function() {
+      // Update closed checkbox.
+      if ( !_.isUndefined( this.model.changedAttributes().closed ) ) {
+        this.$( '#closed' ).prop( 'checked', this.model.get( 'closed' ) );
+      }
+
       Object2DView.prototype.update.call( this );
 
       var pointCount = this.model.pointCount();

@@ -18,4 +18,22 @@
         data-index="<%= index %>">
     </fieldset>
   <% } %>
+
+  <fieldset>
+    <label for="interpolation">interpolation</label>
+    <select id="interpolation">
+      <% interpolations.forEach(function( interpolation ) { %>
+        <option value="<%= interpolation %>"
+          <% if ( model.get( 'interpolation' ) === interpolation )
+            print( 'selected' ) %>><%= interpolation %></option>
+      <% }); %>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <label for="closed">closed</label>
+    <input type="checkbox" id="closed"
+      <% if ( model.get( 'closed' ) )
+        print( 'checked' ) %>>
+  </fieldset>
 </form>

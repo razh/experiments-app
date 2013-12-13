@@ -197,13 +197,15 @@ define(function( require ) {
           });
         }
 
-        shape.set({
-          x: x,
-          y: y
-        });
+        if ( shape ) {
+          shape.set({
+            x: x,
+            y: y
+          });
 
-        this.collection.add( shape );
-        return;
+          this.collection.add( shape );
+          return;
+        }
       }
 
       // Select.
@@ -246,7 +248,7 @@ define(function( require ) {
     },
 
     remove: function() {
-      Backbone.View.prototype.remove.call( this )
+      Backbone.View.prototype.remove.call( this );
       document.removeEventListener( 'keydown', this.onKeyDown );
       document.removeEventListener( 'keyup', this.onKeyUp );
     }

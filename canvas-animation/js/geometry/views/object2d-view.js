@@ -15,7 +15,8 @@ define([
     template: _.template( object2dTemplate ),
 
     events: {
-      'change select': 'changeSelected',
+      'change select': 'changeString',
+      'change input[type=checkbox]': 'changeCheckbox',
       'change input': 'change'
     },
 
@@ -63,11 +64,18 @@ define([
       FormView.prototype.remove.call( this );
     },
 
-    changeSelected: function( event ) {
+    changeString: function( event ) {
       event.stopImmediatePropagation();
 
       var target = event.currentTarget;
       this.model.set( target.id, this.$( target ).val() );
+    },
+
+    changeCheckbox: function( event ) {
+      event.stopImmediatePropagation();
+
+      var target = event.currentTarget;
+      this.model.set( target.id, target.checked );
     }
   });
 

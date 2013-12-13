@@ -148,7 +148,8 @@ define(function( require ) {
   });
 
   var interpInterval = setInterval(function() {
-    path.set( 'interpolation', path.get( 'interpolation' ) === 1 ? 0 : 1 );
+    var interpolation = path.get( 'interpolation' ) === 'linear' ? 'quadratic' : 'linear';
+    path.set( 'interpolation', interpolation );
   }, 500 );
 
   // There's a math joke here.
@@ -163,7 +164,7 @@ define(function( require ) {
       clearInterval( closedInterval );
 
       path.set({
-        interpolation: Path.Interpolation.QUADRATIC,
+        interpolation: 'quadratic',
         closed: true
       });
     }
