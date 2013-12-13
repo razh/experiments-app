@@ -25,7 +25,8 @@ define(function() {
 
     set: function( x ) {
       var points = this.model.get( 'points' );
-      points[ 2 * this.index ] = x + this.offset.x;
+      points[ 2 * this.index ] = x;
+      this.model.trigger( 'change' );
     }
   });
 
@@ -37,7 +38,8 @@ define(function() {
 
     set: function( y ) {
       var points = this.model.get( 'points' );
-      points[ 2 * this.index + 1 ] = y + this.offset.y;
+      points[ 2 * this.index + 1 ] = y;
+      this.model.trigger( 'change' );
     }
   });
 
@@ -51,9 +53,11 @@ define(function() {
       var x = position.x + this.offset.x;
       var y = position.y + this.offset.y;
 
+      var points = this.model.get( 'points' );
       var point = this.model.toLocal( x, y );
-      this.x = point.x;
-      this.y = point.y;
+
+      points[ 2 * this.index ] = point.x;
+      points[ 2 * this.index + 1 ] = point.y;
 
       this.model.trigger( 'change' );
     }

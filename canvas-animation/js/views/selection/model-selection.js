@@ -42,8 +42,10 @@ define(function() {
     },
 
     set: function( position ) {
-      this.x = position.x;
-      this.y = position.y;
+      this.model.set({
+        x: position.x + this.offset.x,
+        y: position.y + this.offset.y
+      });
     }
   });
 
