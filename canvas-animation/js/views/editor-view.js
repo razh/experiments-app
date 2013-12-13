@@ -1,9 +1,18 @@
 /*globals define*/
-define([
-  'underscore',
-  'backbone'
-], function( _, Backbone ) {
+define(function( require ) {
   'use strict';
+
+  var _ = require( 'underscore' );
+  var Backbone = require( 'backbone' );
+
+  var Circle = require( 'geometry/models/circle' );
+  var Path = require( 'geometry/models/path' );
+  var Rect = require( 'geometry/models/rect' );
+
+  var defaults = {
+    fill: [ 255, 255, 255, 1 ],
+    stroke: [ 0, 0, 0, 1 ]
+  };
 
   var EditorView = Backbone.View.extend({
     events: {
@@ -160,6 +169,44 @@ define([
       var x = this.mouse.x,
           y = this.mouse.y;
 
+      // Add shape.
+      var shape;
+      if ( event.altKey ) {
+        // Alt + C. Circle
+        if ( this.keys[ 67 ] ) {
+          shape = new Circle({
+            radius: 30,
+            fill: defaults.fill,
+            stroke: defaults.stroke
+          });
+        }
+        // Alt + R. Rect.
+        else if ( this.keys[ 82 ] ) {
+          shape = new Rect({
+            width: 60,
+            height: 60,
+            fill: defaults.fill,
+            stroke: defaults.stroke
+          });
+        }
+        // Alt + A. Path.
+        else if ( this.keys[ 65 ]) {
+          shape = new Path({
+            points: [ -30, -30, 30, -30, 30, 30, -30, 30 ],
+            stroke: defaults.stroke
+          });
+        }
+
+        shape.set({
+          x: x,
+          y: y
+        });
+
+        this.collection.add( shape );
+        return;
+      }
+
+      // Select.
       var selected = this.collection.find(function( model ) {
         return model.contains( ctx, x, y );
       });
