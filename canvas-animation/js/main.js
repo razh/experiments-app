@@ -95,15 +95,6 @@ define(function( require ) {
 
   editorView.render();
 
-  var PathEditView = require( 'geometry/views/path-edit-view' );
-  var pathEditView = new PathEditView({
-    el: '#path-edit-view',
-    canvas: editorCanvas,
-    model: path
-  });
-
-  pathEditView.render();
-
   var Object2DView = require( 'geometry/views/object2d-view' );
   var object2dView = new Object2DView({
     el: '#object2d-view',

@@ -17,9 +17,16 @@ define([
       return defaults;
     },
 
-    drawPath: function( ctx ) {
-      this.drawPoints( ctx );
-      this.drawCentroid( ctx );
+    drawPath: function( ctx, options ) {
+      options = options || {};
+
+      if ( options.points ) {
+        this.drawPoints( ctx, options.points );
+      }
+
+      if ( options.centroid ) {
+        this.drawCentroid( ctx, options.centroid );
+      }
 
       var interpolation = this.get( 'interpolation' ),
           closed = this.get( 'closed' );
