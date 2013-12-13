@@ -2,14 +2,17 @@
 define([
   'jquery',
   'underscore',
+  'geometry/models/object2d',
   'views/form-view',
   'views/color-view',
   'text!geometry/templates/object2d-view.html'
-], function( $, _, FormView, ColorView, object2dTemplate ) {
+], function( $, _, Object2D, FormView, ColorView, object2dTemplate ) {
   'use strict';
 
   var lineCaps = [ 'butt', 'round', 'square' ];
   var lineJoins = [ 'bevel', 'round', 'miter' ];
+
+  var colorProperties = Object2D.colorProperties;
 
   var Object2DView = FormView.extend({
     template: _.template( object2dTemplate ),
@@ -23,7 +26,7 @@ define([
     initialize: function() {
       _.bindAll( this, 'render' );
 
-      [ 'fill', 'stroke' ].forEach(function( property ) {
+      colorProperties.forEach(function( property ) {
         if ( this.model.get( property ) ) {
           this[ property + 'View' ] = new ColorView({
             className: property,
@@ -42,7 +45,7 @@ define([
         lineJoins: lineJoins
       }));
 
-      [ 'fill', 'stroke' ].forEach(function( property ) {
+      colorProperties.forEach(function( property ) {
         var view = this[ property + 'View' ];
         if ( view ) {
           view.render();
@@ -54,7 +57,7 @@ define([
     },
 
     remove: function() {
-      [ 'fill', 'stroke' ].forEach(function( property ) {
+      colorProperties.forEach(function( property ) {
         var view = this[ property + 'View' ];
         if ( view ) {
           view.remove();

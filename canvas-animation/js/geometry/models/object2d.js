@@ -6,6 +6,8 @@ define([
 ], function( _, Backbone, Color ) {
   'use strict';
 
+  var colorProperties = [ 'fill', 'stroke' ];
+
   var defaultLineStyle = {
     lineCap: 'butt',
     lineJoin: 'miter',
@@ -36,17 +38,19 @@ define([
     },
 
     constructor: function() {
-      var attributes = arguments[0];
+      var attrs = arguments[0];
 
-      [ 'fill', 'stroke' ].forEach(function( property ) {
-        if ( _.isArray( attributes[ property ] ) ) {
-          attributes[ property ] = new Color( attributes[ property ] );
-        }
-      });
+      if ( attrs ) {
+        colorProperties.forEach(function( property ) {
+          if ( _.isArray( attrs[ property ] ) ) {
+            attrs[ property ] = new Color( attrs[ property ] );
+          }
+        });
+      }
 
       Backbone.Model.apply( this, arguments );
 
-      [ 'fill', 'stroke' ].forEach(function( property ) {
+      colorProperties.forEach(function( property ) {
         this.listenTo( this.get( property ), 'change', function() {
           this.trigger( 'change' );
         }.bind( this ));
@@ -179,6 +183,8 @@ define([
       };
     }
   });
+
+  Object2D.colorProperties = colorProperties;
 
   return Object2D;
 });
