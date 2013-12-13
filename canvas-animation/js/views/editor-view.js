@@ -9,13 +9,19 @@ define(function( require ) {
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
 
+  var ModelSelection = require( 'views/selection/model-selection' );
+  var PointSelection = require( 'views/selection/point-selection' );
+
+  var Utils = require( 'utils' );
+
+  var PI2 = Utils.PI2;
+
   var defaults = {
     fill: [ 255, 255, 255, 1 ],
     stroke: [ 0, 0, 0, 1 ]
   };
 
-  var ModelSelection = require( 'views/selection/model-selection' );
-  var PointSelection = require( 'views/selection/point-selection' );
+  var handlerRadius = 8;
 
   var EditorView = Backbone.View.extend({
     events: {
@@ -106,6 +112,95 @@ define(function( require ) {
       ctx.stroke();
     },
 
+    drawHandler: function( ctx, x, y ) {
+      // Draw outer circle.
+      ctx.beginPath();
+      ctx.arc( x, y, handlerRadius, 0, PI2 );
+
+      ctx.shadowColor = '#000';
+      ctx.shadowBlur = 3;
+
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+
+      // Draw inner circle.
+      ctx.beginPath();
+      ctx.arc( x, y, handlerRadius - 2, 0, PI2 );
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fill();
+    },
+
+    drawCircleHandlers: function( ctx, circle ) {
+      var radialPoint = circle.toWorld( circle.get( 'radius' ), 0 );
+      this.drawHandler( ctx, radialPoint.x, radialPoint.y );
+    },
+
+    drawPathHandlers: function( ctx, path ) {
+      var pointCount = path.pointCount;
+      var points = path.getWorldPoints();
+
+      var x, y;
+
+      for ( var i = 0; i < pointCount; i++ ) {
+        x = points[ 2 * i ];
+        y = points[ 2 * i + 1 ];
+
+        this.drawHandler( ctx, x, y );
+      }
+    },
+
+    drawRectHandlers: function( ctx, rect ) {
+      var width = rect.get( 'width' );
+      var height = rect.get( 'height' );
+
+      var halfWidth = 0.5 * width;
+      var halfHeight = 0.5 * height;
+
+      var topLeft  = rect.toWorld( -halfWidth, -halfHeight );
+      var topRight = rect.toWorld(  halfWidth, -halfHeight );
+
+      var bottomLeft  = rect.toWorld( -halfWidth, halfHeight );
+      var bottomRight = rect.toWorld(  halfWidth, halfHeight );
+
+      var left  = rect.toWorld( -halfWidth, 0 );
+      var right = rect.toWorld(  halfWidth, 0 );
+
+      var top    = rect.toWorld( 0, -halfHeight );
+      var bottom = rect.toWorld( 0,  halfHeight );
+
+      [
+        topLeft, topRight,
+        bottomLeft, bottomRight,
+        left, right,
+        top, bottom
+      ].forEach(function( point ) {
+        this.drawHandler( ctx, point.x, point.y );
+      }.bind( this ));
+    },
+
+    drawSelection: function( ctx ) {
+      if ( !this.selection ) {
+        return;
+      }
+
+      if ( this.selection instanceof ModelSelection ) {
+        var model = this.selection.model;
+
+        if ( model instanceof Circle ) {
+          this.drawCircleHandlers( ctx, model );
+        } else if ( model instanceof Path ) {
+          this.drawPathHandlers( ctx, model );
+        } else if ( model instanceof Rect ) {
+          this.drawRectHandlers( ctx, model );
+        }
+      } else if ( this.selection instanceof PointSelection ) {
+        this.drawPathHandlers( ctx, this.selection.path );
+      }
+    },
+
     render: function() {
       var ctx = this.ctx;
 
@@ -118,6 +213,8 @@ define(function( require ) {
 
       this.drawGrid( ctx, 16 );
       this.drawObjects( ctx );
+
+      this.drawSelection( ctx );
 
       ctx.restore();
     },
@@ -208,13 +305,15 @@ define(function( require ) {
         }
       }
 
-      // Select.
+      // Select object.
       var selection = this.collection.find(function( model ) {
         return model.contains( ctx, x, y );
       });
 
       if ( selection ) {
         this.selection = new ModelSelection( selection, x, y );
+      } else {
+        this.selection = null;
       }
     },
 
@@ -229,8 +328,6 @@ define(function( require ) {
 
     onMouseUp: function() {
       this.mouse.down = false;
-
-      this.selection = null;
     },
 
     onKeyDown: function( event ) {
