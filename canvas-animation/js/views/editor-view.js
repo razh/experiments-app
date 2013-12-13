@@ -14,6 +14,9 @@ define(function( require ) {
     stroke: [ 0, 0, 0, 1 ]
   };
 
+  var ModelSelection = require( 'views/selection/model-selection' );
+  var PointSelection = require( 'views/selection/point-selection' );
+
   var EditorView = Backbone.View.extend({
     events: {
       mousedown: 'onMouseDown',
@@ -40,11 +43,7 @@ define(function( require ) {
 
       this.keys = [];
 
-      this.selected = null;
-      this.offset = {
-        x: 0,
-        y: 0
-      };
+      this.selection = null;
 
       this.el.width = this.model.get( 'width' );
       this.el.height = this.model.get( 'height' );
@@ -190,10 +189,11 @@ define(function( require ) {
           });
         }
         // Alt + A. Path.
-        else if ( this.keys[ 65 ]) {
+        else if ( this.keys[ 65 ] ) {
           shape = new Path({
             points: [ -30, -30, 30, -30, 30, 30, -30, 30 ],
-            stroke: defaults.stroke
+            stroke: defaults.stroke,
+            lineWidth: 3
           });
         }
 
@@ -209,34 +209,28 @@ define(function( require ) {
       }
 
       // Select.
-      var selected = this.collection.find(function( model ) {
+      var selection = this.collection.find(function( model ) {
         return model.contains( ctx, x, y );
       });
 
-      if ( selected ) {
-        this.selected = selected;
-        this.offset.x = selected.get( 'x' ) - x;
-        this.offset.y = selected.get( 'y' ) - y;
+      if ( selection ) {
+        this.selection = new ModelSelection( selection, x, y );
       }
     },
 
     onMouseMove: function( event ) {
       this.mousePosition( event );
 
-      if ( this.mouse.down && this.selected ) {
-        this.selected.set({
-          x: this.mouse.x + this.offset.x,
-          y: this.mouse.y + this.offset.y
-        });
+      if ( this.mouse.down && this.selection ) {
+        this.selection.x = this.mouse.x;
+        this.selection.y = this.mouse.y;
       }
     },
 
     onMouseUp: function() {
       this.mouse.down = false;
 
-      this.selected = null;
-      this.offset.x = 0;
-      this.offset.y = 0;
+      this.selection = null;
     },
 
     onKeyDown: function( event ) {
