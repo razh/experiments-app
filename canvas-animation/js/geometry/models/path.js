@@ -1,8 +1,9 @@
 /*globals define*/
 define([
+  'underscore',
   'geometry/models/object2d',
   'utils'
-], function( Object2D, Utils ) {
+], function( _, Object2D, Utils ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -35,7 +36,7 @@ define([
     },
 
     getWorldPoints: function() {
-      var pointCount = this.pointCount();
+      var pointCount = this.pointCount;
       // Shallow copy of points.
       var points = this.get( 'points' ).slice();
 
@@ -53,8 +54,13 @@ define([
       return points;
     },
 
-    drawPoints: function( ctx ) {
-      var pointCount = this.pointCount();
+    drawPoints: function( ctx, options ) {
+      options = options || {};
+
+      var radius = _.isNumber( options.radius ) ? options.radius : 6,
+          fill   = _.isString( options.fill   ) ? options.fill   : 'red';
+
+      var pointCount = this.pointCount;
       var points = this.get( 'points' );
 
       ctx.beginPath();
@@ -64,24 +70,29 @@ define([
         x = points[ 2 * i ];
         y = points[ 2 * i + 1 ];
         ctx.moveTo( x, y );
-        ctx.arc( x, y, 6, 0, PI2 );
+        ctx.arc( x, y, radius, 0, PI2 );
       }
 
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = fill;
       ctx.fill();
     },
 
-    drawCentroid: function( ctx ) {
+    drawCentroid: function( ctx, options ) {
+      options = options || {};
+
+      var radius = _.isNumber( options.radius ) ? options.radius : 10,
+          fill   = _.isString( options.fill   ) ? options.fill   : 'red';
+
       var centroid = this.computeCentroid();
 
       ctx.beginPath();
-      ctx.arc( centroid.x, centroid.y, 10, 0, PI2 );
-      ctx.fillStyle = 'red';
+      ctx.arc( centroid.x, centroid.y, radius, 0, PI2 );
+      ctx.fillStyle = fill;
       ctx.fill();
     },
 
     drawLinear: function( ctx ) {
-      var pointCount = this.pointCount();
+      var pointCount = this.pointCount;
       var points = this.get( 'points' );
 
       ctx.beginPath();
@@ -100,7 +111,7 @@ define([
     },
 
     drawQuadratic: function( ctx ) {
-      var pointCount = this.pointCount();
+      var pointCount = this.pointCount;
       var points = this.get( 'points' );
 
       ctx.beginPath();
@@ -130,7 +141,7 @@ define([
     },
 
     drawQuadraticClosed: function( ctx ) {
-      var pointCount = this.pointCount();
+      var pointCount = this.pointCount;
       var points = this.get( 'points' );
 
       ctx.beginPath();
@@ -177,7 +188,7 @@ define([
     },
 
     computeCentroid: function() {
-      var pointCount = this.pointCount();
+      var pointCount = this.pointCount;
       var points = this.get( 'points' );
 
       // Centroid.
@@ -216,9 +227,11 @@ define([
         x: x / area,
         y: y / area
       };
-    },
+    }
+  });
 
-    pointCount: function() {
+  Object.defineProperty( Path.prototype, 'pointCount', {
+    get: function() {
       return 0.5 * this.get( 'points' ).length;
     }
   });

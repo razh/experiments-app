@@ -23,7 +23,7 @@ define([
 
       this.$el.prepend(this.pathTemplate({
         model: this.model,
-        pointCount: this.model.pointCount(),
+        pointCount: this.model.pointCount,
         points: this.model.get( 'points' ),
         interpolations: interpolations
       }));
@@ -39,7 +39,7 @@ define([
 
       Object2DView.prototype.update.call( this );
 
-      var pointCount = this.model.pointCount();
+      var pointCount = this.model.pointCount;
       var points = this.model.get( 'points' );
 
       var xEl, yEl;

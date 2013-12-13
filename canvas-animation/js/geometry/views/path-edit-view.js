@@ -32,7 +32,7 @@ define([
         y: 0
       };
 
-      var pointCount = this.model.pointCount();
+      var pointCount = this.model.pointCount;
       var fragment = document.createDocumentFragment();
 
       var $handler;
