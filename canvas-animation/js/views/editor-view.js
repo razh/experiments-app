@@ -248,15 +248,43 @@ define(function( require ) {
       var x = this.mouse.x,
           y = this.mouse.y;
 
-      // Select point/handler on model.
       var model;
+
+      var pointCount;
+      var points;
+      var point;
+
+      // V. Add vertex to path.
+      if ( this.keys[ 86 ] &&
+           this.selection && this.selection.model instanceof Path ) {
+        model = this.selection.model;
+        var index = model.closestEdgeIndex( x, y );
+
+        pointCount = model.pointCount;
+        points = model.get( 'points' );
+
+        var xi = points[ 2 * index ];
+        var yi = points[ 2 * index + 1 ];
+        var xj = points[ 2 * ( ( index + 1 ) % pointCount ) ];
+        var yj = points[ 2 * ( ( index + 1 ) % pointCount ) + 1 ];
+
+        var mx = 0.5 * ( xi + xj );
+        var my = 0.5 * ( yi + yj );
+
+        points.splice( 2 * ( ( index + 1 ) % pointCount ), 0, mx, my );
+        model.trigger( 'change' );
+
+        return;
+      }
+
+      // Select point/handler on model.
       var i;
       if ( this.selection instanceof PointSelection ||
           ( this.selection instanceof ModelSelection &&
             this.selection.model instanceof Path ) ) {
         model = this.selection.model;
-        var pointCount = model.pointCount;
-        var points = model.getWorldPoints();
+        pointCount = model.pointCount;
+        points = model.getWorldPoints();
 
         var cx, cy;
         for ( i = 0; i < pointCount; i++ ) {
@@ -277,7 +305,6 @@ define(function( require ) {
 
         var edgeNames = RectEdgeSelection.edgeNames;
         var edgeName;
-        var point;
         for ( i = 0; i < edgeNames.length; i++ ) {
           edgeName = edgeNames[i];
           point = model[ edgeName ];
