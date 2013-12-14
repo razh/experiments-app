@@ -355,6 +355,14 @@ define(function( require ) {
 
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
+
+      // Alt + D. Delete current selection.
+      if ( event.altKey && event.which === 68 ) {
+        var model = this.selection.model;
+        // Set selection to null so handlers don't get drawn.
+        this.selection = null;
+        model.destroy();
+      }
     },
 
     onKeyUp: function( event ) {

@@ -36,6 +36,7 @@ define([
       }.bind( this ));
 
       this.listenTo( this.model, 'change', this.update );
+      this.listenTo( this.model, 'destroy', this.remove );
     },
 
     render: function() {

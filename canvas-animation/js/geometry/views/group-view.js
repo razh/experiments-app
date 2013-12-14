@@ -68,11 +68,13 @@ define(function( require ) {
     },
 
     renderIndex: function( index ) {
-      // Don't render if there's already an objectView of the object at index.
       // Don't render if index is out of bounds.
-      if ( this.objectView &&
-           index === this.selectedIndex ||
-           0 > index || index >= this.collection.length ) {
+      if ( 0 > index || index >= this.collection.length ) {
+        return;
+      }
+
+      // Don't render if there's already an objectView of the object at index.
+      if ( this.objectView && this.objectView.model === this.collection.at( index ) ) {
         return;
       }
 
@@ -97,6 +99,12 @@ define(function( require ) {
 
       this.objectView.render();
       this.$objectEl.append( this.objectView.el );
+
+      this.listenTo( model, 'destroy', function() {
+        this.objectView = null;
+        // Render the view for the next selected model.
+        this.renderIndex( this.selectedIndex );
+      }.bind( this ));
     },
 
     remove: function() {
