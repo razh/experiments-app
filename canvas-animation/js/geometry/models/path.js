@@ -2,8 +2,9 @@
 define([
   'underscore',
   'geometry/models/object2d',
-  'utils'
-], function( _, Object2D, Utils ) {
+  'utils',
+  'geometry/intersection'
+], function( _, Object2D, Utils, Intersection ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -234,6 +235,39 @@ define([
         x: x / area,
         y: y / area
       };
+    },
+
+    /**
+     * Returns the index of the edge closest to world point (x, y).
+     */
+    closestEdgeIndex: function( x, y ) {
+      var pointCount = this.pointCount;
+      var points = this.get( 'points' );
+
+      var point = this.toLocal( x, y );
+      x = point.x;
+      y = point.y;
+
+      var minDistanceSquared = Number.POSITIVE_INFINITY,
+          distanceSquared,
+          minIndex;
+
+      var xi, yi, xj, yj;
+      for ( var i = 0; i < pointCount; i++ ) {
+        xi = points[ 2 * i ];
+        yi = points[ 2 * i + 1 ];
+        xj = points[ 2 * ( ( i + 1 ) % pointCount ) ];
+        yj = points[ 2 * ( ( i + 1 ) % pointCount ) + 1 ];
+
+        point = Intersection.closestPointOnSegment( x, y, xi, yi, xj, yj );
+        distanceSquared = Utils.distanceSquared( x, y, point.x, point.y );
+        if ( distanceSquared < minDistanceSquared ) {
+          minDistanceSquared = distanceSquared;
+          minIndex = i;
+        }
+      }
+
+      return minIndex;
     }
   });
 
