@@ -1,12 +1,26 @@
 /*globals define*/
-define([
-  'backbone',
-  'geometry/models/object2d'
-], function( Backbone, Object2D ) {
+define(function( require ) {
   'use strict';
 
+  var Backbone = require( 'backbone' );
+
+  var Object2D = require( 'geometry/models/object2d' );
+  var Circle = require( 'geometry/models/circle' );
+  var Path = require( 'geometry/models/path' );
+  var Rect = require( 'geometry/models/rect' );
+
   var Group = Backbone.Collection.extend({
-    model: Object2D
+    model: function( attrs, options ) {
+      if ( attrs.radius ) {
+        return new Circle( attrs, options );
+      } else if ( attrs.points ) {
+        return new Path( attrs, options );
+      } else if ( attrs.width ) {
+        return new Rect( attrs, options );
+      }
+
+      return new Object2D( attrs, options );
+    },
   });
 
   return Group;
