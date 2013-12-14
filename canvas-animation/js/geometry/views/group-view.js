@@ -36,8 +36,12 @@ define(function( require ) {
       // When an object is added to an empty collection, render its object view.
       this.listenTo( this.collection, 'add', function() {
         if ( this.collection.length === 1 ) {
-          this.renderIndex( this.selectedIndex );
+          this.renderIndex(0);
         }
+      });
+
+      this.listenTo( this.collection, 'select', function( index ) {
+        this.renderIndex( index );
       });
 
       this.objectView = null;
@@ -96,7 +100,11 @@ define(function( require ) {
         return;
       }
 
+      // Set selected index and update view.
       this.selectedIndex = index;
+      this.$( 'select' ).prop( 'selectedIndex', index );
+
+      // Create and attach objectView.
       this.objectView = new View({
         model: model
       });

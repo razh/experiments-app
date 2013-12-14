@@ -144,7 +144,6 @@ define(function( require ) {
       var points = path.getWorldPoints();
 
       var x, y;
-
       for ( var i = 0; i < pointCount; i++ ) {
         x = points[ 2 * i ];
         y = points[ 2 * i + 1 ];
@@ -369,8 +368,11 @@ define(function( require ) {
 
       if ( selection ) {
         this.selection = new ModelSelection( selection, x, y );
-      } else {
+        this.collection.trigger( 'select', this.collection.indexOf( selection ) );
+      } else if ( this.selection ) {
         this.selection = null;
+        // Rerender to get rid of selection handlers.
+        this.render();
       }
     },
 
