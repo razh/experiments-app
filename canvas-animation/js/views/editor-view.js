@@ -11,6 +11,7 @@ define(function( require ) {
 
   var ModelSelection = require( 'views/selection/model-selection' );
   var PointSelection = require( 'views/selection/point-selection' );
+  var RectEdgeSelection = require( 'views/selection/rect-edge-selection' );
 
   var Utils = require( 'utils' );
 
@@ -153,29 +154,9 @@ define(function( require ) {
     },
 
     drawRectHandlers: function( ctx, rect ) {
-      var width = rect.get( 'width' );
-      var height = rect.get( 'height' );
-
-      var halfWidth = 0.5 * width;
-      var halfHeight = 0.5 * height;
-
-      var topLeft  = rect.toWorld( -halfWidth, -halfHeight );
-      var topRight = rect.toWorld(  halfWidth, -halfHeight );
-
-      var bottomLeft  = rect.toWorld( -halfWidth, halfHeight );
-      var bottomRight = rect.toWorld(  halfWidth, halfHeight );
-
-      var left  = rect.toWorld( -halfWidth, 0 );
-      var right = rect.toWorld(  halfWidth, 0 );
-
-      var top    = rect.toWorld( 0, -halfHeight );
-      var bottom = rect.toWorld( 0,  halfHeight );
-
       [
-        topLeft, topRight,
-        bottomLeft, bottomRight,
-        left, right,
-        top, bottom
+        rect.left, rect.right,
+        rect.top, rect.bottom
       ].forEach(function( point ) {
         this.drawHandler( ctx, point.x, point.y );
       }.bind( this ));
@@ -186,6 +167,7 @@ define(function( require ) {
         return;
       }
 
+      // A mess.
       var model = this.selection.model;
       if ( this.selection instanceof ModelSelection ) {
         if ( model instanceof Circle ) {
@@ -197,6 +179,8 @@ define(function( require ) {
         }
       } else if ( this.selection instanceof PointSelection ) {
         this.drawPathHandlers( ctx, model );
+      } else if ( this.selection instanceof RectEdgeSelection ) {
+        this.drawRectHandlers( ctx, model );
       }
     },
 
@@ -264,21 +248,41 @@ define(function( require ) {
       var x = this.mouse.x,
           y = this.mouse.y;
 
-      // Select point on path.
-      if ( this.selection instanceof ModelSelection &&
-           this.selection.model instanceof Path ||
-           this.selection instanceof PointSelection ) {
-        var model = this.selection.model;
+      // Select point/handler on model.
+      var model;
+      var i;
+      if ( this.selection instanceof PointSelection ||
+          ( this.selection instanceof ModelSelection &&
+            this.selection.model instanceof Path ) ) {
+        model = this.selection.model;
         var pointCount = model.pointCount;
         var points = model.getWorldPoints();
 
         var cx, cy;
-        for ( var i = 0; i < pointCount; i++ ) {
+        for ( i = 0; i < pointCount; i++ ) {
           cx = points[ 2 * i ];
           cy = points[ 2 * i + 1 ];
 
           if ( Utils.circleContains( x, y, cx, cy, handlerRadius ) ) {
             this.selection = new PointSelection( model, i, x, y );
+            return;
+          }
+        }
+      }
+
+      if ( this.selection instanceof RectEdgeSelection ||
+           ( this.selection instanceof ModelSelection &&
+             this.selection.model instanceof Rect ) ) {
+        model = this.selection.model;
+
+        var edgeNames = RectEdgeSelection.edgeNames;
+        var edgeName;
+        var point;
+        for ( i = 0; i < edgeNames.length; i++ ) {
+          edgeName = edgeNames[i];
+          point = model[ edgeName ];
+          if ( Utils.circleContains( x, y, point.x, point.y, handlerRadius ) ) {
+            this.selection = new RectEdgeSelection( model, edgeName, x, y );
             return;
           }
         }
