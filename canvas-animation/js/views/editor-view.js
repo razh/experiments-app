@@ -12,6 +12,7 @@ define(function( require ) {
   var ModelSelection = require( 'views/selection/model-selection' );
   var PointSelection = require( 'views/selection/point-selection' );
   var RectEdgeSelection = require( 'views/selection/rect-edge-selection' );
+  var CircleRadiusSelection = require( 'views/selection/circle-radius-selection' );
 
   var Utils = require( 'utils' );
 
@@ -176,6 +177,8 @@ define(function( require ) {
         } else if ( model instanceof Rect ) {
           this.drawRectHandlers( ctx, model );
         }
+      } else if ( this.selection instanceof CircleRadiusSelection ) {
+        this.drawCircleHandlers( ctx, model );
       } else if ( this.selection instanceof PointSelection ) {
         this.drawPathHandlers( ctx, model );
       } else if ( this.selection instanceof RectEdgeSelection ) {
@@ -304,6 +307,7 @@ define(function( require ) {
         }
       }
 
+      // Handle Rect selections.
       if ( this.selection instanceof RectEdgeSelection ||
            ( this.selection instanceof ModelSelection &&
              this.selection.model instanceof Rect ) ) {
@@ -318,6 +322,19 @@ define(function( require ) {
             this.selection = new RectEdgeSelection( model, edgeName, x, y );
             return;
           }
+        }
+      }
+
+      // Handle Circle selections.
+      if ( this.selection instanceof CircleRadiusSelection ||
+           ( this.selection instanceof ModelSelection &&
+             this.selection.model instanceof Circle ) ) {
+        model = this.selection.model;
+
+        point = model.toWorld( model.get( 'radius' ), 0 );
+        if ( Utils.circleContains( x, y, point.x, point.y, handlerRadius ) ) {
+          this.selection = new CircleRadiusSelection( model, x, y );
+          return;
         }
       }
 
