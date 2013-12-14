@@ -11,6 +11,31 @@ define(function() {
     return Math.min( Math.max( value, min ), max );
   }
 
+  /**
+   * Lerp functions.
+   */
+  function lerp( a, b, t ) {
+    return a + t * ( b - a );
+  }
+
+  function inverseLerp( value, a, b ) {
+    return ( value - a ) / ( b - a );
+  }
+
+  function lerp2d( x0, y0, x1, y1, parameter ) {
+    if ( parameter === null ) {
+      return null;
+    }
+
+    return {
+      x: lerp( x0, x1, parameter ),
+      y: lerp( y0, y1, parameter )
+    };
+  }
+
+  /**
+   * Distance functions.
+   */
   function distanceSquared( x0, y0, x1, y1 ) {
     var dx = x1 - x0,
         dy = y1 - y0;
@@ -33,6 +58,10 @@ define(function() {
     RAD_TO_DEG: RAD_TO_DEG,
 
     clamp: clamp,
+
+    lerp: lerp,
+    inverseLerp: inverseLerp,
+    lerp2d: lerp2d,
 
     distanceSquared: distanceSquared,
     distance: distance,
