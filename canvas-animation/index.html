@@ -47,6 +47,14 @@
       margin: 0 auto;
       padding: 0.2em;
     }
+
+    .help {
+      float: left;
+    }
+
+    .help > p {
+      line-height: 0;
+    }
   </style>
 </head>
 <body>
@@ -58,6 +66,14 @@
   <div class="object2d-view" id="rect-view"></div>
   <div class="object2d-view" id="circle-view"></div>
   <div class="object2d-view" id="path-view"></div>
+  <div class="help">
+    <p>Click to select.</p>
+    <p>Alt+C - Add circle.</p>
+    <p>Alt+A - Add path.</p>
+    <p>Alt+R - Add rect.</p>
+    <p>V - Add point/vertex to path.</p>
+    <p>Alt+click - Remove point from path.</p>
+  </div>
 
   <script data-main="js/main" src="../app/components/requirejs/require.js"></script>
 </body>
