@@ -278,6 +278,7 @@ define(function( require ) {
       }
 
       // Select point/handler on model.
+      // If alt key, remove point instead.
       var i;
       if ( this.selection instanceof PointSelection ||
           ( this.selection instanceof ModelSelection &&
@@ -292,7 +293,13 @@ define(function( require ) {
           cy = points[ 2 * i + 1 ];
 
           if ( Utils.circleContains( x, y, cx, cy, handlerRadius ) ) {
-            this.selection = new PointSelection( model, i, x, y );
+            if ( event.altKey ) {
+              model.get( 'points' ).splice( 2 * i, 2 );
+              model.trigger( 'change' );
+            } else {
+              this.selection = new PointSelection( model, i, x, y );
+            }
+
             return;
           }
         }
