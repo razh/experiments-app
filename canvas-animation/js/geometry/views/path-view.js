@@ -18,12 +18,19 @@ define([
       'change input': 'change'
     },
 
+    initialize: function() {
+      Object2DView.prototype.initialize.apply( this, arguments );
+      this.renderedPointCount = 0;
+    },
+
     render: function() {
       Object2DView.prototype.render.call( this );
 
+      this.renderedPointCount = this.model.pointCount;
+
       this.$el.prepend(this.pathTemplate({
         model: this.model,
-        pointCount: this.model.pointCount,
+        pointCount: this.renderedPointCount,
         points: this.model.get( 'points' ),
         interpolations: interpolations
       }));
@@ -42,6 +49,11 @@ define([
       var pointCount = this.model.pointCount;
       var points = this.model.get( 'points' );
 
+      if ( pointCount !== this.renderedPointCount ) {
+        this.render();
+      }
+
+      // Update coordinate values.
       var xEl, yEl;
       var x, y;
       for ( var i = 0; i < pointCount; i++ ) {
