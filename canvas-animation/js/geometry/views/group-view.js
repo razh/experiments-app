@@ -33,6 +33,12 @@ define(function( require ) {
     initialize: function( options ) {
       _.bindAll( this, 'render' );
       this.listenTo( this.collection, 'add remove reset', this.render );
+      // When an object is added to an empty collection, render its object view.
+      this.listenTo( this.collection, 'add', function() {
+        if ( this.collection.length === 1 ) {
+          this.renderIndex( this.selectedIndex );
+        }
+      });
 
       this.objectView = null;
 
@@ -68,11 +74,6 @@ define(function( require ) {
     },
 
     renderIndex: function( index ) {
-      // Don't render if index is out of bounds.
-      if ( 0 > index || index >= this.collection.length ) {
-        return;
-      }
-
       // Don't render if there's already an objectView of the object at index.
       if ( this.objectView && this.objectView.model === this.collection.at( index ) ) {
         return;
@@ -84,15 +85,18 @@ define(function( require ) {
         this.objectView = null;
       }
 
-      // Create new Object2DView for corresponding type.
-      this.selectedIndex = index;
-      var model = this.collection.at( this.selectedIndex );
+      var model = this.collection.at( index );
+      if ( !model ) {
+        return;
+      }
 
+      // Create new Object2DView for corresponding type.
       var View = viewClassForModel( model );
       if ( !View ) {
         return;
       }
 
+      this.selectedIndex = index;
       this.objectView = new View({
         model: model
       });
@@ -101,8 +105,9 @@ define(function( require ) {
       this.$objectEl.append( this.objectView.el );
 
       this.listenTo( model, 'destroy', function() {
-        this.objectView = null;
         // Render the view for the next selected model.
+        // Since .renderIndex() also removes the old objectView,
+        // calling it is still valid when the collection is empty.
         this.renderIndex( this.selectedIndex );
       }.bind( this ));
     },
