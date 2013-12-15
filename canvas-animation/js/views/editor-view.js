@@ -424,7 +424,41 @@ define(function( require ) {
       if ( this.mouse.down && this.selection ) {
         // Snap center of selection to grid.
         if ( this.snapping ) {
+          // Find point closest to selected point.
+          var selection = this.selection;
+          var paths = this.collection.filter(function( model ) {
+            return selection.model !== model && model instanceof Path;
+          });
+
+          var minDistanceSquared = Number.POSITIVE_INFINITY,
+              distanceSquared,
+              minPath,
+              minIndex;
+
+          var points, point, index;
+          var path;
+          for ( var i = 0, il = paths.length; i < il; i++ ) {
+            path = paths[i];
+            points = path.get( 'points' );
+            index = path.closestPointIndex( this.mouse.x, this.mouse.y );
+            point = path.toWorld( points[ 2 * index ], points[ 2 * index + 1 ] );
+
+            distanceSquared = Utils.distanceSquared( this.mouse.x, this.mouse.y, point.x, point.y );
+            if ( distanceSquared < minDistanceSquared ) {
+              minDistanceSquared = distanceSquared;
+              minPath = path;
+              minIndex = index;
+            }
+          }
+
           var point = this.snapToGrid( this.mouse.x, this.mouse.y );
+          // metaKey? Whoops sorry Windows.
+          if ( event.metaKey &&
+               minPath && _.isNumber( minIndex ) ) {
+            points = minPath.get( 'points' );
+            point = minPath.toWorld( points[ 2 * minIndex ], points[ 2 * minIndex + 1 ] );
+          }
+
           this.mouse.x = point.x - this.selection.offset.x;
           this.mouse.y = point.y - this.selection.offset.y;
         }
