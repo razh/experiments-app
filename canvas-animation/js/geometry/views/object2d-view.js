@@ -9,8 +9,9 @@ define([
 ], function( $, _, Object2D, FormView, ColorView, object2dTemplate ) {
   'use strict';
 
-  var lineCaps = [ 'butt', 'round', 'square' ];
-  var lineJoins = [ 'bevel', 'round', 'miter' ];
+  var lineCaps = Object2D.lineCaps;
+  var lineJoins = Object2D.lineJoins;
+  var compositeOperations = Object2D.compositeOperations;
 
   var colorProperties = Object2D.colorProperties;
 
@@ -43,7 +44,8 @@ define([
       this.$el.html(this.template({
         model: this.model,
         lineCaps: lineCaps,
-        lineJoins: lineJoins
+        lineJoins: lineJoins,
+        compositeOperations: compositeOperations
       }));
 
       colorProperties.forEach(function( property ) {

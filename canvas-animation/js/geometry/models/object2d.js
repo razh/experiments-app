@@ -6,12 +6,33 @@ define([
 ], function( _, Backbone, Color ) {
   'use strict';
 
+  var lineCaps = [ 'butt', 'round', 'square' ];
+  var lineJoins = [ 'bevel', 'round', 'miter' ];
+
   var colorProperties = [ 'fill', 'stroke' ];
 
-  var defaultLineStyle = {
+  var compositeOperations = [
+    'source-over',
+    'source-in',
+    'source-out',
+    'source-atop',
+    'destination-over',
+    'destination-in',
+    'destination-out',
+    'destination-atop',
+    'lighter',
+    'darker',
+    'copy',
+    'xor'
+  ];
+
+  // Default values as defined in the canvas spec.
+  var defaults = {
     lineCap: 'butt',
     lineJoin: 'miter',
-    miterLimit: 10
+    miterLimit: 10,
+    globalAlpha: 1,
+    globalCompositeOperation: 'source-over'
   };
 
   var Object2D = Backbone.Model.extend({
@@ -29,9 +50,12 @@ define([
         stroke: new Color(),
         lineWidth: 1,
 
-        lineCap: defaultLineStyle.lineCap,
-        lineJoin: defaultLineStyle.lineJoin,
-        miterLimit: defaultLineStyle.miterLimit,
+        lineCap: defaults.lineCap,
+        lineJoin: defaults.lineJoin,
+        miterLimit: defaults.miterLimit,
+
+        globalAlpha: defaults.globalAlpha,
+        globalCompositeOperation: defaults.globalCompositeOperation,
 
         zIndex: 0
       };
@@ -65,20 +89,32 @@ define([
 
       ctx.restore();
 
+      // Set compositing if not default.
+      var globalAlpha = this.get( 'globalAlpha' ),
+          globalCompositeOperation = this.get( 'globalCompositeOperation' );
+
+      if ( globalAlpha !== defaults.globalAlpha ) {
+        ctx.globalAlpha = globalAlpha;
+      }
+
+      if ( globalCompositeOperation !== defaults.globalCompositeOperation ) {
+        ctx.globalCompositeOperation = globalCompositeOperation;
+      }
+
       // Set line style if not default.
       var lineCap = this.get( 'lineCap' ),
           lineJoin = this.get( 'lineJoin' ),
           miterLimit = this.get( 'miterLimit' );
 
-      if ( lineCap !== defaultLineStyle.lineCap ) {
+      if ( lineCap !== defaults.lineCap ) {
         ctx.lineCap = lineCap;
       }
 
-      if ( lineJoin !== defaultLineStyle.lineJoin ) {
+      if ( lineJoin !== defaults.lineJoin ) {
         ctx.lineJoin = lineJoin;
       }
 
-      if ( ctx.lineJoin === 'miter' && miterLimit !== defaultLineStyle.miterLimit ) {
+      if ( ctx.lineJoin === 'miter' && miterLimit !== defaults.miterLimit ) {
         ctx.miterLimit = miterLimit;
       }
 
@@ -98,17 +134,26 @@ define([
         ctx.stroke();
       }
 
-      // Restore default line style state.
-      if ( lineCap !== defaultLineStyle.lineCap ) {
-        ctx.lineCap = defaultLineStyle.lineCap;
+      // Restore default compositing.
+      if ( globalAlpha !== defaults.globalAlpha ) {
+        ctx.globalAlpha = defaults.globalAlpha;
       }
 
-      if ( lineJoin !== defaultLineStyle.lineJoin ) {
-        ctx.lineJoin = defaultLineStyle.lineJoin;
+      if ( globalCompositeOperation !== defaults.globalCompositeOperation ) {
+        ctx.globalCompositeOperation = defaults.globalCompositeOperation;
       }
 
-      if ( miterLimit !== defaultLineStyle.miterLimit ) {
-        ctx.miterLimit = defaultLineStyle.miterLimit;
+      // Restore default line style.
+      if ( lineCap !== defaults.lineCap ) {
+        ctx.lineCap = defaults.lineCap;
+      }
+
+      if ( lineJoin !== defaults.lineJoin ) {
+        ctx.lineJoin = defaults.lineJoin;
+      }
+
+      if ( miterLimit !== defaults.miterLimit ) {
+        ctx.miterLimit = defaults.miterLimit;
       }
     },
 
@@ -183,6 +228,10 @@ define([
       };
     }
   });
+
+  Object2D.lineCaps = lineCaps;
+  Object2D.lineJoins = lineJoins;
+  Object2D.compositeOperations = compositeOperations;
 
   Object2D.colorProperties = colorProperties;
 
