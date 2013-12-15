@@ -89,72 +89,14 @@ define([
 
       ctx.restore();
 
-      // Set compositing if not default.
-      var globalAlpha = this.get( 'globalAlpha' ),
-          globalCompositeOperation = this.get( 'globalCompositeOperation' );
+      this.applyCompositing( ctx );
+      this.applyLineStyle( ctx );
 
-      if ( globalAlpha !== defaults.globalAlpha ) {
-        ctx.globalAlpha = globalAlpha;
-      }
+      this.fill( ctx );
+      this.stroke( ctx );
 
-      if ( globalCompositeOperation !== defaults.globalCompositeOperation ) {
-        ctx.globalCompositeOperation = globalCompositeOperation;
-      }
-
-      // Set line style if not default.
-      var lineCap = this.get( 'lineCap' ),
-          lineJoin = this.get( 'lineJoin' ),
-          miterLimit = this.get( 'miterLimit' );
-
-      if ( lineCap !== defaults.lineCap ) {
-        ctx.lineCap = lineCap;
-      }
-
-      if ( lineJoin !== defaults.lineJoin ) {
-        ctx.lineJoin = lineJoin;
-      }
-
-      if ( ctx.lineJoin === 'miter' && miterLimit !== defaults.miterLimit ) {
-        ctx.miterLimit = miterLimit;
-      }
-
-      // Fill and stroke.
-      var fill = this.get( 'fill' ),
-          stroke = this.get( 'stroke' ),
-          lineWidth = this.get( 'lineWidth' );
-
-      if ( fill && fill.get( 'alpha' ) ) {
-        ctx.fillStyle = fill.rgba();
-        ctx.fill();
-      }
-
-      if ( lineWidth && stroke && stroke.get( 'alpha' ) ) {
-        ctx.lineWidth = lineWidth;
-        ctx.strokeStyle = stroke.rgba();
-        ctx.stroke();
-      }
-
-      // Restore default compositing.
-      if ( globalAlpha !== defaults.globalAlpha ) {
-        ctx.globalAlpha = defaults.globalAlpha;
-      }
-
-      if ( globalCompositeOperation !== defaults.globalCompositeOperation ) {
-        ctx.globalCompositeOperation = defaults.globalCompositeOperation;
-      }
-
-      // Restore default line style.
-      if ( lineCap !== defaults.lineCap ) {
-        ctx.lineCap = defaults.lineCap;
-      }
-
-      if ( lineJoin !== defaults.lineJoin ) {
-        ctx.lineJoin = defaults.lineJoin;
-      }
-
-      if ( miterLimit !== defaults.miterLimit ) {
-        ctx.miterLimit = defaults.miterLimit;
-      }
+      this.restoreCompositing( ctx );
+      this.restoreLineStyle( ctx );
     },
 
     drawPath: function( ctx ) {
@@ -167,6 +109,70 @@ define([
       ctx.translate( this.get( 'x' ), this.get( 'y' ) );
       ctx.rotate( -this.get( 'angle' ) );
       ctx.scale( this.get( 'scaleX' ), this.get( 'scaleY' ) );
+    },
+
+    fill: function( ctx ) {
+      var fill = this.get( 'fill' );
+
+      if ( fill && fill.get( 'alpha' ) ) {
+        ctx.fillStyle = fill.rgba();
+        ctx.fill();
+      }
+    },
+
+    stroke: function( ctx ) {
+      var stroke = this.get( 'stroke' ),
+          lineWidth = this.get( 'lineWidth' );
+
+      if ( lineWidth && stroke && stroke.get( 'alpha' ) ) {
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = stroke.rgba();
+        ctx.stroke();
+      }
+    },
+
+    applyCompositing: function( ctx ) {
+      // Set compositing if not default.
+      [ 'globalAlpha', 'globalCompositeOperation' ].forEach(function( property ) {
+        var value = this.get( property );
+        if ( value !== defaults[ property ] ) {
+          ctx[ property ] = value;
+        }
+      }.bind( this ));
+    },
+
+    applyLineStyle: function( ctx ) {
+      // Set line style if not default.
+      [ 'lineCap', 'lineJoin' ].forEach(function( property ) {
+        var value = this.get( property );
+        if ( value !== defaults[ property ] ) {
+          ctx[ property ] = value;
+        }
+      }.bind( this ));
+
+      var miterLimit = this.get( 'miterLimit' );
+      if ( ctx.lineJoin === 'miter' && miterLimit !== defaults.miterLimit ) {
+        ctx.miterLimit = miterLimit;
+      }
+    },
+
+    restoreCompositing: function( ctx ) {
+      // Restore default compositing.
+      [ 'globalAlpha', 'globalCompositeOperation' ].forEach(function( property ) {
+        var defaultValue = defaults[ property ];
+        if ( this.get( property ) !== defaults[ property ] ) {
+          ctx[ property ] = defaultValue;
+        }
+      }.bind( this ));
+    },
+
+    restoreLineStyle: function( ctx ) {
+      [ 'lineCap', 'lineJoin', 'miterLimit' ].forEach(function( property ) {
+        var value = this.get( property );
+        if ( value !== defaults[ property ] ) {
+          ctx[ property ] = value;
+        }
+      }.bind( this ));
     },
 
     contains: function( ctx, x, y ) {
