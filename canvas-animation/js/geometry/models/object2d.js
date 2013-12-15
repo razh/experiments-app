@@ -35,6 +35,28 @@ define([
     globalCompositeOperation: 'source-over'
   };
 
+  // Set canvas attributes to the object properties (if not default).
+  // For example, the object's globalCompositeOperation or lineCap.
+  function canvasApplyFn( ctx, properties, object ) {
+    properties.forEach(function( property ) {
+      var value = this.get( property );
+      if ( value !== defaults[ property ] ) {
+        ctx[ property ] = value;
+      }
+    }.bind( object ));
+  }
+
+  // The reverse of canvasApplyFn.
+  // Set canvas attributes to their defaults.
+  function canvasRestoreFn( ctx, properties, object ) {
+    properties.forEach(function( property ) {
+      var defaultValue = defaults[ property ];
+      if ( this.get( property ) !== defaults[ property ] ) {
+        ctx[ property ] = defaultValue;
+      }
+    }.bind( object ));
+  }
+
   var Object2D = Backbone.Model.extend({
     defaults: function() {
       return {
@@ -131,48 +153,24 @@ define([
       }
     },
 
+    // Set compositing if not default.
     applyCompositing: function( ctx ) {
-      // Set compositing if not default.
-      [ 'globalAlpha', 'globalCompositeOperation' ].forEach(function( property ) {
-        var value = this.get( property );
-        if ( value !== defaults[ property ] ) {
-          ctx[ property ] = value;
-        }
-      }.bind( this ));
+      canvasApplyFn( ctx, [ 'globalAlpha', 'globalCompositeOperation' ], this );
     },
 
+    // Set line style if not default.
     applyLineStyle: function( ctx ) {
-      // Set line style if not default.
-      [ 'lineCap', 'lineJoin' ].forEach(function( property ) {
-        var value = this.get( property );
-        if ( value !== defaults[ property ] ) {
-          ctx[ property ] = value;
-        }
-      }.bind( this ));
-
-      var miterLimit = this.get( 'miterLimit' );
-      if ( ctx.lineJoin === 'miter' && miterLimit !== defaults.miterLimit ) {
-        ctx.miterLimit = miterLimit;
-      }
+      canvasApplyFn( ctx, [ 'lineCap', 'lineJoin', 'miterLimit' ], this );
     },
 
+    // Restore default compositing.
     restoreCompositing: function( ctx ) {
-      // Restore default compositing.
-      [ 'globalAlpha', 'globalCompositeOperation' ].forEach(function( property ) {
-        var defaultValue = defaults[ property ];
-        if ( this.get( property ) !== defaults[ property ] ) {
-          ctx[ property ] = defaultValue;
-        }
-      }.bind( this ));
+      canvasRestoreFn( ctx, [ 'globalAlpha', 'globalCompositeOperation' ], this );
     },
 
+    // Restore default line style.
     restoreLineStyle: function( ctx ) {
-      [ 'lineCap', 'lineJoin', 'miterLimit' ].forEach(function( property ) {
-        var value = this.get( property );
-        if ( value !== defaults[ property ] ) {
-          ctx[ property ] = value;
-        }
-      }.bind( this ));
+      canvasRestoreFn( ctx, [ 'lineCap', 'lineJoin', 'miterLimit' ], this );
     },
 
     contains: function( ctx, x, y ) {
