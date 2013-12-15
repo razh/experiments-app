@@ -237,6 +237,27 @@ define(function( require ) {
       return calls;
     },
 
+    getCanvasCalls: function( contextName ) {
+      if ( _.isUndefined( contextName ) ) {
+        contextName = 'ctx';
+      }
+
+      var canvasKeys = _.keys( this.ctx );
+      var canvasFunctions = _.functions( this.ctx );
+      return this.renderIntercept().map(function( call ) {
+        var key = call.shift();
+        if ( canvasKeys.indexOf( key ) !== -1 ) {
+          return 'ctx.' + key + ' = ' + call + ';';
+        } else if ( canvasFunctions.indexOf( key ) !== -1 ) {
+          if ( call.length ) {
+            return 'ctx.' + key + '( ' + call.join( ', ' ) + ' );';
+          } else {
+            return 'ctx.' + key + '();';
+          }
+        }
+      });
+    },
+
     mousePosition: function( event ) {
       this.mouse.x = event.pageX - this.el.offsetLeft;
       this.mouse.y = event.pageY - this.el.offsetTop;
@@ -415,6 +436,12 @@ define(function( require ) {
         // Set selection to null so handlers don't get drawn.
         this.selection = null;
         model.destroy();
+      }
+
+      // Alt + Space.
+      if ( event.altKey && event.which === 32 ) {
+        console.log( JSON.stringify( this.renderIntercept() ) );
+        console.log( this.getCanvasCalls() );
       }
     },
 
