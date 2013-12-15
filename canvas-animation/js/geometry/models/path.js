@@ -238,7 +238,7 @@ define([
     },
 
     /**
-     * Returns the index of the edge closest to world point (x, y).
+     * Returns the index of the edge closest to the world point (x, y).
      */
     closestEdgeIndex: function( x, y ) {
       var pointCount = this.pointCount;
@@ -261,6 +261,36 @@ define([
 
         point = Intersection.closestPointOnSegment( x, y, xi, yi, xj, yj );
         distanceSquared = Utils.distanceSquared( x, y, point.x, point.y );
+        if ( distanceSquared < minDistanceSquared ) {
+          minDistanceSquared = distanceSquared;
+          minIndex = i;
+        }
+      }
+
+      return minIndex;
+    },
+
+    /**
+     * Returns the index of the point closest to the world point (x, y).
+     */
+    closestPointIndex: function( x, y ) {
+      var pointCount = this.pointCount;
+      var points = this.get( 'points' );
+
+      var point = this.toLocal( x, y );
+      x = point.x;
+      y = point.y;
+
+      var minDistanceSquared = Number.POSITIVE_INFINITY,
+          distanceSquared,
+          minIndex;
+
+      var xi, yi;
+      for ( var i = 0; i < pointCount; i++ ) {
+        xi = points[ 2 * i ];
+        yi = points[ 2 * i + 1 ];
+
+        distanceSquared = Utils.distanceSquared( x, y, xi, yi );
         if ( distanceSquared < minDistanceSquared ) {
           minDistanceSquared = distanceSquared;
           minIndex = i;
