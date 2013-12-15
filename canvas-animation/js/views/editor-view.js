@@ -467,8 +467,12 @@ define(function( require ) {
 
       // Alt + Space.
       if ( event.altKey && event.which === 32 ) {
-        console.log( JSON.stringify( this.renderIntercept() ) );
-        console.log( this.getCanvasCalls() );
+        if ( event.shiftKey ) {
+          console.log( JSON.stringify( this.collection ) );
+        } else {
+          console.log( JSON.stringify( this.renderIntercept() ) );
+          console.log( this.getCanvasCalls() );
+        }
       }
 
       // Shift key.
@@ -476,7 +480,7 @@ define(function( require ) {
         this.snapping = true;
       }
 
-      // '. Toggle snap to path points.
+      // Alt + '. Toggle snap to path points.
       if ( event.altKey && event.which === 222 ) {
         this.pathSnapping = !this.pathSnapping;
       }
