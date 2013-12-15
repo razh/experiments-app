@@ -56,6 +56,10 @@ define(function( require ) {
       this.el.width = this.model.get( 'width' );
       this.el.height = this.model.get( 'height' );
 
+      this.gridSpacing = 16;
+      this.snapping = false;
+      this.snappingRadius = 12;
+
       this.ctx = this.el.getContext( '2d' );
 
       this.listenTo( this.collection, 'change add remove reset', this.render );
@@ -196,7 +200,7 @@ define(function( require ) {
 
       ctx.save();
 
-      this.drawGrid( ctx, 16 );
+      this.drawGrid( ctx, this.gridSpacing );
       this.drawObjects( ctx );
 
       this.drawSelection( ctx );
@@ -418,6 +422,13 @@ define(function( require ) {
       this.mousePosition( event );
 
       if ( this.mouse.down && this.selection ) {
+        // Snap center of selection to grid.
+        if ( this.snapping ) {
+          var point = this.snapToGrid( this.mouse.x, this.mouse.y );
+          this.mouse.x = point.x - this.selection.offset.x;
+          this.mouse.y = point.y - this.selection.offset.y;
+        }
+
         // The worldPosition property shallow clones the mouse position.
         this.selection.worldPosition = this.mouse;
       }
@@ -443,10 +454,38 @@ define(function( require ) {
         console.log( JSON.stringify( this.renderIntercept() ) );
         console.log( this.getCanvasCalls() );
       }
+
+      // Shift key.
+      if ( event.which === 16 ) {
+        this.snapping = true;
+      }
     },
 
     onKeyUp: function( event ) {
       this.keys[ event.which ] = false;
+
+      // Shift key.
+      if ( event.which === 16 ) {
+        this.snapping = false;
+      }
+    },
+
+    snapToGrid: function( x, y ) {
+      var dx = Utils.distanceToGrid( x, this.gridSpacing ),
+          dy = Utils.distanceToGrid( y, this.gridSpacing );
+
+      if ( Math.abs( dx ) < this.snappingRadius ) {
+        x += dx;
+      }
+
+      if ( Math.abs( dy ) < this.snappingRadius ) {
+        y += dy;
+      }
+
+      return {
+        x: x,
+        y: y
+      };
     },
 
     remove: function() {

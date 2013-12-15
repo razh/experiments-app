@@ -47,6 +47,10 @@ define(function() {
     return Math.sqrt( distanceSquared( x0, y0, x1 ,y1 ) );
   }
 
+  function distanceToGrid( value, spacing ) {
+    return Math.round( value / spacing ) * spacing - value;
+  }
+
   function circleContains( x, y, cx, cy, radius ) {
     return distanceSquared( x, y, cx, cy ) <= radius * radius;
   }
@@ -65,6 +69,7 @@ define(function() {
 
     distanceSquared: distanceSquared,
     distance: distance,
+    distanceToGrid: distanceToGrid,
 
     circleContains: circleContains
   };
