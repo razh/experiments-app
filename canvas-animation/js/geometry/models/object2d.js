@@ -128,9 +128,26 @@ define([
     },
 
     applyTransform: function( ctx ) {
-      ctx.translate( this.get( 'x' ), this.get( 'y' ) );
-      ctx.rotate( -this.get( 'angle' ) );
-      ctx.scale( this.get( 'scaleX' ), this.get( 'scaleY' ) );
+      var x = this.get( 'x' ),
+          y = this.get( 'y' );
+
+      var angle = this.get( 'angle' );
+
+      var scaleX = this.get( 'scaleX' ),
+          scaleY = this.get( 'scaleY' );
+
+      // Apply non-identity transforms.
+      if ( x || y ) {
+        ctx.translate( x, y );
+      }
+
+      if ( angle ) {
+        ctx.rotate( -angle );
+      }
+
+      if ( scaleX !== 1 || scaleY !== 1 ) {
+        ctx.scale( scaleX, scaleY );
+      }
     },
 
     fill: function( ctx ) {
