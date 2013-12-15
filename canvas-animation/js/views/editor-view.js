@@ -433,7 +433,9 @@ define(function( require ) {
             });
 
             point = this.closestPointInPaths( paths, this.mouse.x, this.mouse.y );
-          } else {
+          }
+
+          if ( !point ) {
             // Snap center of selection to grid.
             point = this.snapToGrid( this.mouse.x, this.mouse.y );
           }
@@ -454,8 +456,9 @@ define(function( require ) {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
 
-      // Alt + D. Delete current selection.
-      if ( event.altKey && event.which === 68 ) {
+      // Alt + Shift + D. Delete current selection.
+      if ( event.altKey && event.shiftKey && event.which === 68 &&
+           this.selection ) {
         var model = this.selection.model;
         // Set selection to null so handlers don't get drawn.
         this.selection = null;
