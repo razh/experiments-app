@@ -59,6 +59,7 @@ define(function( require ) {
       this.gridSpacing = 16;
       this.snapping = false;
       this.snappingRadius = 12;
+      this.pathSnapping = false;
 
       this.ctx = this.el.getContext( '2d' );
 
@@ -422,41 +423,19 @@ define(function( require ) {
       this.mousePosition( event );
 
       if ( this.mouse.down && this.selection ) {
-        // Snap center of selection to grid.
         if ( this.snapping ) {
-          // Find point closest to selected point.
-          var selection = this.selection;
-          var paths = this.collection.filter(function( model ) {
-            return selection.model !== model && model instanceof Path;
-          });
+          var point;
+          if ( this.pathSnapping ) {
+            // Find point in paths closest to selected point.
+            var selectionModel = this.selection.model;
+            var paths = this.collection.filter(function( model ) {
+              return selectionModel !== model && model instanceof Path;
+            });
 
-          var minDistanceSquared = Number.POSITIVE_INFINITY,
-              distanceSquared,
-              minPath,
-              minIndex;
-
-          var points, point, index;
-          var path;
-          for ( var i = 0, il = paths.length; i < il; i++ ) {
-            path = paths[i];
-            points = path.get( 'points' );
-            index = path.closestPointIndex( this.mouse.x, this.mouse.y );
-            point = path.toWorld( points[ 2 * index ], points[ 2 * index + 1 ] );
-
-            distanceSquared = Utils.distanceSquared( this.mouse.x, this.mouse.y, point.x, point.y );
-            if ( distanceSquared < minDistanceSquared ) {
-              minDistanceSquared = distanceSquared;
-              minPath = path;
-              minIndex = index;
-            }
-          }
-
-          var point = this.snapToGrid( this.mouse.x, this.mouse.y );
-          // metaKey? Whoops sorry Windows.
-          if ( event.metaKey &&
-               minPath && _.isNumber( minIndex ) ) {
-            points = minPath.get( 'points' );
-            point = minPath.toWorld( points[ 2 * minIndex ], points[ 2 * minIndex + 1 ] );
+            point = this.closestPointInPaths( paths, this.mouse.x, this.mouse.y );
+          } else {
+            // Snap center of selection to grid.
+            point = this.snapToGrid( this.mouse.x, this.mouse.y );
           }
 
           this.mouse.x = point.x - this.selection.offset.x;
@@ -493,6 +472,11 @@ define(function( require ) {
       if ( event.which === 16 ) {
         this.snapping = true;
       }
+
+      // '. Toggle snap to path points.
+      if ( event.altKey && event.which === 222 ) {
+        this.pathSnapping = !this.pathSnapping;
+      }
     },
 
     onKeyUp: function( event ) {
@@ -520,6 +504,45 @@ define(function( require ) {
         x: x,
         y: y
       };
+    },
+
+    /**
+     * Find the closest point in paths to the point (x, y).
+     */
+    closestPointInPaths: function( paths, x, y ) {
+      var minDistanceSquared = Number.POSITIVE_INFINITY,
+          distanceSquared,
+          minPath, minIndex;
+
+      var path, points, point, index;
+      for ( var i = 0, il = paths.length; i < il; i++ ) {
+        path = paths[i];
+
+        // Get closest point
+        points = path.get( 'points' );
+        index = path.closestPointIndex( x, y );
+        point = path.toWorld(
+          points[ 2 * index ],
+          points[ 2 * index + 1 ]
+        );
+
+        distanceSquared = Utils.distanceSquared( x, y, point.x, point.y );
+        if ( distanceSquared < minDistanceSquared ) {
+          minDistanceSquared = distanceSquared;
+          minPath = path;
+          minIndex = index;
+        }
+      }
+
+      if ( minPath && minIndex >= 0 ) {
+        points = minPath.get( 'points' );
+        point = minPath.toWorld(
+          points[ 2 * minIndex ],
+          points[ 2 * minIndex + 1 ]
+        );
+      }
+
+      return point;
     },
 
     remove: function() {
