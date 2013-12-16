@@ -558,6 +558,12 @@ define(function( require ) {
         this.collection.add( cloneModel );
       }
 
+      // Alt + Shift + C. Center a Path selection.
+      if ( event.altKey && event.shiftKey && event.which === 67 &&
+           this.selection && this.selection.model instanceof Path ) {
+        this.centerPath( this.selection.model );
+      }
+
       // Alt + P. Toggle drawing.
       if ( event.altKey && event.which === 80 ) {
         this.drawing = !this.drawing;
@@ -641,6 +647,30 @@ define(function( require ) {
 
       return point;
     },
+
+    centerPath: function( path ) {
+      var pointCount = path.pointCount;
+      var points = path.get( 'points' );
+
+      var centroid = path.computeCentroid();
+      var dx = centroid.x,
+          dy = centroid.y;
+
+      // Shift all points about centroid.
+      for ( var i = 0; i < pointCount; i++ ) {
+        points[ 2 * i ] -= dx;
+        points[ 2 * i + 1 ] -= dy;
+      }
+
+      // Shift path to the world-space centroid.
+      centroid = path.toWorld( centroid.x, centroid.y );
+
+      path.set({
+        x: centroid.x,
+        y: centroid.y
+      });
+    },
+
 
     getStoredGroups: function() {
       var groups = this.storage.getItem( 'groups' );
