@@ -61,6 +61,9 @@ define(function( require ) {
       this.snappingRadius = 12;
       this.pathSnapping = false;
 
+      this.drawing = false;
+      this.drawnPath = [];
+
       this.ctx = this.el.getContext( '2d' );
       this.storage = window.localStorage;
 
@@ -173,9 +176,9 @@ define(function( require ) {
         return;
       }
 
-      // A mess.
-      var model = this.selection.model;
-      if ( this.selection instanceof ModelSelection ) {
+      var model;
+      if ( this.selection && this.selection.model ) {
+        model = this.selection.model;
         if ( model instanceof Circle ) {
           this.drawCircleHandlers( ctx, model );
         } else if ( model instanceof Path ) {
@@ -183,13 +186,33 @@ define(function( require ) {
         } else if ( model instanceof Rect ) {
           this.drawRectHandlers( ctx, model );
         }
-      } else if ( this.selection instanceof CircleRadiusSelection ) {
-        this.drawCircleHandlers( ctx, model );
-      } else if ( this.selection instanceof PointSelection ) {
-        this.drawPathHandlers( ctx, model );
-      } else if ( this.selection instanceof RectEdgeSelection ) {
-        this.drawRectHandlers( ctx, model );
       }
+    },
+
+    drawPath: function( ctx, path ) {
+      if ( !this.drawing ) {
+        return;
+      }
+
+      // Lines or better.
+      if ( path.length < 4 ) {
+        return;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo( path[0], path[1] );
+
+      var x, y;
+      for ( var i = 0, il = 0.5 * path.length; i < il; i++ ) {
+        x = path[ 2 * i ];
+        y = path[ 2 * i + 1 ];
+
+        ctx.lineTo( x, y );
+      }
+
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#000';
+      ctx.stroke();
     },
 
     render: function() {
@@ -206,6 +229,7 @@ define(function( require ) {
       this.drawObjects( ctx );
 
       this.drawSelection( ctx );
+      this.drawPath( ctx, this.drawnPath );
 
       ctx.restore();
     },
@@ -282,6 +306,16 @@ define(function( require ) {
       var pointCount;
       var points;
       var point;
+
+      if ( this.drawing ) {
+        if ( !this.drawnPath.length ) {
+          this.drawnPath = [ x, y, x, y ];
+        } else {
+          this.drawnPath.push( x, y );
+        }
+
+        this.render();
+      }
 
       // V. Add vertex to path.
       if ( this.keys[ 86 ] &&
@@ -419,6 +453,7 @@ define(function( require ) {
       if ( selection ) {
         this.selection = new ModelSelection( selection, x, y );
         this.collection.trigger( 'select', this.collection.indexOf( selection ) );
+        return;
       } else if ( this.selection ) {
         this.selection = null;
         // Rerender to get rid of selection handlers.
@@ -428,6 +463,16 @@ define(function( require ) {
 
     onMouseMove: function( event ) {
       this.mousePosition( event );
+
+      var x = this.mouse.x,
+          y = this.mouse.y;
+
+      // Move point of last drawn path to current mouse position.
+      if ( this.drawing ) {
+        this.drawnPath[ this.drawnPath.length - 2 ] = x;
+        this.drawnPath[ this.drawnPath.length - 1 ] = y;
+        this.render();
+      }
 
       if ( this.mouse.down && this.selection ) {
         if ( this.snapping ) {
@@ -439,12 +484,12 @@ define(function( require ) {
               return selectionModel !== model && model instanceof Path;
             });
 
-            point = this.closestPointInPaths( paths, this.mouse.x, this.mouse.y );
+            point = this.closestPointInPaths( paths, x, y );
           }
 
           if ( !point ) {
             // Snap center of selection to grid.
-            point = this.snapToGrid( this.mouse.x, this.mouse.y );
+            point = this.snapToGrid( x, y );
           }
 
           this.mouse.x = point.x - this.selection.offset.x;
@@ -511,6 +556,23 @@ define(function( require ) {
         });
 
         this.collection.add( cloneModel );
+      }
+
+      // Alt + P. Toggle drawing.
+      if ( event.altKey && event.which === 80 ) {
+        this.drawing = !this.drawing;
+        if ( !this.drawing ) {
+          var path = new Path({
+            x: 0,
+            y: 0,
+            lineWidth: 3,
+            stroke: defaults.stroke,
+            points: this.drawnPath.slice()
+          });
+
+          this.drawnPath = [];
+          this.collection.add( path );
+        }
       }
     },
 
