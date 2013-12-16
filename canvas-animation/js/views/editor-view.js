@@ -62,6 +62,7 @@ define(function( require ) {
       this.pathSnapping = false;
 
       this.ctx = this.el.getContext( '2d' );
+      this.storage = window.localStorage;
 
       this.listenTo( this.collection, 'change add remove reset select', this.render );
 
@@ -478,6 +479,8 @@ define(function( require ) {
           console.log( JSON.stringify( this.renderIntercept() ) );
           console.log( this.getCanvasCalls() );
         }
+
+        this.saveToStorage();
       }
 
       // Shift key.
@@ -567,6 +570,26 @@ define(function( require ) {
       }
 
       return point;
+    },
+
+    getStoredGroups: function() {
+      var groups = this.storage.getItem( 'groups' );
+      return groups ? JSON.parse( groups ) : [];
+    },
+
+    saveToStorage: function() {
+      var groups = this.getStoredGroups();
+      groups.push( this.collection );
+      this.storage.setItem( 'groups', JSON.stringify( groups ) );
+    },
+
+    loadFromStorage: function( index ) {
+      var groups = this.getStoredGroups();
+      if ( 0 > index || index >= groups.length ) {
+        return;
+      }
+
+      this.collection.reset( groups[ index ] );
     },
 
     remove: function() {
