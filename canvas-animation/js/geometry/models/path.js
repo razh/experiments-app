@@ -298,6 +298,17 @@ define([
       }
 
       return minIndex;
+    },
+
+    clone: function() {
+      var cloneModel = Object2D.prototype.clone.call( this );
+
+      // Clone nested points array.
+      cloneModel.set({
+        points: _.clone( this.get( 'points' ) )
+      });
+
+      return cloneModel;
     }
   });
 

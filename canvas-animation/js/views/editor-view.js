@@ -493,18 +493,11 @@ define(function( require ) {
       // Alt + D. Duplicate current selection.
       if ( event.altKey && event.which === 68 && this.selection ) {
         var cloneModel = this.selection.model.clone();
-        // Offset clone from original.
-        // Clone any nested arrays and objects.
+
         cloneModel.set({
           x: cloneModel.get( 'x' ) + 20,
-          y: cloneModel.get( 'y' ) + 20,
-          fill: cloneModel.get( 'fill' ).clone(),
-          stroke: cloneModel.get( 'stroke' ).clone()
+          y: cloneModel.get( 'y' ) + 20
         });
-
-        if ( cloneModel instanceof Path ) {
-          cloneModel.set( 'points', _.clone( cloneModel.get( 'points' ) ) );
-        }
 
         this.collection.add( cloneModel );
       }

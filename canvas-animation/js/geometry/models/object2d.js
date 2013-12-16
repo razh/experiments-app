@@ -247,6 +247,18 @@ define([
         x: x + this.get( 'x' ),
         y: y + this.get( 'y' )
       };
+    },
+
+    clone: function() {
+      var cloneModel = Backbone.Model.prototype.clone.call( this );
+
+      // Clone nested color objects.
+      cloneModel.set({
+        fill:   this.get( 'fill'   ).clone(),
+        stroke: this.get( 'stroke' ).clone()
+      });
+
+      return cloneModel;
     }
   });
 
