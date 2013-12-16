@@ -63,7 +63,7 @@ define(function( require ) {
 
       this.ctx = this.el.getContext( '2d' );
 
-      this.listenTo( this.collection, 'change add remove reset', this.render );
+      this.listenTo( this.collection, 'change add remove reset select', this.render );
 
       document.addEventListener( 'keydown', this.onKeyDown );
       document.addEventListener( 'keyup', this.onKeyUp );
@@ -306,7 +306,7 @@ define(function( require ) {
       }
 
       // Select point/handler on model.
-      // If alt key, remove point instead.
+      // If alt+shift, remove point instead.
       var i;
       if ( this.selection instanceof PointSelection ||
           ( this.selection instanceof ModelSelection &&
@@ -321,7 +321,7 @@ define(function( require ) {
           cy = points[ 2 * i + 1 ];
 
           if ( Utils.circleContains( x, y, cx, cy, handlerRadius ) ) {
-            if ( event.altKey ) {
+            if ( event.altKey && event.shiftKey ) {
               model.get( 'points' ).splice( 2 * i, 2 );
               model.trigger( 'change' );
             } else {
@@ -405,9 +405,15 @@ define(function( require ) {
       }
 
       // Select object.
-      var selection = this.collection.find(function( model ) {
-        return model.contains( ctx, x, y );
-      });
+      var selection = this.collection.chain()
+        // Prioritize by higher zIndex.
+        .sortBy(function( model ) {
+          return -model.get( 'zIndex' );
+        })
+        .find(function( model ) {
+          return model.contains( ctx, x, y );
+        })
+        .value();
 
       if ( selection ) {
         this.selection = new ModelSelection( selection, x, y );
@@ -480,8 +486,8 @@ define(function( require ) {
         this.snapping = true;
       }
 
-      // Alt + '. Toggle snap to path points.
-      if ( event.altKey && event.which === 222 ) {
+      // Alt + S. Toggle snap to path points.
+      if ( event.altKey && event.which === 83 ) {
         this.pathSnapping = !this.pathSnapping;
       }
     },
