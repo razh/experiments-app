@@ -463,8 +463,16 @@ define(function( require ) {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
 
+      // Stop backspace from triggering history back.
+      // The body is not the active element if we're in an input.
+      if ( event.which === 8 && document.body === document.activeElement ) {
+        event.preventDefault();
+      }
+
       // Delete. Delete current selection.
-      if ( event.which === 46 && this.selection ) {
+      if ( event.which === 46 &&
+           document.body === document.activeElement &&
+           this.selection ) {
         var model = this.selection.model;
         // Set selection to null so handlers don't get drawn.
         this.selection = null;
