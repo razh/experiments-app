@@ -462,9 +462,8 @@ define(function( require ) {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
 
-      // Alt + Shift + D. Delete current selection.
-      if ( event.altKey && event.shiftKey && event.which === 68 &&
-           this.selection ) {
+      // Delete. Delete current selection.
+      if ( event.which === 46 && this.selection ) {
         var model = this.selection.model;
         // Set selection to null so handlers don't get drawn.
         this.selection = null;
@@ -489,6 +488,25 @@ define(function( require ) {
       // Alt + S. Toggle snap to path points.
       if ( event.altKey && event.which === 83 ) {
         this.pathSnapping = !this.pathSnapping;
+      }
+
+      // Alt + D. Duplicate current selection.
+      if ( event.altKey && event.which === 68 && this.selection ) {
+        var cloneModel = this.selection.model.clone();
+        // Offset clone from original.
+        // Clone any nested arrays and objects.
+        cloneModel.set({
+          x: cloneModel.get( 'x' ) + 20,
+          y: cloneModel.get( 'y' ) + 20,
+          fill: cloneModel.get( 'fill' ).clone(),
+          stroke: cloneModel.get( 'stroke' ).clone()
+        });
+
+        if ( cloneModel instanceof Path ) {
+          cloneModel.set( 'points', _.clone( cloneModel.get( 'points' ) ) );
+        }
+
+        this.collection.add( cloneModel );
       }
     },
 
