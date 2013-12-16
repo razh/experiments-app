@@ -7,7 +7,7 @@ define([
 ], function( _, Backbone, Utils ) {
   'use strict';
 
-  var hexRegex = /([a-f\d]{2})/gi;
+  var hexRegex = /([a-f\d])/gi;
 
   var Color = Backbone.Model.extend({
     defaults: function() {
@@ -57,10 +57,30 @@ define([
                Math.round( this.get( 'blue'  ) );
     },
 
+    /**
+     * hexString can be any string that has 3 or 6 hexadecimal characters.
+     */
     setHexString: function( hexString ) {
-      var hex = hexString.match( hexRegex );
-      if ( hex.length !== 3 ) {
+      if ( !_.isString( hexString ) ) {
         return;
+      }
+
+      var hex = hexString.match( hexRegex );
+      if ( !hex || ( hex.length !== 3 && hex.length !== 6 ) ) {
+        return;
+      }
+
+      // Handle shorthand: #f43 -> $ff4433.
+      if ( hex.length === 3 ) {
+        hex[0] += hex[0];
+        hex[1] += hex[1];
+        hex[2] += hex[2];
+      }
+
+      if ( hex.length === 6 ) {
+        hex[0] += hex[1];
+        hex[2] += hex[3];
+        hex[4] += hex[5];
       }
 
       this.set({
