@@ -1,3 +1,4 @@
+'use strict';
 // Karma configuration
 // Generated on Tue Dec 17 2013 16:34:41 GMT-0500 (EST)
 
@@ -5,18 +6,31 @@ module.exports = function(config) {
   config.set({
 
     // base path, that will be used to resolve files and exclude
-    basePath: '',
-
+    // Since karma-requirejs uses absolute paths for parent directory files
+    // by default, we nned to go up a directory for relative paths to work.
+    basePath: '../',
 
     // frameworks to use
     frameworks: ['jasmine', 'requirejs'],
 
+    // Don't use html2js preprocessor for html files.
+    preprocessors: {
+      '**/*.html': []
+    },
 
     // list of files / patterns to load in the browser
     files: [
-      'test/test-main.js',
-      {pattern: 'js/*.js', included: false},
-      {pattern: 'test/**/*Spec.js', included: false}
+      'canvas-animation/test/test-main.js',
+      {pattern: 'canvas-animation/js/**/*.js', included: false},
+      {pattern: 'canvas-animation/test/**/*Spec.js', included: false},
+      // Load templates.
+      {pattern: 'canvas-animation/js/templates/*.html', included: false},
+
+      // Load component dependencies.
+      {pattern: 'app/components/backbone/backbone.js', included: false},
+      {pattern: 'app/components/jquery/jquery.js', included: false},
+      {pattern: 'app/components/underscore/underscore.js', included: false},
+      {pattern: 'app/components/requirejs-text/text.js', included: false}
     ],
 
 
