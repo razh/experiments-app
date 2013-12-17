@@ -315,6 +315,7 @@ define(function( require ) {
         }
 
         this.render();
+        return;
       }
 
       // V. Add vertex to path.
@@ -341,11 +342,9 @@ define(function( require ) {
       }
 
       // Select point/handler on model.
-      // If alt+shift, remove point instead.
+      // If Alt+Shift, remove point instead.
       var i;
-      if ( this.selection instanceof PointSelection ||
-          ( this.selection instanceof ModelSelection &&
-            this.selection.model instanceof Path ) ) {
+      if ( this.selection && this.selection.model instanceof Path ) {
         model = this.selection.model;
         pointCount = model.pointCount;
         points = model.getWorldPoints();
@@ -369,9 +368,7 @@ define(function( require ) {
       }
 
       // Handle Rect selections.
-      if ( this.selection instanceof RectEdgeSelection ||
-           ( this.selection instanceof ModelSelection &&
-             this.selection.model instanceof Rect ) ) {
+      if ( this.selection && this.selection.model instanceof Rect ) {
         model = this.selection.model;
 
         var edgeNames = RectEdgeSelection.edgeNames;
@@ -387,9 +384,7 @@ define(function( require ) {
       }
 
       // Handle Circle selections.
-      if ( this.selection instanceof CircleRadiusSelection ||
-           ( this.selection instanceof ModelSelection &&
-             this.selection.model instanceof Circle ) ) {
+      if ( this.selection && this.selection.model instanceof Circle ) {
         model = this.selection.model;
 
         point = model.toWorld( model.get( 'radius' ), 0 );
@@ -402,7 +397,7 @@ define(function( require ) {
       // Add shape.
       var shape;
       if ( event.altKey ) {
-        // Alt + C. Circle
+        // Alt + C. Circle.
         if ( this.keys[ 67 ] ) {
           shape = new Circle({
             radius: 30,
@@ -455,6 +450,7 @@ define(function( require ) {
         this.collection.trigger( 'select', this.collection.indexOf( selection ) );
         return;
       } else if ( this.selection ) {
+        // If we clicked on empty space, clear the selection.
         this.selection = null;
         // Rerender to get rid of selection handlers.
         this.render();
@@ -512,6 +508,7 @@ define(function( require ) {
       // The body is not the active element if we're in an input.
       if ( event.which === 8 && document.body === document.activeElement ) {
         event.preventDefault();
+        this.deleteSelection();
       }
 
       // Delete. Delete current selection.
@@ -600,7 +597,7 @@ define(function( require ) {
       for ( var i = 0, il = paths.length; i < il; i++ ) {
         path = paths[i];
 
-        // Get closest point
+        // Get world coordinates of closest point in path.
         points = path.get( 'points' );
         index = path.closestPointIndex( x, y );
         point = path.toWorld(
