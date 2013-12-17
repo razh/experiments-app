@@ -1,7 +1,7 @@
 <form class="color-form">
   <fieldset>
     <input type="color" value="<%= color.hexString() %>">
-    <input type="text" value="<%= color.hexString() %>" pattern="\#[a-f\d]{6}">
+    <input type="text" value="<%= color.hexString() %>">
   </fieldset>
   <% [ 'red', 'green', 'blue' ].forEach(function( component ) { %>
     <fieldset>
