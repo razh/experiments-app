@@ -515,13 +515,8 @@ define(function( require ) {
       }
 
       // Delete. Delete current selection.
-      if ( event.which === 46 &&
-           document.body === document.activeElement &&
-           this.selection ) {
-        var model = this.selection.model;
-        // Set selection to null so handlers don't get drawn.
-        this.selection = null;
-        model.destroy();
+      if ( event.which === 46 && document.body === document.activeElement ) {
+        this.deleteSelection();
       }
 
       // Alt + Space.
@@ -547,15 +542,8 @@ define(function( require ) {
       }
 
       // Alt + D. Duplicate current selection.
-      if ( event.altKey && event.which === 68 && this.selection ) {
-        var cloneModel = this.selection.model.clone();
-
-        cloneModel.set({
-          x: cloneModel.get( 'x' ) + 20,
-          y: cloneModel.get( 'y' ) + 20
-        });
-
-        this.collection.add( cloneModel );
+      if ( event.altKey && event.which === 68 ) {
+        this.cloneSelection( 20, 20 );
       }
 
       // Alt + Shift + C. Center a Path selection.
@@ -568,16 +556,7 @@ define(function( require ) {
       if ( event.altKey && event.which === 80 ) {
         this.drawing = !this.drawing;
         if ( !this.drawing ) {
-          var path = new Path({
-            x: 0,
-            y: 0,
-            lineWidth: 3,
-            stroke: defaults.stroke,
-            points: this.drawnPath.slice()
-          });
-
-          this.drawnPath = [];
-          this.collection.add( path );
+          this.stopDrawing();
         }
       }
     },
@@ -671,6 +650,49 @@ define(function( require ) {
       });
     },
 
+    deleteSelection: function() {
+      if ( !this.selection && !this.selection.model ) {
+        return;
+      }
+
+      var model = this.selection.model;
+      // Set selection to null so handlers don't get drawn.
+      this.selection = null;
+      model.destroy();
+    },
+
+    cloneSelection: function( offsetX, offsetY ) {
+      if ( !this.selection && !this.selection.model ) {
+        return;
+      }
+
+      var cloneModel = this.selection.model.clone();
+
+      cloneModel.set({
+        x: cloneModel.get( 'x' ) + offsetX || 0,
+        y: cloneModel.get( 'y' ) + offsetY || 0
+      });
+
+      this.collection.add( cloneModel );
+    },
+
+    stopDrawing: function() {
+      var points = this.drawnPath;
+      if ( !points && !points.length ) {
+        return;
+      }
+
+      var path = new Path({
+        x: 0,
+        y: 0,
+        lineWidth: 3,
+        stroke: defaults.stroke,
+        points: points
+      });
+
+      this.drawnPath = [];
+      this.collection.add( path );
+    },
 
     getStoredGroups: function() {
       var groups = this.storage.getItem( 'groups' );
