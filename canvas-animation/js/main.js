@@ -27,6 +27,7 @@ define(function( require ) {
   var Editor = require( 'models/editor' );
   var EditorView = require( 'views/editor-view' );
 
+  var Arc = require( 'geometry/models/arc' );
   var Circle = require( 'geometry/models/circle' );
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
@@ -83,6 +84,18 @@ define(function( require ) {
   });
 
   group.add( circle );
+
+  var arc = new Arc({
+    x: 100,
+    y: 400,
+    radius: 50,
+    startAngle: 20 * Utils.DEG_TO_RAD,
+    endAngle: 180 * Utils.DEG_TO_RAD,
+    fill: [ 200, 150, 192, 1 ],
+    stroke: [ 64, 0, 64, 1 ]
+  });
+
+  group.add( arc );
 
   editorView.render();
 

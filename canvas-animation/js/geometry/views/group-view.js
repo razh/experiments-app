@@ -5,10 +5,12 @@ define(function( require ) {
   var _ = require( 'underscore' );
   var Backbone = require( 'backbone' );
 
+  var Arc = require( 'geometry/models/arc' );
   var Circle = require( 'geometry/models/circle' );
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
 
+  var ArcView = require( 'geometry/views/arc-view' );
   var CircleView = require( 'geometry/views/circle-view' );
   var PathView = require( 'geometry/views/path-view' );
   var RectView = require( 'geometry/views/rect-view' );
@@ -16,7 +18,9 @@ define(function( require ) {
   var groupTemplate = require( 'text!geometry/templates/group-view.html' );
 
   function viewClassForModel( model ) {
-    if ( model instanceof Circle ) {
+    if ( model instanceof Arc ) {
+      return ArcView;
+    } else if ( model instanceof Circle ) {
       return CircleView;
     } else if ( model instanceof Path ) {
       return PathView;

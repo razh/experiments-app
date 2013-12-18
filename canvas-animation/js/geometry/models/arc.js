@@ -13,6 +13,7 @@ define([
       defaults.startAngle = 0;
       defaults.endAngle = PI2;
       defaults.anticlockwise = false;
+      defaults.closed = false;
       return defaults;
     },
 
@@ -27,7 +28,9 @@ define([
         this.get( 'anticlockwise' )
       );
 
-      ctx.closePath();
+      if ( this.get( 'closed') ) {
+        ctx.closePath();
+      }
     }
   });
 

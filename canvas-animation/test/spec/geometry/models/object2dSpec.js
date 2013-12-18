@@ -1,4 +1,4 @@
-/*globals define, describe, it, expect, ctx, ctxSpy*/
+/*globals define, describe, beforeEach, it, expect, ctx, ctxSpy*/
 define(function( require ) {
   'use strict';
 

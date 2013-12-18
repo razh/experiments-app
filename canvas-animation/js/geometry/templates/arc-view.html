@@ -1,5 +1,5 @@
 <form class="arc-form">
-  <% [ 'startAngle', 'endAngle' ].forEach(function() { %>
+  <% [ 'startAngle', 'endAngle' ].forEach(function( angle ) { %>
     <fieldset>
       <label for="<%= angle %>"><%= angle %></label>
       <input type="number" id="<%= angle %>" value="<%= model.get( angle ) %>" step="<%= Math.PI / 180 %>">
@@ -10,6 +10,13 @@
     <label for="anticlockwise">anticlockwise</label>
     <input type="checkbox" id="anticlockwise"
       <% if ( model.get( 'anticlockwise' ) )
+        print( 'checked' ) %>>
+  </fieldset>
+
+  <fieldset>
+    <label for="closed">closed</label>
+    <input type="checkbox" id="closed"
+      <% if ( model.get( 'closed' ) )
         print( 'checked' ) %>>
   </fieldset>
 </form>
