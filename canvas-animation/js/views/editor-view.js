@@ -5,6 +5,7 @@ define(function( require ) {
   var _ = require( 'underscore' );
   var Backbone = require( 'backbone' );
 
+  var Arc = require( 'geometry/models/arc' );
   var Circle = require( 'geometry/models/circle' );
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
@@ -13,6 +14,7 @@ define(function( require ) {
   var PointSelection = require( 'views/selection/point-selection' );
   var RectEdgeSelection = require( 'views/selection/rect-edge-selection' );
   var CircleRadiusSelection = require( 'views/selection/circle-radius-selection' );
+  var ArcAngleSelection = require( 'views/selection/arc-angle-selection' );
 
   var Utils = require( 'utils' );
 
@@ -149,6 +151,16 @@ define(function( require ) {
       this.drawHandler( ctx, radialPoint.x, radialPoint.y );
     },
 
+    drawArcHandlers: function( ctx, arc ) {
+      this.drawCircleHandlers( ctx, arc );
+
+      var point = arc.start;
+      this.drawHandler( ctx, point.x, point.y );
+
+      point = arc.end;
+      this.drawHandler( ctx, point.x, point.y );
+    },
+
     drawPathHandlers: function( ctx, path ) {
       var pointCount = path.pointCount;
       var points = path.getWorldPoints();
@@ -179,7 +191,9 @@ define(function( require ) {
       var model;
       if ( this.selection && this.selection.model ) {
         model = this.selection.model;
-        if ( model instanceof Circle ) {
+        if ( model instanceof Arc ) {
+          this.drawArcHandlers( ctx, model );
+        } else if ( model instanceof Circle ) {
           this.drawCircleHandlers( ctx, model );
         } else if ( model instanceof Path ) {
           this.drawPathHandlers( ctx, model );
@@ -378,6 +392,21 @@ define(function( require ) {
           point = model[ edgeName ];
           if ( Utils.circleContains( x, y, point.x, point.y, handlerRadius ) ) {
             this.selection = new RectEdgeSelection( model, edgeName, x, y );
+            return;
+          }
+        }
+      }
+
+      if ( this.selection && this.selection.model instanceof Arc ) {
+        model = this.selection.model;
+
+        var angleNames = Arc.angleNames;
+        var angleName;
+        for ( i = 0; i < angleNames.length; i++ ) {
+          angleName = angleNames[i];
+          point = model[ angleName ];
+          if ( Utils.circleContains( x, y, point.x, point.y, handlerRadius ) ) {
+            this.selection = new ArcAngleSelection( model, angleName, x, y );
             return;
           }
         }

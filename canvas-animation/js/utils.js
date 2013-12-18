@@ -55,6 +55,10 @@ define(function() {
     return distanceSquared( x, y, cx, cy ) <= radius * radius;
   }
 
+  function angleFrom( x0, y0, x1, y1 ) {
+    return Math.atan2( y1 - y0, x1 - y0 );
+  }
+
   return {
     PI2: PI2,
 
@@ -71,6 +75,8 @@ define(function() {
     distance: distance,
     distanceToGrid: distanceToGrid,
 
-    circleContains: circleContains
+    circleContains: circleContains,
+
+    angleFrom: angleFrom
   };
 });
