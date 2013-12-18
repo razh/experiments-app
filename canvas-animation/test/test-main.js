@@ -1,5 +1,5 @@
 /*jshint camelcase:false*/
-/*globals requirejs*/
+/*globals requirejs, beforeEach, require, jasmine*/
 // Add all specs to tests.
 var tests = [];
 for ( var file in window.__karma__.files ) {
@@ -34,4 +34,18 @@ requirejs.config({
   deps: tests,
 
   callback: window.__karma__.start
+});
+
+// Add canvas testing methods.
+var ctx;
+
+beforeEach(function() {
+  'use strict';
+
+  var _ = require( 'underscore' );
+
+  var canvas = document.createElement( 'canvas' );
+  var context = canvas.getContext( '2d' );
+
+  ctx = jasmine.createSpyObj( 'ctx', _.functions( context ) );
 });
