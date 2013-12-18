@@ -24,7 +24,7 @@ module.exports = function(config) {
       {pattern: 'canvas-animation/js/**/*.js', included: false},
       {pattern: 'canvas-animation/test/**/*Spec.js', included: false},
       // Load templates.
-      {pattern: 'canvas-animation/js/templates/*.html', included: false},
+      {pattern: 'canvas-animation/js/**/*.html', included: false},
 
       // Load component dependencies.
       {pattern: 'app/components/backbone/backbone.js', included: false},

@@ -2,17 +2,23 @@
 define(function( require ) {
   'use strict';
 
+  var _ = require( 'underscore' );
+
   var Utils = require( 'utils' );
   var Object2D = require( 'geometry/models/object2d' );
 
   describe( 'Object2D', function() {
+    beforeEach(function() {
+      // Reset Jasmine spy.
+      _.functions( ctxSpy ).forEach(function( functionName ) {
+        ctxSpy[ functionName ].reset();
+      });
+    });
+
     it( 'applies canvas transformations', function() {
       // No transforms.
       var object = new Object2D();
 
-      ctxSpy.translate.reset();
-      ctxSpy.scale.reset();
-      ctxSpy.rotate.reset();
       object.applyTransform( ctxSpy );
 
       expect( ctxSpy.translate ).not.toHaveBeenCalled();

@@ -45,13 +45,13 @@ define(function( require ) {
       expect( model.get( 'blue' ) ).toBe( 0 );
 
       // Six hex.
-      view.$( 'input[type=text]' ).val( '0f0' ).trigger( 'change' );
+      view.$( 'input[type=text]' ).val( '00ff00' ).trigger( 'change' );
       expect( model.get( 'red' ) ).toBe( 0 );
       expect( model.get( 'green' ) ).toBe( 255 );
       expect( model.get( 'blue' ) ).toBe( 0 );
 
       // Six hex with pound symbol.
-      view.$( 'input[type=text]' ).val( '#242' ).trigger( 'change' );
+      view.$( 'input[type=text]' ).val( '#224422' ).trigger( 'change' );
       expect( model.get( 'red' ) ).toBe( 34 );
       expect( model.get( 'green' ) ).toBe( 68 );
       expect( model.get( 'blue' ) ).toBe( 34 );
