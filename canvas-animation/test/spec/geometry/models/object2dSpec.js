@@ -46,7 +46,7 @@ define(function( require ) {
       expect( ctxSpy.rotate ).toHaveBeenCalledWith( -angle );
     });
 
-    it( 'toLocal transforms world points', function() {
+    it( 'toLocal transforms world points to local coordinate space', function() {
       var x = 20,
           y = 30,
           scaleX = 2,

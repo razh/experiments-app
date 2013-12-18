@@ -26,7 +26,7 @@ define(function( require ) {
       });
     });
 
-    it( 'changes to view numeric inputs affects the model', function() {
+    it( 'numeric inputs update the model', function() {
       view.$( '#red' ).val( 255 ).trigger( 'change' );
       expect( model.get( 'red' ) ).toBe( 255 );
     });
