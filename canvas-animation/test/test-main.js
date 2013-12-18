@@ -36,16 +36,44 @@ requirejs.config({
   callback: window.__karma__.start
 });
 
-// Add canvas testing methods.
-var ctx;
+// Canvas testing methods:
+// Jasmine spy.
+var ctxSpy;
+// An alternative to Jasmine spies that keeps track of call order.
+var ctx = {
+  calls: []
+};
 
-beforeEach(function() {
+require([
+  'underscore'
+], function( _ ) {
   'use strict';
-
-  var _ = require( 'underscore' );
 
   var canvas = document.createElement( 'canvas' );
   var context = canvas.getContext( '2d' );
 
-  ctx = jasmine.createSpyObj( 'ctx', _.functions( context ) );
+  var canvasFunctions = _.functions( context );
+
+  ctxSpy = jasmine.createSpyObj( 'ctxSpy', canvasFunctions );
+
+  // Create ctx with canvas keys tracking.
+  _.keys( context ).forEach(function( property ) {
+    Object.defineProperty( ctx, property, {
+      get: function() {
+        return ctx[ '_' + property ];
+      },
+
+      set: function( value ) {
+        ctx.calls.push( [ property, value ] );
+        ctx[ '_' + property ] = value;
+      }
+    });
+  });
+
+  // Track canvas functions.
+  canvasFunctions.forEach(function( functionName ) {
+    ctx[ functionName ] = function() {
+      ctx.calls.push( [ functionName ].concat( _.toArray( arguments ) ) );
+    };
+  });
 });

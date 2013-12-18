@@ -1,4 +1,4 @@
-/*globals define, describe, it, expect, ctx*/
+/*globals define, describe, it, expect, ctx, ctxSpy*/
 define(function( require ) {
   'use strict';
 
@@ -9,10 +9,15 @@ define(function( require ) {
     it( 'applies canvas transformations', function() {
       // No transforms.
       var object = new Object2D();
-      object.applyTransform( ctx );
-      expect( ctx.translate ).not.toHaveBeenCalled();
-      expect( ctx.scale ).not.toHaveBeenCalled();
-      expect( ctx.rotate ).not.toHaveBeenCalled();
+
+      ctxSpy.translate.reset();
+      ctxSpy.scale.reset();
+      ctxSpy.rotate.reset();
+      object.applyTransform( ctxSpy );
+
+      expect( ctxSpy.translate ).not.toHaveBeenCalled();
+      expect( ctxSpy.scale ).not.toHaveBeenCalled();
+      expect( ctxSpy.rotate ).not.toHaveBeenCalled();
 
       var x = 100;
       var y = 150;
@@ -29,10 +34,10 @@ define(function( require ) {
         angle: angle
       });
 
-      object.applyTransform( ctx );
-      expect( ctx.translate ).toHaveBeenCalledWith( x, y );
-      expect( ctx.scale ).toHaveBeenCalledWith( scaleX, scaleY );
-      expect( ctx.rotate ).toHaveBeenCalledWith( -angle );
+      object.applyTransform( ctxSpy );
+      expect( ctxSpy.translate ).toHaveBeenCalledWith( x, y );
+      expect( ctxSpy.scale ).toHaveBeenCalledWith( scaleX, scaleY );
+      expect( ctxSpy.rotate ).toHaveBeenCalledWith( -angle );
     });
 
     it( 'toLocal transforms world points', function() {
