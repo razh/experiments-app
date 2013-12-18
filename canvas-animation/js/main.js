@@ -27,20 +27,11 @@ define(function( require ) {
   var Editor = require( 'models/editor' );
   var EditorView = require( 'views/editor-view' );
 
-  var Color = require( 'models/color' );
   var Circle = require( 'geometry/models/circle' );
   var Path = require( 'geometry/models/path' );
   var Rect = require( 'geometry/models/rect' );
 
   var editorCanvas = document.getElementById( 'editor' );
-
-  var color = new Color([ 255, 20, 30, 1 ]);
-  if ( color.get( 'red'   ) !== 255 ||
-       color.get( 'green' ) !==  20 ||
-       color.get( 'blue'  ) !==  30 ||
-       color.get( 'alpha' ) !==   1 ) {
-    console.log( 'Incorrect initializion of Color.' );
-  }
 
   var editorView = new EditorView({
     el: editorCanvas,
@@ -94,72 +85,6 @@ define(function( require ) {
   group.add( circle );
 
   editorView.render();
-
-  var Object2DView = require( 'geometry/views/object2d-view' );
-  var object2dView = new Object2DView({
-    el: '#object2d-view',
-    model: path
-  });
-
-  object2dView.render();
-
-  var RectView = require( 'geometry/views/rect-view' );
-  var rectView = new RectView({
-    el: '#rect-view',
-    model: rect
-  });
-
-  rectView.render();
-
-  var CircleView = require( 'geometry/views/circle-view' );
-  var circleView = new CircleView({
-    el: '#circle-view',
-    model: circle
-  });
-
-  circleView.render();
-
-  var PathView = require( 'geometry/views/path-view' );
-  var pathView = new PathView({
-    el: '#path-view',
-    model: path
-  });
-
-  pathView.render();
-
-
-  editorCanvas.addEventListener( 'mousedown', function( event ) {
-    var x = event.pageX - editorCanvas.offsetLeft,
-        y = event.pageY - editorCanvas.offsetTop;
-
-    var rectContains = rect.contains( editorCanvas.getContext( '2d' ), x, y );
-    var pathContains = path.contains( editorCanvas.getContext( '2d' ), x, y );
-
-    console.log( 'rect: ' + rectContains + ', path: ' + pathContains );
-  });
-
-  var interpInterval = setInterval(function() {
-    var interpolation = path.get( 'interpolation' ) === 'linear' ? 'quadratic' : 'linear';
-    path.set( 'interpolation', interpolation );
-  }, 500 );
-
-  // There's a math joke here.
-  var closedInterval = setInterval(function() {
-    path.set( 'closed', !path.get( 'closed' ) );
-  }, 1000 );
-
-  // Continuously draw closed quadratic Path.
-  document.addEventListener( 'keydown', function( event ) {
-    if ( event.which === 32 ) {
-      clearInterval( interpInterval );
-      clearInterval( closedInterval );
-
-      path.set({
-        interpolation: 'quadratic',
-        closed: true
-      });
-    }
-  });
 
   console.log( JSON.stringify( editorView.renderIntercept() ) );
 
