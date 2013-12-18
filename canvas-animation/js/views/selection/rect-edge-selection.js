@@ -47,7 +47,5 @@ define(function() {
     }
   });
 
-  RectEdgeSelection.edgeNames = [ 'top', 'right', 'bottom', 'left' ];
-
   return RectEdgeSelection;
 });

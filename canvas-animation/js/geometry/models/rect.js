@@ -22,6 +22,8 @@ define([
     }
   });
 
+  Rect.edgeNames = [ 'top', 'right', 'bottom', 'left' ];
+
   // left, right, top, and bottom properties are in world space.
   Object.defineProperty( Rect.prototype, 'left', {
     get: function() {

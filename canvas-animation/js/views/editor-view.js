@@ -154,11 +154,10 @@ define(function( require ) {
     drawArcHandlers: function( ctx, arc ) {
       this.drawCircleHandlers( ctx, arc );
 
-      var point = arc.start;
-      this.drawHandler( ctx, point.x, point.y );
-
-      point = arc.end;
-      this.drawHandler( ctx, point.x, point.y );
+      Arc.angleNames.forEach(function( angleName ) {
+        var point = arc[ angleName ];
+        this.drawHandler( ctx, point.x, point.y );
+      }.bind( this ));
     },
 
     drawPathHandlers: function( ctx, path ) {
@@ -175,10 +174,8 @@ define(function( require ) {
     },
 
     drawRectHandlers: function( ctx, rect ) {
-      [
-        rect.left, rect.right,
-        rect.top, rect.bottom
-      ].forEach(function( point ) {
+      Rect.edgeNames.forEach(function( edgeName ) {
+        var point = rect[ edgeName ];
         this.drawHandler( ctx, point.x, point.y );
       }.bind( this ));
     },
@@ -385,7 +382,7 @@ define(function( require ) {
       if ( this.selection && this.selection.model instanceof Rect ) {
         model = this.selection.model;
 
-        var edgeNames = RectEdgeSelection.edgeNames;
+        var edgeNames = Rect.edgeNames;
         var edgeName;
         for ( i = 0; i < edgeNames.length; i++ ) {
           edgeName = edgeNames[i];
