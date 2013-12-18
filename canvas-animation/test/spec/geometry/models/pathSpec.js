@@ -2,6 +2,8 @@
 define(function( require ) {
   'use strict';
 
+  var Utils = require( 'utils' );
+
   var Path = require( 'geometry/models/path' );
 
   describe( 'Path', function() {
@@ -89,6 +91,32 @@ define(function( require ) {
         mx0,
         my0
       ]);
+    });
+
+    it( 'getWorldPoints() transforms path points to world space', function() {
+      var x = 60,
+          y = 40,
+          scaleX = 10,
+          scaleY = 2,
+          angle = 90 * Utils.DEG_TO_RAD;
+
+      path.set({
+        x: x,
+        y: y,
+        scaleX: scaleX,
+        scaleY: scaleY,
+        angle: angle
+      });
+
+      var worldPoints = path.getWorldPoints();
+      expect( worldPoints[0] ).toBeCloseTo( points[1] * scaleY + x );
+      expect( worldPoints[1] ).toBeCloseTo( -points[0] * scaleX + y );
+    });
+
+    it( 'computeCentroid()', function() {
+      var centroid = path.computeCentroid();
+      expect( centroid.x ).toBe(0);
+      expect( centroid.y ).toBe(0);
     });
   });
 });

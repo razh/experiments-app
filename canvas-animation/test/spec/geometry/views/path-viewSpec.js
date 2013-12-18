@@ -45,5 +45,18 @@ define(function( require ) {
       pathView.$( 'input[data-index=2][data-axis=1]' ).val(8).trigger( 'change' );
       expect( path.get( 'points' )[ 2 * 2 + 1  ] ).toBe(8);
     });
+
+    it( 'points changes update view values (need to trigger change events)', function() {
+      path.set( 'points', points );
+
+      var $x0El = pathView.$( '.coordinate' ).eq(0);
+      expect( parseFloat( $x0El.val() ) ).toBe( -100 );
+
+      points[0] = 200;
+      expect( parseFloat( $x0El.val() ) ).toBe( -100 );
+
+      path.trigger( 'change' );
+      expect( parseFloat( $x0El.val() ) ).toBe( 200 );
+    });
   });
 });

@@ -27,5 +27,13 @@ define(function( require ) {
         expect( rect.get( dimension ) ).toBe( parseFloat( $dimensionEl.val() ) );
       });
     });
+
+    it( 'width and height changes update view values', function() {
+      [ 'width', 'height' ].forEach(function( dimension ) {
+        var $dimensionEl = rectView.$( '#' + dimension );
+        rect.set( dimension, 100 * Math.random() );
+        expect( parseFloat( $dimensionEl.val() ) ).toBe( rect.get( dimension ) );
+      });
+    });
   });
 });
