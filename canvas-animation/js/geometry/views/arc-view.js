@@ -17,6 +17,19 @@ define([
       }));
 
       return this;
+    },
+
+    update: function() {
+      var changedAttributes = this.model.changedAttributes();
+
+      // Update checkboxes.
+      [ 'anticlockwise', 'closed' ].forEach(function( attr ) {
+        if ( !_.isUndefined( changedAttributes[ attr ] ) ) {
+          this.$( '#' + attr ).prop( 'checked', this.model.get( attr ) );
+        }
+      }.bind( this ));
+
+      CircleView.prototype.update.call( this );
     }
   });
 

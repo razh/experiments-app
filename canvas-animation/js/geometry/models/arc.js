@@ -28,7 +28,7 @@ define([
         this.get( 'anticlockwise' )
       );
 
-      if ( this.get( 'closed') ) {
+      if ( this.get( 'closed' ) ) {
         ctx.closePath();
       }
     }

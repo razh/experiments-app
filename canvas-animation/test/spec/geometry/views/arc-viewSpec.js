@@ -2,6 +2,8 @@
 define(function( require ) {
   'use strict';
 
+  var ctxSpy = require( 'canvas-spy' ).ctxSpy;
+
   var $ = require( 'jquery' );
 
   var ArcView = require( 'geometry/views/arc-view' );
@@ -11,6 +13,8 @@ define(function( require ) {
     var arc, arcView;
 
     beforeEach(function() {
+      ctxSpy.reset();
+
       arc = new Arc();
       arcView = new ArcView({
         el: $( '<div>' ),
@@ -36,6 +40,22 @@ define(function( require ) {
         arc.set( angle, value );
         expect( parseFloat( $angleEl.val() ) ).toBe( value );
       });
+    });
+
+    it( 'closed checkbox input determines if drawn path is closed', function() {
+      var $closedEl = arcView.$( '#closed' );
+
+      expect( $closedEl.prop( 'checked' ) ).toBe( false );
+      expect( arc.get( 'closed' ) ).toBe( false );
+      arc.drawPath( ctxSpy );
+      expect( ctxSpy.closePath ).not.toHaveBeenCalled();
+
+      $closedEl.prop( 'checked', true ).trigger( 'change' );
+
+      expect( $closedEl.prop( 'checked' ) ).toBe( true );
+      expect( arc.get( 'closed' ) ).toBe( true );
+      arc.drawPath( ctxSpy );
+      expect( ctxSpy.closePath ).toHaveBeenCalled();
     });
   });
 });
