@@ -108,6 +108,7 @@ define(function( require ) {
       // Set selected index and update view.
       this.selectedIndex = index;
       this.$( 'select' ).prop( 'selectedIndex', index );
+      this.collection.trigger( 'select:group-view', index );
 
       // Create and attach objectView.
       this.objectView = new View({

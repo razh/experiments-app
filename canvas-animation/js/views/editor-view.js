@@ -70,6 +70,11 @@ define(function( require ) {
       this.storage = window.localStorage;
 
       this.listenTo( this.collection, 'change add remove reset select', this.render );
+      // Listen to any selects from a GroupView.
+      this.listenTo( this.collection, 'select:group-view', function( index ) {
+        this.selection = new ModelSelection( this.collection.at( index ) );
+        this.render();
+      });
 
       document.addEventListener( 'keydown', this.onKeyDown );
       document.addEventListener( 'keyup', this.onKeyUp );

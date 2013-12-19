@@ -1,4 +1,4 @@
-<select class="group-view" size="<%= collection.length %>">
+<select class="group-view" size="<%= Math.max( collection.length, 3 ) %>">
   <% collection.each(function( model, i ) { %>
     <option value="<%= i %>" <% if ( i === selectedIndex ) print( 'selected' ) %>><%
       if ( model instanceof Arc ) {%>Arc<% }
