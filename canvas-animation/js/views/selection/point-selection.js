@@ -9,14 +9,15 @@ define(function() {
     this.model = model;
     this.index = index;
 
-    var point = this.model.toWorld( this.x, this.y );
+    var point = this.worldPosition;
     this.offset = {
       x: point.x - x || 0,
       y: point.y - y || 0
     };
   }
 
-  // x and y are in local coordinates.
+  // WARNING: Unlike other selection objects,
+  // x and y are get/set in local coordinates.
   Object.defineProperty( PointSelection.prototype, 'x', {
     get: function() {
       var points = this.model.get( 'points' );
@@ -46,7 +47,11 @@ define(function() {
 
   Object.defineProperty( PointSelection.prototype, 'worldPosition', {
     get: function() {
-      return this.model.toWorld( this.x, this.y );
+      var points = this.model.get( 'points' );
+      var x = points[ 2 * this.index ],
+          y = points[ 2 * this.index + 1 ];
+
+      return this.model.toWorld( x, y );
     },
 
     set: function( position ) {

@@ -10,25 +10,23 @@ define(function() {
     this.model = model;
     this.edge = edge;
 
-    var point = this.model.toWorld( this.model[ this.edge ] );
+    var edgePoint = this.worldPosition;
     this.offset = {
-      x: point.x - x || 0,
-      y: point.y - y || 0
+      x: edgePoint.x - x || 0,
+      y: edgePoint.y - y || 0
     };
   }
 
   // No x and y setters since we need both components to set position.
   Object.defineProperty( RectEdgeSelection.prototype, 'x', {
     get: function() {
-      var position = this.worldPosition;
-      return this.model.toWorld( position.x, position.y ).x;
+      return this.worldPosition.x;
     }
   });
 
   Object.defineProperty( RectEdgeSelection.prototype, 'y', {
     get: function() {
-      var position = this.worldPosition;
-      return this.model.toWorld( position.x, position.y ).y;
+      return this.worldPosition.y;
     }
   });
 

@@ -16,13 +16,13 @@ define(function() {
 
   Object.defineProperty( ArcAngleSelection.prototype, 'x', {
     get: function() {
-      return this.model[ this.angle ].x;
+      return this.worldPosition.x;
     }
   });
 
   Object.defineProperty( ArcAngleSelection.prototype, 'y',  {
     get: function() {
-      return this.model[ this.angle ].y;
+      return this.worldPosition.y;
     }
   });
 
