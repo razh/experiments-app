@@ -30,5 +30,28 @@ define(function( require ) {
         y: y
       });
     });
+
+    it( 'mouse movement adds initial mouse offsets from selection center', function() {
+      expect( object.get( 'x' ) ).toBe(0);
+      expect( object.get( 'y' ) ).toBe(0);
+
+      // Mouse position.
+      var x = 5;
+      var y = -2;
+
+      // Mouse movement.
+      var dx = -10;
+      var dy = 10;
+
+      selection = new ModelSelection( object, x, y );
+
+      selection.worldPosition = {
+        x: x + dx,
+        y: y + dy
+      };
+
+      expect( object.get( 'x' ) ).toBe( dx );
+      expect( object.get( 'y' ) ).toBe( dy );
+    });
   });
 });
