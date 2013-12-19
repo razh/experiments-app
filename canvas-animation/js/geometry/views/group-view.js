@@ -67,6 +67,7 @@ define(function( require ) {
 
     render: function() {
       this.$el.html(this.template({
+        Arc: Arc,
         Circle: Circle,
         Path: Path,
         Rect: Rect,

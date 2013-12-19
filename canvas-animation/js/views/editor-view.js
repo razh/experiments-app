@@ -423,8 +423,18 @@ define(function( require ) {
       // Add shape.
       var shape;
       if ( event.altKey ) {
+        // Alt + A. Arc.
+        if ( this.keys[ 65 ] ) {
+          shape = new Arc({
+            radius: 30,
+            startAngle: 0.25 * Math.PI,
+            endAngle: Math.PI,
+            fill: defaults.fill,
+            stroke: defaults.stroke
+          });
+        }
         // Alt + C. Circle.
-        if ( this.keys[ 67 ] ) {
+        else if ( this.keys[ 67 ] ) {
           shape = new Circle({
             radius: 30,
             fill: defaults.fill,
@@ -440,8 +450,8 @@ define(function( require ) {
             stroke: defaults.stroke
           });
         }
-        // Alt + A. Path.
-        else if ( this.keys[ 65 ] ) {
+        // Alt + E(dge). Path.
+        else if ( this.keys[ 69 ] ) {
           shape = new Path({
             points: [ -30, -30, 30, -30, 30, 30, -30, 30 ],
             stroke: defaults.stroke,
@@ -674,7 +684,7 @@ define(function( require ) {
     },
 
     deleteSelection: function() {
-      if ( !this.selection && !this.selection.model ) {
+      if ( !this.selection || !this.selection.model ) {
         return;
       }
 
@@ -685,7 +695,7 @@ define(function( require ) {
     },
 
     cloneSelection: function( offsetX, offsetY ) {
-      if ( !this.selection && !this.selection.model ) {
+      if ( !this.selection || !this.selection.model ) {
         return;
       }
 
@@ -701,7 +711,7 @@ define(function( require ) {
 
     stopDrawing: function() {
       var points = this.drawnPath;
-      if ( !points && !points.length ) {
+      if ( !points || !points.length ) {
         return;
       }
 

@@ -1,7 +1,8 @@
 <select class="group-view" size="<%= collection.length %>">
   <% collection.each(function( model, i ) { %>
     <option value="<%= i %>" <% if ( i === selectedIndex ) print( 'selected' ) %>><%
-      if ( model instanceof Circle ) { %>Circle<% }
+      if ( model instanceof Arc ) {%>Arc<% }
+      else if ( model instanceof Circle ) { %>Circle<% }
       else if ( model instanceof Path ) { %>Path<% }
       else if ( model instanceof Rect ) { %>Rect<% }
     %></option>
