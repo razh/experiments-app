@@ -196,7 +196,12 @@ define([
       this.drawPath( ctx );
       ctx.restore();
 
-      return ctx.isPointInPath( x, y );
+      ctx.lineWidth = this.get( 'lineWidth' );
+      this.applyLineStyle( ctx );
+      var contains = ctx.isPointInPath( x, y ) || ctx.isPointInStroke( x, y );
+      this.restoreLineStyle( ctx );
+
+      return contains;
     },
 
     toLocal: function( x, y ) {
