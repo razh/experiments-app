@@ -126,24 +126,25 @@ define(function( require ) {
     },
 
     drawHandler: function( ctx, x, y ) {
-      // Draw outer circle.
+      // Draw inner circle.
       ctx.beginPath();
       ctx.arc( x, y, handlerRadius, 0, PI2 );
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fill();
+
+      // Draw outer circle.
+      ctx.beginPath();
+      ctx.arc( x, y, handlerRadius - 1, 0, PI2 );
 
       ctx.shadowColor = '#000';
       ctx.shadowBlur = 3;
 
-      ctx.fillStyle = '#fff';
-      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
 
       ctx.shadowBlur = 0;
-
-      // Draw inner circle.
-      ctx.beginPath();
-      ctx.arc( x, y, handlerRadius - 2, 0, PI2 );
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-      ctx.fill();
     },
 
     drawCircleHandlers: function( ctx, circle ) {

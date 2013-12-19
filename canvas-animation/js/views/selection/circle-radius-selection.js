@@ -20,7 +20,11 @@ define([
     },
 
     set: function( position ) {
-      var point = this.model.toLocal( position.x, position.y );
+      var point = this.model.toLocal(
+        position.x + this.offset.x,
+        position.y + this.offset.y
+      );
+
       this.model.set( 'radius', Utils.distance( 0, 0, point.x, point.y ) );
     }
   });

@@ -32,7 +32,10 @@ define(function() {
     },
 
     set: function( position ) {
-      this.model[ this.angle ] = position;
+      this.model[ this.angle ] = {
+        x: position.x + this.offset.x,
+        y: position.y + this.offset.y
+      };
     }
   });
 
