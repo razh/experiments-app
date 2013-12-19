@@ -45,17 +45,26 @@ define(function( require ) {
     it( 'closed checkbox input determines if drawn path is closed', function() {
       var $closedEl = arcView.$( '#closed' );
 
-      expect( $closedEl.prop( 'checked' ) ).toBe( false );
+      $closedEl.prop( 'checked', false ).trigger( 'change' );
       expect( arc.get( 'closed' ) ).toBe( false );
       arc.drawPath( ctxSpy );
       expect( ctxSpy.closePath ).not.toHaveBeenCalled();
 
       $closedEl.prop( 'checked', true ).trigger( 'change' );
-
-      expect( $closedEl.prop( 'checked' ) ).toBe( true );
       expect( arc.get( 'closed' ) ).toBe( true );
       arc.drawPath( ctxSpy );
       expect( ctxSpy.closePath ).toHaveBeenCalled();
+    });
+
+    it( 'anticlockwise/closed attribute changes update view values', function() {
+      [ 'anticlockwise', 'closed' ].forEach(function( attr ) {
+        var $attrEl = arcView.$( '#' + attr );
+        arc.set( attr, false );
+        expect( $attrEl.prop( 'checked' ) ).toBe( false );
+
+        arc.set( attr, true );
+        expect( $attrEl.prop( 'checked' ) ).toBe( true );
+      });
     });
   });
 });

@@ -58,5 +58,15 @@ define(function( require ) {
       path.trigger( 'change' );
       expect( parseFloat( $x0El.val() ) ).toBe( 200 );
     });
+
+    it( 'interpolation selection updates the model', function() {
+      var $interpolationEl = pathView.$( '#interpolation' );
+
+      $interpolationEl.prop( 'selectedIndex', 0 ).trigger( 'change' );
+      expect( path.get( 'interpolation' ) ).toBe( 'linear' );
+
+      $interpolationEl.prop( 'selectedIndex', 1 ).trigger( 'change' );
+      expect( path.get( 'interpolation' ) ).toBe( 'quadratic' );
+    });
   });
 });
