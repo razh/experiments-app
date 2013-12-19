@@ -542,7 +542,7 @@ define(function( require ) {
       this.keys[ event.which ] = true;
 
       // Arrow keys.
-      if ( this.selection ) {
+      if ( this.selection && document.body === document.activeElement ) {
         var position = this.selection.worldPosition;
         position.x -= this.selection.offset.x;
         position.y -= this.selection.offset.y;
@@ -574,9 +574,12 @@ define(function( require ) {
 
       // Stop backspace from triggering history back.
       // The body is not the active element if we're in an input.
-      if ( event.which === 8 && document.body === document.activeElement ) {
+      if ( event.which === 8 ) {
         event.preventDefault();
-        this.deleteSelection();
+
+        if ( document.body === document.activeElement ) {
+          this.deleteSelection();
+        }
       }
 
       // Delete. Delete current selection.
