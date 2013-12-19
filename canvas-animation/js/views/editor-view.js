@@ -541,6 +541,37 @@ define(function( require ) {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
 
+      // Arrow keys.
+      if ( this.selection ) {
+        var position = this.selection.worldPosition;
+        position.x -= this.selection.offset.x;
+        position.y -= this.selection.offset.y;
+
+        var distance = 1;
+        var dx = 0,
+            dy = 0;
+
+        // Arrow keys.
+        if ( 37 <= event.which && event.which <= 40 ) {
+          event.preventDefault();
+        }
+
+        if ( event.which === 37 ) { dx -= distance; }
+        if ( event.which === 38 ) { dy -= distance; }
+        if ( event.which === 39 ) { dx += distance; }
+        if ( event.which === 40 ) { dy += distance; }
+
+        if ( event.shiftKey ) {
+          dx *= this.gridSpacing;
+          dy *= this.gridSpacing;
+        }
+
+        position.x += dx;
+        position.y += dy;
+
+        this.selection.worldPosition = position;
+      }
+
       // Stop backspace from triggering history back.
       // The body is not the active element if we're in an input.
       if ( event.which === 8 && document.body === document.activeElement ) {
@@ -591,6 +622,11 @@ define(function( require ) {
         this.drawing = !this.drawing;
         if ( !this.drawing ) {
           this.stopDrawing();
+        }
+
+        // Disable the selection.
+        if ( this.drawing ) {
+          this.selection = null;
         }
       }
     },
