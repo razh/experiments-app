@@ -1,5 +1,5 @@
 /*jshint camelcase:false*/
-/*globals requirejs, beforeEach, require, jasmine*/
+/*globals requirejs, define, jasmine*/
 // Add all specs to tests.
 var tests = [];
 for ( var file in window.__karma__.files ) {
@@ -36,18 +36,19 @@ requirejs.config({
   callback: window.__karma__.start
 });
 
-// Canvas testing methods:
-// Jasmine spy.
-var ctxSpy;
-// An alternative to Jasmine spies that keeps track of call order.
-var ctx = {
-  calls: []
-};
 
-require([
+// Canvas testing objects.
+define( 'canvas-spy', [
   'underscore'
 ], function( _ ) {
   'use strict';
+
+  // Jasmine spy. Has a reset() method which resets all spy methods.
+  var ctxSpy;
+  // An alternative to Jasmine spies that keeps track of call order.
+  var ctx = {
+    calls: []
+  };
 
   var canvas = document.createElement( 'canvas' );
   var context = canvas.getContext( '2d' );
@@ -55,6 +56,11 @@ require([
   var canvasFunctions = _.functions( context );
 
   ctxSpy = jasmine.createSpyObj( 'ctxSpy', canvasFunctions );
+  ctxSpy.reset = function() {
+    canvasFunctions.forEach(function( functionName ) {
+      ctxSpy[ functionName ].reset();
+    });
+  };
 
   // Create ctx with canvas keys tracking.
   _.keys( context ).forEach(function( property ) {
@@ -76,4 +82,9 @@ require([
       ctx.calls.push( [ functionName ].concat( _.toArray( arguments ) ) );
     };
   });
+
+  return {
+    ctxSpy: ctxSpy,
+    ctx: ctx
+  };
 });

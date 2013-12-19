@@ -1,9 +1,9 @@
-/*globals define, describe, beforeEach, it, expect, ctx*/
+/*globals define, describe, beforeEach, it, expect*/
 define(function( require ) {
   'use strict';
 
+  var ctx = require( 'canvas-spy' ).ctx;
   var Utils = require( 'utils' );
-
   var Path = require( 'geometry/models/path' );
 
   describe( 'Path', function() {

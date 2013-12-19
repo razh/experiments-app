@@ -1,18 +1,14 @@
-/*globals define, describe, beforeEach, it, expect, ctx, ctxSpy*/
+/*globals define, describe, beforeEach, it, expect, ctxSpy*/
 define(function( require ) {
   'use strict';
 
-  var _ = require( 'underscore' );
-
+  var ctxSpy = require( 'canvas-spy' ).ctxSpy;
   var Utils = require( 'utils' );
   var Object2D = require( 'geometry/models/object2d' );
 
   describe( 'Object2D', function() {
     beforeEach(function() {
-      // Reset Jasmine spy.
-      _.functions( ctxSpy ).forEach(function( functionName ) {
-        ctxSpy[ functionName ].reset();
-      });
+      ctxSpy.reset();
     });
 
     it( 'applies canvas transformations', function() {
