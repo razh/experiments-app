@@ -34,8 +34,13 @@ define([
     set: function( position ) {
       var halfWidth = 0.5 * this.get( 'width' );
       var point = this.toLocal( position.x, position.y );
-      point = this.toWorld( point.x + halfWidth, 0 );
-      this.set( point );
+      var newWidth = -point.x + halfWidth;
+      point = this.toWorld( point.x + 0.5 * newWidth, 0 );
+      this.set({
+        x: point.x,
+        y: point.y,
+        width: newWidth
+      });
     }
   });
 
@@ -48,8 +53,13 @@ define([
     set: function( position ) {
       var halfWidth = 0.5 * this.get( 'width' );
       var point = this.toLocal( position.x, position.y );
-      point = this.toWorld( point.x - halfWidth, 0 );
-      this.set( point );
+      var newWidth = point.x + halfWidth;
+      point = this.toWorld( point.x - 0.5 * newWidth, 0 );
+      this.set({
+        x: point.x,
+        y: point.y,
+        width: newWidth
+      });
     }
   });
 
@@ -62,8 +72,13 @@ define([
     set: function( position ) {
       var halfHeight = 0.5 * this.get( 'height' );
       var point = this.toLocal( position.x, position.y );
-      point = this.toWorld( 0, point.y + halfHeight );
-      this.set( point );
+      var newHeight = -point.y + halfHeight;
+      point = this.toWorld( 0, point.y + 0.5 * newHeight );
+      this.set({
+        x: point.x,
+        y: point.y,
+        height: newHeight
+      });
     }
   });
 
@@ -76,8 +91,13 @@ define([
     set: function( position ) {
       var halfHeight = 0.5 * this.get( 'height' );
       var point = this.toLocal( position.x, position.y );
-      point = this.toWorld( 0, point.y - halfHeight );
-      this.set( point );
+      var newHeight = point.y + halfHeight;
+      point = this.toWorld( 0, point.y - 0.5 * newHeight );
+      this.set({
+        x: point.x,
+        y: point.y,
+        height: newHeight
+      });
     }
   });
 
