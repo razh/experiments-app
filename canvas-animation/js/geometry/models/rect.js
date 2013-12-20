@@ -32,14 +32,14 @@ define([
     },
 
     set: function( position ) {
-      var halfWidth = 0.5 * this.get( 'width' );
       var point = this.toLocal( position.x, position.y );
-      var newWidth = -point.x + halfWidth;
-      point = this.toWorld( point.x + 0.5 * newWidth, 0 );
+      var width = -point.x + 0.5 * this.get( 'width' );
+      point = this.toWorld( point.x + 0.5 * width, 0 );
+
       this.set({
         x: point.x,
         y: point.y,
-        width: newWidth
+        width: width
       });
     }
   });
@@ -51,14 +51,14 @@ define([
     },
 
     set: function( position ) {
-      var halfWidth = 0.5 * this.get( 'width' );
       var point = this.toLocal( position.x, position.y );
-      var newWidth = point.x + halfWidth;
-      point = this.toWorld( point.x - 0.5 * newWidth, 0 );
+      var width = point.x + 0.5 * this.get( 'width' );
+      point = this.toWorld( point.x - 0.5 * width, 0 );
+
       this.set({
         x: point.x,
         y: point.y,
-        width: newWidth
+        width: width
       });
     }
   });
@@ -70,14 +70,14 @@ define([
     },
 
     set: function( position ) {
-      var halfHeight = 0.5 * this.get( 'height' );
       var point = this.toLocal( position.x, position.y );
-      var newHeight = -point.y + halfHeight;
-      point = this.toWorld( 0, point.y + 0.5 * newHeight );
+      var height = -point.y + 0.5 * this.get( 'height' );
+      point = this.toWorld( 0, point.y + 0.5 * height );
+
       this.set({
         x: point.x,
         y: point.y,
-        height: newHeight
+        height: height
       });
     }
   });
@@ -89,14 +89,14 @@ define([
     },
 
     set: function( position ) {
-      var halfHeight = 0.5 * this.get( 'height' );
       var point = this.toLocal( position.x, position.y );
-      var newHeight = point.y + halfHeight;
-      point = this.toWorld( 0, point.y - 0.5 * newHeight );
+      var height = point.y + 0.5 * this.get( 'height' );
+      point = this.toWorld( 0, point.y - 0.5 * height );
+
       this.set({
         x: point.x,
         y: point.y,
-        height: newHeight
+        height: height
       });
     }
   });
