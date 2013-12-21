@@ -79,7 +79,11 @@ define(function( require ) {
     },
 
     onSelect: function( event ) {
-      this.renderIndex( event.currentTarget.selectedIndex );
+      var selectedIndex = event.currentTarget.selectedIndex;
+      this.renderIndex( selectedIndex );
+      if ( this.selectedIndex === selectedIndex ) {
+        this.collection.trigger( 'select:group-view', selectedIndex );
+      }
     },
 
     renderIndex: function( index ) {
@@ -108,7 +112,6 @@ define(function( require ) {
       // Set selected index and update view.
       this.selectedIndex = index;
       this.$( 'select' ).prop( 'selectedIndex', index );
-      this.collection.trigger( 'select:group-view', index );
 
       // Create and attach objectView.
       this.objectView = new View({
