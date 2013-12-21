@@ -73,15 +73,23 @@ define([
     changeString: function( event ) {
       event.stopImmediatePropagation();
 
-      var target = event.currentTarget;
-      this.model.set( target.id, this.$( target ).val() );
+      var target = event.currentTarget,
+          id = target.id;
+
+      if ( this.model.has( id ) ) {
+        this.model.set( id, this.$( target ).val() );
+      }
     },
 
     changeCheckbox: function( event ) {
       event.stopImmediatePropagation();
 
-      var target = event.currentTarget;
-      this.model.set( target.id, target.checked );
+      var target = event.currentTarget,
+          id = target.id;
+
+      if ( this.model.has( id ) ) {
+        this.model.set( id, target.checked );
+      }
     }
   });
 

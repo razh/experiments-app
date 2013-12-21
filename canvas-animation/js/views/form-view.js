@@ -18,9 +18,12 @@ define([
       event.stopImmediatePropagation();
 
       var target = event.currentTarget,
+          id = target.id,
           value = parseFloat( this.$( target ).val() );
 
-      this.model.set( target.id, value );
+      if ( this.model.has( id ) ) {
+        this.model.set( id, value );
+      }
     }
   });
 
