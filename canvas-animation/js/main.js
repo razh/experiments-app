@@ -111,4 +111,30 @@ define(function( require ) {
   });
 
   groupView.render();
+
+  (function() {
+    var groups = editorView.getStoredGroups();
+
+    // Load last group with anything in it.
+    if ( groups.length ) {
+      var lastGroup = groups[ groups.length - 1 ];
+      if ( lastGroup.length ) {
+        editorView.collection.reset( lastGroup );
+      }
+    }
+  }) ();
+
+  window.addEventListener( 'beforeunload', function() {
+    if ( editorView.collection.length ) {
+      var groups = editorView.getStoredGroups();
+
+      // Maximum history of 5.
+      while ( groups.length > 4 ) {
+        groups.shift();
+      }
+
+      window.localStorage.setItem( 'groups', JSON.stringify( groups ) );
+      editorView.saveToStorage();
+    }
+  });
 });
