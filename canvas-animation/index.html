@@ -34,6 +34,12 @@
       background-color: rgba(0, 0, 0, 0.5);
     }
 
+    .group-view > select,
+    .object2d-view {
+     border: 1px solid #ddd;
+     border-radius: 4px;
+    }
+
     .object2d-view {
       float: right;
       width: 160px;
@@ -46,7 +52,17 @@
 
     fieldset {
       margin: 0 auto;
-      padding: 0.2em;
+      padding: 0.2em 1em;
+      border: none;
+    }
+
+    fieldset > label {
+      display: inline-block;
+      width: 72px;
+    }
+
+    fieldset:nth-child(even) {
+      background-color: #f8f8f8;
     }
 
     .help {
@@ -63,10 +79,6 @@
   <canvas class="editor-view" id="editor"></canvas>
   <div class="group-view" id="group-view"></div>
   <div class="object2d-view" id="group-object2d-view"></div>
-  <div class="object2d-view" id="object2d-view"></div>
-  <div class="object2d-view" id="rect-view"></div>
-  <div class="object2d-view" id="circle-view"></div>
-  <div class="object2d-view" id="path-view"></div>
   <div class="help">
     <p>Click to select.</p>
     <p>Arrow keys - Move selection (shift to move by grid units).</p>
