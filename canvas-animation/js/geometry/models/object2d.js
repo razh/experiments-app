@@ -88,7 +88,8 @@ define([
 
       if ( attrs ) {
         colorProperties.forEach(function( property ) {
-          if ( _.isArray( attrs[ property ] ) ) {
+          // Load attrs object/array.
+          if ( attrs[ property ] ) {
             attrs[ property ] = new Color( attrs[ property ] );
           }
         });
