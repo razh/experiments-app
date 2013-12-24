@@ -29,6 +29,11 @@ define([
         this.drawCentroid( ctx, options.centroid );
       }
 
+      if ( this.pointCount <= 2 ) {
+        this.drawLinear( ctx );
+        return;
+      }
+
       var interpolation = this.get( 'interpolation' ),
           closed = this.get( 'closed' );
 
