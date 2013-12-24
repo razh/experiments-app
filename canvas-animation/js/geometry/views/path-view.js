@@ -77,6 +77,19 @@ define([
           axis  = parseInt( $target.attr( 'data-axis' ), 10 ),
           index = parseInt( $target.attr( 'data-index' ), 10 );
 
+      // Index must be correspond to an existing point.
+      // Axis must be 0 (x) or 1 (y).
+      if ( 0 > index || index > this.model.pointCount ||
+           ( axis !== 0 && axis !== 1 ) ) {
+        return;
+      }
+
+      // If value is not finite, set to previous coordinate value.
+      if ( !isFinite( value ) ) {
+        $target.val( this.model.get( 'points' )[ 2 * index + axis ] );
+        return;
+      }
+
       this.model.get( 'points' )[ 2 * index + axis ] = value;
       this.model.trigger( 'change' );
     }

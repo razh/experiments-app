@@ -18,8 +18,15 @@ define([
       event.stopImmediatePropagation();
 
       var target = event.currentTarget,
+          $target = this.$( target ),
           id = target.id,
-          value = parseFloat( this.$( target ).val() );
+          value = parseFloat( $target.val() );
+
+      // If value is not finite, set to previous model value.
+      if ( !isFinite( value ) ) {
+        $target.val( this.model.get( id ) );
+        return;
+      }
 
       if ( this.model.has( id ) ) {
         this.model.set( id, value );
