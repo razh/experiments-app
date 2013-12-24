@@ -339,20 +339,24 @@ define(function( require ) {
       if ( this.keys[ 86 ] &&
            this.selection && this.selection.model instanceof Path ) {
         model = this.selection.model;
-        var index = model.closestEdgeIndex( x, y );
 
         pointCount = model.pointCount;
         points = model.get( 'points' );
+        point = model.toLocal( x, y );
 
-        var xi = points[ 2 * index ];
-        var yi = points[ 2 * index + 1 ];
-        var xj = points[ 2 * ( ( index + 1 ) % pointCount ) ];
-        var yj = points[ 2 * ( ( index + 1 ) % pointCount ) + 1 ];
+        // TODO: Adding points to the ends of the path (right now, it just
+        // places the point in between the nearest edge).
 
-        var mx = 0.5 * ( xi + xj );
-        var my = 0.5 * ( yi + yj );
+        // Just push a point in if we have less than a line.
+        if ( pointCount < 2 ) {
+          points.push( point.x );
+          points.push( point.y );
+        } else {
+          // Otherwise, find the closest edge where can add the point.
+          var index = model.closestEdgeIndex( x, y );
+          points.splice( 2 * ( ( index + 1 ) % pointCount ), 0, point.x, point.y );
+        }
 
-        points.splice( 2 * ( ( index + 1 ) % pointCount ), 0, mx, my );
         model.trigger( 'change' );
 
         return;
@@ -375,6 +379,11 @@ define(function( require ) {
             if ( event.altKey && event.shiftKey ) {
               model.get( 'points' ).splice( 2 * i, 2 );
               model.trigger( 'change' );
+
+              // So deleted points don't remain selected.
+              if ( this.selection instanceof PointSelection ) {
+                this.selection = new ModelSelection( model, x, y );
+              }
             } else {
               this.selection = new PointSelection( model, i, x, y );
             }
