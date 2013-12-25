@@ -355,7 +355,7 @@ define(function( require ) {
           var offset;
           if ( index === pointCount &&
                model.closestPointIndex( x, y ) === 0 ) {
-            // First edge and first point. Insert point at beginning.
+            // Last edge and first point. Insert point at beginning.
             offset = 0;
           } else if ( index === pointCount - 1  &&
                       model.closestPointIndex( x, y ) === pointCount - 1 ) {
@@ -551,8 +551,11 @@ define(function( require ) {
             point = this.snapToGrid( x, y );
           }
 
-          this.mouse.x = point.x - this.selection.offset.x;
-          this.mouse.y = point.y - this.selection.offset.y;
+          // Move to nearest grid line.
+          // We modulo offset by grid spacing to reduce the snap 'jump'
+          // if the selection has a large offset.
+          this.mouse.x = point.x - ( this.selection.offset.x % this.gridSpacing );
+          this.mouse.y = point.y - ( this.selection.offset.y % this.gridSpacing );
         }
 
         // The worldPosition property shallow clones the mouse position.
