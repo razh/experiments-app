@@ -353,16 +353,12 @@ define(function( require ) {
           var index = model.closestEdgeIndex( x, y );
 
           var offset;
-          if ( index === pointCount &&
-               model.closestPointIndex( x, y ) === 0 ) {
-            // Last edge and first point. Insert point at beginning.
-            offset = 0;
-          } else if ( index === pointCount - 1  &&
-                      model.closestPointIndex( x, y ) === pointCount - 1 ) {
+          if ( index === pointCount - 1  &&
+               model.closestPointIndex( x, y ) === pointCount - 1 ) {
             // Last edge and last point. Insert point at end.
             offset = points.length;
           } else {
-            // In the middle of the closest edge.
+            // In the middle of the closest edge. (Includes beginning of path.)
             offset = 2 * ( ( index + 1 ) % pointCount );
           }
 
