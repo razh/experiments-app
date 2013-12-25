@@ -84,13 +84,15 @@ define([
         return;
       }
 
+      var offset = 2 * index + axis;
+
       // If value is not finite, set to previous coordinate value.
       if ( !isFinite( value ) ) {
-        $target.val( this.model.get( 'points' )[ 2 * index + axis ] );
+        $target.val( this.model.get( 'points' )[ offset ] );
         return;
       }
 
-      this.model.get( 'points' )[ 2 * index + axis ] = value;
+      this.model.get( 'points' )[ offset ] = value;
       this.model.trigger( 'change' );
     }
   });

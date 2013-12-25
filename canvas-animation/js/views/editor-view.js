@@ -344,9 +344,6 @@ define(function( require ) {
         points = model.get( 'points' );
         point = model.toLocal( x, y );
 
-        // TODO: Adding points to the ends of the path (right now, it just
-        // places the point in between the nearest edge).
-
         // Just push a point in if we have less than a line.
         if ( pointCount < 2 ) {
           points.push( point.x );
@@ -354,11 +351,25 @@ define(function( require ) {
         } else {
           // Otherwise, find the closest edge where can add the point.
           var index = model.closestEdgeIndex( x, y );
-          points.splice( 2 * ( ( index + 1 ) % pointCount ), 0, point.x, point.y );
+
+          var offset;
+          if ( index === pointCount &&
+               model.closestPointIndex( x, y ) === 0 ) {
+            // First edge and first point. Insert point at beginning.
+            offset = 0;
+          } else if ( index === pointCount - 1  &&
+                      model.closestPointIndex( x, y ) === pointCount - 1 ) {
+            // Last edge and last point. Insert point at end.
+            offset = points.length;
+          } else {
+            // In the middle of the closest edge.
+            offset = 2 * ( ( index + 1 ) % pointCount );
+          }
+
+          points.splice( offset, 0, point.x, point.y );
         }
 
         model.trigger( 'change' );
-
         return;
       }
 
@@ -380,10 +391,11 @@ define(function( require ) {
               model.get( 'points' ).splice( 2 * i, 2 );
               model.trigger( 'change' );
 
-              // So deleted points don't remain selected.
-              if ( this.selection instanceof PointSelection ) {
-                this.selection = new ModelSelection( model, x, y );
-              }
+              // Reselect at the new mouse position.
+              // - Prevents selection of deleted points.
+              // - Calculates new offset at click point (would remain at last
+              //   click point otherwise).
+              this.selection = new ModelSelection( model, x, y );
             } else {
               this.selection = new PointSelection( model, i, x, y );
             }
