@@ -26,14 +26,26 @@ define([
     'xor'
   ];
 
-  // Default values as defined in the canvas spec.
-  var defaults = {
-    lineCap: 'butt',
-    lineJoin: 'miter',
-    miterLimit: 10,
-    globalAlpha: 1,
-    globalCompositeOperation: 'source-over'
-  };
+  /*
+    Default values as defined by the canvas spec/browser.
+    Example values: {
+      lineCap: 'butt',
+      lineJoin: 'miter',
+      miterLimit: 10,
+      globalAlpha: 1,
+      globalCompositeOperation: 'source-over'
+    }
+   */
+  var defaults = (function() {
+    var canvas = document.createElement( 'canvas' ),
+        context = canvas.getContext( '2d' );
+
+    var primitiveKeys = _.keys( context ).filter(function( key ) {
+      return !_.isObject( context[ key ] );
+    });
+
+    return _.pick( context, primitiveKeys );
+  }) ();
 
   // Set canvas attributes to the object properties (if not default).
   // For example, the object's globalCompositeOperation or lineCap.
