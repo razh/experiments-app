@@ -326,8 +326,10 @@ define(function( require ) {
 
       if ( this.drawing ) {
         if ( !this.drawnPath.length ) {
+          // Add initial path.
           this.drawnPath = [ x, y, x, y ];
         } else {
+          // Otherwise, add point.
           this.drawnPath.push( x, y );
         }
 
@@ -346,8 +348,7 @@ define(function( require ) {
 
         // Just push a point in if we have less than a line.
         if ( pointCount < 2 ) {
-          points.push( point.x );
-          points.push( point.y );
+          points.push( point.x, point.y );
         } else {
           // Otherwise, find the closest edge where can add the point.
           var index = model.closestEdgeIndex( x, y );
@@ -389,8 +390,8 @@ define(function( require ) {
 
               // Reselect at the new mouse position.
               // - Prevents selection of deleted points.
-              // - Calculates new offset at click point (would remain at last
-              //   click point otherwise).
+              // - For ModelSelections, calculates new offset at click point
+              //   (offset would remain at last click otherwise).
               this.selection = new ModelSelection( model, x, y );
             } else {
               this.selection = new PointSelection( model, i, x, y );
@@ -417,6 +418,7 @@ define(function( require ) {
         }
       }
 
+      // Handle Arc selections.
       if ( this.selection && this.selection.model instanceof Arc ) {
         model = this.selection.model;
 
