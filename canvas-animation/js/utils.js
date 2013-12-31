@@ -34,6 +34,26 @@ define(function() {
   }
 
   /**
+   * Interpolates along the quadratic curve given by (x0, y0), (x1, y1) and
+   * the control point (cpx, cpy).
+   *
+   * t is generally in the domain [0, 1], but the function allows for values
+   * which exceed that.
+   */
+  function quadraticCurveInterpolate( x0, y0, cpx, cpy, x1, y1, t ) {
+    var t2 = t * t;
+
+    var k = 1 - t,
+        k2 = k * k;
+
+    // (1 - t)^2 * p0 + 2 * (1 - t) * t * p1 + t^2 * p2.
+    return {
+      x: k2 * x0 + 2 * k * t * cpx + t2 * x1,
+      y: k2 * y0 + 2 * k * t * cpy + t2 * y1
+    };
+  }
+
+  /**
    * Distance functions.
    */
   function distanceSquared( x0, y0, x1, y1 ) {
@@ -70,6 +90,8 @@ define(function() {
     lerp: lerp,
     inverseLerp: inverseLerp,
     lerp2d: lerp2d,
+
+    quadraticCurveInterpolate: quadraticCurveInterpolate,
 
     distanceSquared: distanceSquared,
     distance: distance,
