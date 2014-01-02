@@ -600,9 +600,12 @@ define(function( require ) {
       }
 
       // Stop backspace from triggering history back.
-      // The body is not the active element if we're in an input.
       if ( event.which === 8 ) {
-        event.preventDefault();
+        var tagName = document.activeElement.tagName.toLowerCase();
+        // Allow backspace in input elements.
+        if ( tagName !== 'input' ) {
+          event.preventDefault();
+        }
 
         if ( document.body === document.activeElement ) {
           this.deleteSelection();
