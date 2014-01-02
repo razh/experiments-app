@@ -242,6 +242,29 @@ define([
       };
     },
 
+    center: function() {
+      var pointCount = this.pointCount;
+      var points = this.get( 'points' );
+
+      var centroid = this.computeCentroid();
+      var dx = centroid.x,
+          dy = centroid.y;
+
+      // Shift all points about centroid.
+      for ( var i = 0; i < pointCount; i++ ) {
+        points[ 2 * i ] -= dx;
+        points[ 2 * i + 1 ] -= dy;
+      }
+
+      // Shift to the world-space centroid.
+      centroid = this.toWorld( centroid.x, centroid.y );
+
+      this.set({
+        x: centroid.x,
+        y: centroid.y
+      });
+    },
+
     /**
      * Returns the index of the edge closest to the world point (x, y).
      */
