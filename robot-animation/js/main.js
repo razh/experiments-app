@@ -112,14 +112,14 @@ define(function( require ) {
     };
 
     var upperArm = {
-      width: 10,
+      width: 8,
       height: 60,
-      depth: 10
+      depth: 8
     };
 
     var lowerArm = {
       width: 8,
-      height: 40,
+      height: 50,
       depth: 8
     };
 
