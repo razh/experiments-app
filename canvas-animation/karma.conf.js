@@ -28,7 +28,7 @@ module.exports = function(config) {
 
       // Load component dependencies.
       {pattern: 'app/components/backbone/backbone.js', included: false},
-      {pattern: 'app/components/jquery/jquery.js', included: false},
+      {pattern: 'app/components/jquery/dist/jquery.js', included: false},
       {pattern: 'app/components/underscore/underscore.js', included: false},
       {pattern: 'app/components/requirejs-text/text.js', included: false}
     ],

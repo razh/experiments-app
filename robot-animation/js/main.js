@@ -12,7 +12,7 @@ requirejs.config({
 
   paths: {
     'backbone': '../../app/components/backbone/backbone-min',
-    'jquery': '../../app/components/jquery/jquery.min',
+    'jquery': '../../app/components/jquery/dist/jquery.min',
     'underscore': '../../app/components/underscore/underscore-min',
     'text': '../../app/components/requirejs-text/text'
   }
