@@ -11,10 +11,10 @@ requirejs.config({
   },
 
   paths: {
-    'backbone': '../../app/components/backbone/backbone-min',
-    'jquery': '../../app/components/jquery/dist/jquery.min',
-    'underscore': '../../app/components/underscore/underscore-min',
-    'text': '../../app/components/requirejs-text/text'
+    'backbone': '../../app/bower_components/backbone/backbone-min',
+    'jquery': '../../app/bower_components/jquery/dist/jquery.min',
+    'underscore': '../../app/bower_components/underscore/underscore-min',
+    'text': '../../app/bower_components/requirejs-text/text'
   }
 });
 

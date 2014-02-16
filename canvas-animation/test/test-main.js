@@ -24,10 +24,10 @@ requirejs.config({
 
   // Use un-minified files unlike main.js.
   paths: {
-    'backbone': '../../app/components/backbone/backbone',
-    'jquery': '../../app/components/jquery/jquery',
-    'underscore': '../../app/components/underscore/underscore',
-    'text': '../../app/components/requirejs-text/text'
+    'backbone': '../../app/bower_components/backbone/backbone',
+    'jquery': '../../app/bower_components/jquery/dist/jquery',
+    'underscore': '../../app/bower_components/underscore/underscore',
+    'text': '../../app/bower_components/requirejs-text/text'
   },
 
   // Load the test specs.
