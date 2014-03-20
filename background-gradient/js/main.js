@@ -1,19 +1,9 @@
 /*globals requirejs, define*/
 requirejs.config({
-  shim: {
-    'underscore': {
-      exports: '_'
-    },
-    'backbone': {
-      deps: [ 'jquery', 'underscore' ],
-      exports: 'Backbone'
-    }
-  },
-
   paths: {
-    'backbone': '../../app/bower_components/backbone/backbone-min',
-    'jquery': '../../app/bower_components/jquery/dist/jquery.min',
-    'underscore': '../../app/bower_components/underscore/underscore-min',
+    'backbone': '../../app/bower_components/backbone/backbone',
+    'jquery': '../../app/bower_components/jquery/dist/jquery',
+    'underscore': '../../app/bower_components/underscore/underscore',
     'text': '../../app/bower_components/requirejs-text/text'
   }
 });
