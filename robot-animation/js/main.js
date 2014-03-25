@@ -59,14 +59,29 @@ define(function( require ) {
       });
     };
 
-    BoxView.prototype.highlight = function() {
-      var rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)?\)$/;
+    var rgbaRegex = new RegExp(
+      '^' +
+      'rgba\\(' +
+        '(\\d+),\\s*' +
+        '(\\d+),\\s*' +
+        '(\\d+),\\s*' +
+        '(\\d+(?:\\.\\d+)?)' +
+      '\\)' +
+      '$'
+    );
 
+    BoxView.prototype.highlight = function() {
       this.$el.children( '.face' ).each(function( index, face ) {
         var $face = $( face );
 
         var color = $face.css( 'background-color' );
-        var rgba = rgbaRegex.exec( color ).slice( 1, 5 );
+        var rgba = rgbaRegex.exec( color );
+        if ( !rgba ) {
+          return;
+        }
+
+        // Extract rgba from [string, r, g, b, a] returned by regex.
+        rgba = rgba.slice( 1, 5 );
 
         // Swap red/green.
         var temp = rgba[0];
