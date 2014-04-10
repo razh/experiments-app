@@ -26,6 +26,9 @@ define([
     'xor'
   ];
 
+  var compositingKeys = [ 'globalAlpha', 'globalCompositeOperation' ];
+  var lineStyleKeys = [ 'lineCap', 'lineJoin', 'miterLimit' ];
+
   /*
     Default values as defined by the canvas spec/browser.
     Example values: {
@@ -185,22 +188,22 @@ define([
 
     // Set compositing if not default.
     applyCompositing: function( ctx ) {
-      canvasApplyFn( ctx, [ 'globalAlpha', 'globalCompositeOperation' ], this );
+      canvasApplyFn( ctx, compositingKeys, this );
     },
 
     // Set line style if not default.
     applyLineStyle: function( ctx ) {
-      canvasApplyFn( ctx, [ 'lineCap', 'lineJoin', 'miterLimit' ], this );
+      canvasApplyFn( ctx, lineStyleKeys, this );
     },
 
     // Restore default compositing.
     restoreCompositing: function( ctx ) {
-      canvasRestoreFn( ctx, [ 'globalAlpha', 'globalCompositeOperation' ], this );
+      canvasRestoreFn( ctx, compositingKeys, this );
     },
 
     // Restore default line style.
     restoreLineStyle: function( ctx ) {
-      canvasRestoreFn( ctx, [ 'lineCap', 'lineJoin', 'miterLimit' ], this );
+      canvasRestoreFn( ctx, lineStyleKeys, this );
     },
 
     contains: function( ctx, x, y ) {
