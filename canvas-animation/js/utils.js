@@ -18,7 +18,7 @@ define(function() {
     return a + t * ( b - a );
   }
 
-  function inverseLerp( value, a, b ) {
+  function inverseLerp( a, b, value ) {
     return ( value - a ) / ( b - a );
   }
 
