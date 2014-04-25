@@ -10,8 +10,8 @@ define([
     template: _.template( colorTemplate ),
 
     events: {
-      'change input[type=color]': 'changeHex',
-      'change input[type=text]': 'changeHex',
+      'input input[type=color]': 'changeHex',
+      'input input[type=text]': 'changeHex',
       'input input': 'change'
     },
 
