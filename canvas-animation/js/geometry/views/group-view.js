@@ -37,6 +37,17 @@ define(function( require ) {
     initialize: function( options ) {
       _.bindAll( this, 'render' );
       this.listenTo( this.collection, 'add remove reset', this.render );
+      // Rerender objectView if its model is not at selectedIndex.
+      this.listenTo( this.collection, 'remove reset', function() {
+        if ( this.collection.at( this.selectedIndex ) !== this.objectView.model ) {
+          // Check if the model still exists in the collection.
+          // Can be -1 if it no longer exists.
+          this.selectedIndex = this.collection.indexOf( this.objectView.model );
+          // Render index. If index is -1, this removes the view.
+          this.renderIndex( this.selectedIndex );
+        }
+      });
+
       // When an object is added to an empty collection, render its object view.
       this.listenTo( this.collection, 'add', function() {
         if ( this.collection.length === 1 ) {
