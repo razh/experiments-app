@@ -21,7 +21,7 @@ define([
     events: {
       'change select': 'changeString',
       'change input[type=checkbox]': 'changeCheckbox',
-      'change input': 'change'
+      'input input': 'change'
     },
 
     initialize: function() {

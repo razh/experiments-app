@@ -12,10 +12,10 @@ define([
     pathTemplate: _.template( pathTemplate ),
 
     events: {
-      'change input.coordinate': 'changeCoordinate',
+      'input input.coordinate': 'changeCoordinate',
       'change select': 'changeString',
       'change input[type=checkbox]': 'changeCheckbox',
-      'change input': 'change'
+      'input input': 'change'
     },
 
     initialize: function() {

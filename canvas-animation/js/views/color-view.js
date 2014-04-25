@@ -12,7 +12,7 @@ define([
     events: {
       'change input[type=color]': 'changeHex',
       'change input[type=text]': 'changeHex',
-      'change input': 'change'
+      'input input': 'change'
     },
 
     initialize: function() {
