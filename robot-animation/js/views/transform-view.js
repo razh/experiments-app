@@ -10,7 +10,7 @@ define([
     template: _.template( transformTemplate ),
 
     events: {
-      'change input': 'change'
+      'input input': 'change'
     },
 
     initialize: function() {
