@@ -781,8 +781,13 @@ define(function( require ) {
 
     saveToStorage: function() {
       var groups = this.getStoredGroups();
-      groups.push( this.collection );
-      this.storage.setItem( 'groups', JSON.stringify( groups ) );
+      // Saved only if the collection has been modified.
+      var lastGroup = groups[ groups.length - 1 ];
+      if ( !lastGroup ||
+           JSON.stringify( this.collection ) !== JSON.stringify( lastGroup ) ) {
+        groups.push( this.collection );
+        this.storage.setItem( 'groups', JSON.stringify( groups ) );
+      }
     },
 
     loadFromStorage: function( index ) {
