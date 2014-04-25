@@ -39,14 +39,14 @@ define(function( require ) {
     it( 'coordinate inputs update the model', function() {
       path.set( 'points', points );
 
-      pathView.$( 'input[data-index=2][data-axis=0]' ).val(5).trigger( 'change' );
+      pathView.$( 'input[data-index=2][data-axis=0]' ).val(5).trigger( 'input' );
       expect( path.get( 'points' )[ 2 * 2 ] ).toBe(5);
 
-      pathView.$( 'input[data-index=2][data-axis=1]' ).val(8).trigger( 'change' );
+      pathView.$( 'input[data-index=2][data-axis=1]' ).val(8).trigger( 'input' );
       expect( path.get( 'points' )[ 2 * 2 + 1  ] ).toBe(8);
     });
 
-    it( 'points changes update view values (need to trigger change events)', function() {
+    it( 'points model changes update view values', function() {
       path.set( 'points', points );
 
       var $x0El = pathView.$( '.coordinate' ).eq(0);
@@ -55,6 +55,7 @@ define(function( require ) {
       points[0] = 200;
       expect( parseFloat( $x0El.val() ) ).toBe( -100 );
 
+      // Trigger change to model.
       path.trigger( 'change' );
       expect( parseFloat( $x0El.val() ) ).toBe( 200 );
     });

@@ -33,15 +33,15 @@ define(function( require ) {
     });
 
     it( 'inputs to fill and stroke subviews update the model', function() {
-      objectView.$( '.fill input[type=text]' ).val( '#342' ).trigger( 'change' );
+      objectView.$( '.fill input[type=text]' ).val( '#342' ).trigger( 'input' );
       expect( object.get( 'fill' ).hexString() ).toBe( '#334422' );
 
-      objectView.$( '.stroke input[type=text]' ).val( '#f8d' ).trigger( 'change' );
+      objectView.$( '.stroke input[type=text]' ).val( '#f8d' ).trigger( 'input' );
       expect( object.get( 'stroke' ).hexString() ).toBe( '#ff88dd' );
 
-      objectView.$( '.stroke #red' ).val( 255 ).trigger( 'change' );
-      objectView.$( '.stroke #green' ).val( 0 ).trigger( 'change' );
-      objectView.$( '.stroke #blue' ).val( 68 ).trigger( 'change' );
+      objectView.$( '.stroke #red' ).val( 255 ).trigger( 'input' );
+      objectView.$( '.stroke #green' ).val( 0 ).trigger( 'input' );
+      objectView.$( '.stroke #blue' ).val( 68 ).trigger( 'input' );
       expect( object.get( 'stroke' ).hexString() ).toBe( '#ff0044' );
     });
 

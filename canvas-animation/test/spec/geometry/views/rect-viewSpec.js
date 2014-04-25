@@ -23,7 +23,7 @@ define(function( require ) {
     it( 'width and height inputs update the model', function() {
       [ 'width', 'height' ].forEach(function( dimension ) {
         var $dimensionEl = rectView.$( '#' + dimension );
-        $dimensionEl.val( 100 * Math.random() ).trigger( 'change' );
+        $dimensionEl.val( 100 * Math.random() ).trigger( 'input' );
         expect( rect.get( dimension ) ).toBe( parseFloat( $dimensionEl.val() ) );
       });
     });

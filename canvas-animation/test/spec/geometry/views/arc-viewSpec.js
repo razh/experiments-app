@@ -28,7 +28,7 @@ define(function( require ) {
       [ 'startAngle', 'endAngle' ].forEach(function( angle ) {
         var $angleEl = arcView.$( '#' + angle );
         var value = Math.random() * Math.PI;
-        $angleEl.val( value ).trigger( 'change' );
+        $angleEl.val( value ).trigger( 'input' );
         expect( arc.get( angle ) ).toBe( value );
       });
     });

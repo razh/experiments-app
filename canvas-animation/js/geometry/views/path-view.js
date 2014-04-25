@@ -70,6 +70,7 @@ define([
     },
 
     changeCoordinate: function( event ) {
+      // Prevent it from triggering the generic input change event.
       event.stopImmediatePropagation();
 
       var $target = this.$( event.currentTarget ),

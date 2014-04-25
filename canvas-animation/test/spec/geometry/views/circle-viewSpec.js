@@ -22,7 +22,7 @@ define(function( require ) {
 
     it( 'radius input updates the model', function() {
       var $radiusEl = circleView.$( '#radius' );
-      $radiusEl.val( 20 ).trigger( 'change' );
+      $radiusEl.val( 20 ).trigger( 'input' );
       expect( circle.get( 'radius' ) ).toBe( 20 );
     });
 

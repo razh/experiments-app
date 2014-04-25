@@ -27,31 +27,31 @@ define(function( require ) {
     });
 
     it( 'numeric inputs update the model', function() {
-      colorView.$( '#red' ).val( 255 ).trigger( 'change' );
+      colorView.$( '#red' ).val( 255 ).trigger( 'input' );
       expect( color.get( 'red' ) ).toBe( 255 );
     });
 
     it( 'hex string inputs update the model', function() {
       // Three hex.
-      colorView.$( 'input[type=text]' ).val( 'fff' ).trigger( 'change' );
+      colorView.$( 'input[type=text]' ).val( 'fff' ).trigger( 'input' );
       expect( color.get( 'red' ) ).toBe( 255 );
       expect( color.get( 'green' ) ).toBe( 255 );
       expect( color.get( 'blue' ) ).toBe( 255 );
 
       // Three hex with pound symbol.
-      colorView.$( 'input[type=text]' ).val( '#000' ).trigger( 'change' );
+      colorView.$( 'input[type=text]' ).val( '#000' ).trigger( 'input' );
       expect( color.get( 'red' ) ).toBe( 0 );
       expect( color.get( 'green' ) ).toBe( 0 );
       expect( color.get( 'blue' ) ).toBe( 0 );
 
       // Six hex.
-      colorView.$( 'input[type=text]' ).val( '00ff00' ).trigger( 'change' );
+      colorView.$( 'input[type=text]' ).val( '00ff00' ).trigger( 'input' );
       expect( color.get( 'red' ) ).toBe( 0 );
       expect( color.get( 'green' ) ).toBe( 255 );
       expect( color.get( 'blue' ) ).toBe( 0 );
 
       // Six hex with pound symbol.
-      colorView.$( 'input[type=text]' ).val( '#224422' ).trigger( 'change' );
+      colorView.$( 'input[type=text]' ).val( '#224422' ).trigger( 'input' );
       expect( color.get( 'red' ) ).toBe( 34 );
       expect( color.get( 'green' ) ).toBe( 68 );
       expect( color.get( 'blue' ) ).toBe( 34 );
