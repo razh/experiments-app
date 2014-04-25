@@ -117,16 +117,14 @@ define(function( require ) {
   groupView.render();
 
   window.addEventListener( 'beforeunload', function() {
-    if ( editorView.collection.length ) {
-      var groups = editorView.getStoredGroups();
+    var groups = editorView.getStoredGroups();
 
-      // Maximum history of 5.
-      while ( groups.length > 4 ) {
-        groups.shift();
-      }
-
-      window.localStorage.setItem( 'groups', JSON.stringify( groups ) );
-      editorView.saveToStorage();
+    // Maximum history of 5.
+    while ( groups.length > 5 ) {
+      groups.shift();
     }
+
+    window.localStorage.setItem( 'groups', JSON.stringify( groups ) );
+    editorView.saveToStorage();
   });
 });
