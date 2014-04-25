@@ -91,6 +91,20 @@ define(function( require ) {
 
   console.log( JSON.stringify( editorView.renderIntercept() ) );
 
+  // Load saved groups.
+  (function() {
+    var groups = editorView.getStoredGroups();
+
+    // Load last group if it has anything in it.
+    if ( groups.length ) {
+      var lastGroup = groups[ groups.length - 1 ];
+      if ( lastGroup.length ) {
+        editorView.collection.reset( lastGroup );
+      }
+    }
+  }) ();
+
+  // Create GroupView.
   var GroupView = require( 'geometry/views/group-view' );
 
   var groupView = new GroupView({
@@ -101,18 +115,6 @@ define(function( require ) {
   });
 
   groupView.render();
-
-  (function() {
-    var groups = editorView.getStoredGroups();
-
-    // Load last group with anything in it.
-    if ( groups.length ) {
-      var lastGroup = groups[ groups.length - 1 ];
-      if ( lastGroup.length ) {
-        editorView.collection.reset( lastGroup );
-      }
-    }
-  }) ();
 
   window.addEventListener( 'beforeunload', function() {
     if ( editorView.collection.length ) {
