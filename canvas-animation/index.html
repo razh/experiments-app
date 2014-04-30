@@ -5,6 +5,11 @@
   <title>Canvas Animation</title>
 
   <style>
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
 
@@ -14,7 +19,9 @@
 
     .editor-view,
     .group-view {
-      display: inline;
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
     }
 
     #path-edit-view {
@@ -40,6 +47,10 @@
      border-radius: 4px;
     }
 
+    .group-view > select {
+      width: 5em;
+    }
+
     .object2d-view {
       float: right;
       width: 160px;
@@ -54,6 +65,7 @@
       margin: 0 auto;
       padding: 0.2em 1em;
       border: none;
+      background-color: #fff;
     }
 
     fieldset > label {
@@ -79,11 +91,12 @@
     }
 
     .help {
-      float: right;
+      float: left;
+      margin-left: 1em;
     }
 
     .help > p {
-      line-height: 0;
+      line-height: 0.2;
     }
   </style>
 </head>
@@ -93,22 +106,22 @@
   <div class="group-view" id="group-view"></div>
   <div class="object2d-view" id="group-object2d-view"></div>
   <div class="help">
-    <p>Click to select.</p>
-    <p>Arrow keys - Move selection (shift to move by grid units).</p>
-    <p>Alt+A - Add arc.</p>
-    <p>Alt+C - Add circle.</p>
-    <p>Alt+E - Add path.</p>
-    <p>Alt+R - Add rect.</p>
-    <p>Alt+D - Duplicate selection.</p>
-    <p>Alt+P - Toggle path drawing mode.</p>
-    <p>Backspace/Delete - Delete selection.</p>
-    <p>V - Add point/vertex to path.</p>
-    <p>Shift - Enable snapping (defaults to grid).</p>
-    <p>Alt+S - Toggle snap to path points.</p>
-    <p>Alt+Shift+Click - Remove point from path.</p>
-    <p>Alt+Shift+C - Center path on centroid.</p>
-    <p>Alt+Space - List canvas calls in console.</p>
-    <p>Alt+Shift+Space - Display JSON.</p>
+    <p><strong>Click</strong> to select.</p>
+    <p><strong>Arrow keys</strong> - Move selection (shift to move by grid units).</p>
+    <p><strong>Alt+A</strong> - Add arc.</p>
+    <p><strong>Alt+C</strong> - Add circle.</p>
+    <p><strong>Alt+E</strong> - Add path.</p>
+    <p><strong>Alt+R</strong> - Add rect.</p>
+    <p><strong>Alt+D</strong> - Duplicate selection.</p>
+    <p><strong>Alt+P</strong> - Toggle path drawing mode.</p>
+    <p><strong>Backspace/Delete</strong> - Delete selection.</p>
+    <p><strong>V</strong> - Add point/vertex to path.</p>
+    <p><strong>Shift</strong> - Enable snapping (defaults to grid).</p>
+    <p><strong>Alt+S</strong> - Toggle snap to path points.</p>
+    <p><strong>Alt+Shift+Click</strong> - Remove point from path.</p>
+    <p><strong>Alt+Shift+C</strong> - Center path on centroid.</p>
+    <p><strong>Alt+Space</strong> - List canvas calls in console.</p>
+    <p><strong>Alt+Shift+Space</strong> - Display JSON.</p>
   </div>
 
   <script data-main="js/main" src="../app/bower_components/requirejs/require.js"></script>
