@@ -58,7 +58,7 @@ define([
       if ( value !== defaults[ property ] ) {
         ctx[ property ] = value;
       }
-    }.bind( object ));
+    }, object );
   }
 
   // The reverse of canvasApplyFn.
@@ -69,7 +69,7 @@ define([
       if ( this.get( property ) !== defaults[ property ] ) {
         ctx[ property ] = defaultValue;
       }
-    }.bind( object ));
+    }, object );
   }
 
   var Object2D = Backbone.Model.extend({
@@ -115,8 +115,8 @@ define([
       colorProperties.forEach(function( property ) {
         this.listenTo( this.get( property ), 'change', function() {
           this.trigger( 'change' );
-        }.bind( this ));
-      }.bind( this ));
+        });
+      }, this );
     },
 
     draw: function( ctx ) {
