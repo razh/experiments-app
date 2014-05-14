@@ -28,12 +28,12 @@ define([
         var view = options[ part + 'View' ];
         this[ part + 'View' ] = view;
         this[ part ] = view.model;
-      }.bind( this ));
+      }, this );
 
       // Attach left-right limb transforms/offsets.
       leftRightOffsets.forEach(function( key ) {
         this[ key ] = options[ key ];
-      }.bind( this ));
+      }, this );
 
       this.spacingView = options.spacing;
 
@@ -144,7 +144,7 @@ define([
         });
 
         attachBone( lowerLeg, foot );
-      }.bind( this ));
+      }, this );
 
       // Entangle change events of each pair of parts together.
       [
@@ -162,8 +162,8 @@ define([
           this.listenTo( model, 'change', function() {
             otherModel.set( model.attributes );
           });
-        }.bind( this ));
-      }.bind( this ));
+        }, this );
+      }, this );
     },
 
     toJSON: function() {
@@ -181,12 +181,12 @@ define([
         partJSON.transformOrigin = view.transformOrigin.toJSON();
 
         jsonObject[ part ] = partJSON;
-      }.bind( this ));
+      }, this );
 
       // Attach left-right limb offsets.
       leftRightOffsets.forEach(function( key ) {
         jsonObject[ key ] = this[ key ].toJSON();
-      }.bind( this ));
+      }, this );
 
       jsonObject.spacing = this.spacing;
 
@@ -221,7 +221,7 @@ define([
         } else if ( key === 'spacing' ) {
           this.spacing = value;
         }
-      }.bind( this ));
+      }, this );
     }
   });
 
