@@ -34,7 +34,7 @@ define([
             model: this.model.get( property )
           });
         }
-      }.bind( this ));
+      }, this );
 
       this.listenTo( this.model, 'change', this.update );
       this.listenTo( this.model, 'destroy', this.remove );
@@ -54,7 +54,7 @@ define([
           view.render();
           this.$el.append( view.el );
         }
-      }.bind( this ));
+      }, this );
 
       return this;
     },
@@ -65,7 +65,7 @@ define([
         if ( view ) {
           view.remove();
         }
-      }.bind( this ));
+      }, this );
 
       FormView.prototype.remove.call( this );
     },
