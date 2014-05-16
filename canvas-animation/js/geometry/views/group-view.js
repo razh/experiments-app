@@ -137,7 +137,7 @@ define(function( require ) {
         // Since .renderIndex() also removes the old objectView,
         // calling it is still valid when the collection is empty.
         this.renderIndex( this.selectedIndex );
-      }.bind( this ));
+      });
     },
 
     remove: function() {
