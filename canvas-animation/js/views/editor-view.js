@@ -163,7 +163,7 @@ define(function( require ) {
       Arc.angleNames.forEach(function( angleName ) {
         var point = arc[ angleName ];
         this.drawHandler( ctx, point.x, point.y );
-      }.bind( this ));
+      }, this );
     },
 
     drawPathHandlers: function( ctx, path ) {
@@ -183,7 +183,7 @@ define(function( require ) {
       Rect.edgeNames.forEach(function( edgeName ) {
         var point = rect[ edgeName ];
         this.drawHandler( ctx, point.x, point.y );
-      }.bind( this ));
+      }, this );
     },
 
     drawSelection: function( ctx ) {
