@@ -27,7 +27,7 @@ define([
         if ( !_.isUndefined( changedAttributes[ attr ] ) ) {
           this.$( '#' + attr ).prop( 'checked', this.model.get( attr ) );
         }
-      }.bind( this ));
+      }, this );
 
       CircleView.prototype.update.call( this );
     }
